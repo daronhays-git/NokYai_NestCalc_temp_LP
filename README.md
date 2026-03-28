@@ -1,73 +1,75 @@
-# React + TypeScript + Vite
+# NokYai.com Landing Page
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Version:** V1.0  
+**Status:** Initial build complete — pending color re-skin  
+**Branch:** main  
+**Dev Server:** http://localhost:5174  
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Quick Start
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd C:\Users\daron\dev3\nokyai-lp
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Vite + React 18 + TypeScript
+- Tailwind CSS 3.4 (custom design tokens)
+- Framer Motion (component animations)
+- GSAP + ScrollTrigger (scroll-driven animations)
+- 2D Canvas particle system (custom, mouse-reactive)
+- Google Fonts: Syne (display) + Outfit (body)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## File Structure
+
 ```
+nokyai-lp/
+├── src/
+│   ├── components/
+│   │   ├── layout/        Navbar.tsx, Footer.tsx
+│   │   ├── sections/      Hero, Services, CaseStudies, Process,
+│   │   │                  Testimonials, TechStack, WhyNokYai,
+│   │   │                  CTABand, Contact, LogoBar
+│   │   ├── ui/            MagneticButton, GlowCard, SectionHeading,
+│   │   │                  CustomCursor, ScrollProgress
+│   │   └── effects/       ParticleField, GradientMesh, NoiseOverlay
+│   ├── styles/globals.css
+│   ├── lib/               animations.ts, constants.ts
+│   └── hooks/             useMousePosition, useScrollProgress, useInView
+├── tailwind.config.ts
+├── vite.config.ts
+└── package.json
+```
+
+## Color Palette (Target — V1.1)
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| nok-deep | #0f2920 | Hero, WhyNokYai, Footer bg |
+| nok-forest | #1a3a2a | LogoBar, Cases, Testimonials bg |
+| nok-medium | #2d5a42 | Services, Process, Contact bg |
+| nok-gold | #F59E0B | CTAs, numbers, highlights |
+| nok-teal | #0d9488 | Links, secondary accent |
+| nok-heading | #FFFFFF | Section headings |
+| nok-body | #FEF3C7 | Body text (warm wheat) |
+| nok-caption | #D4C9A8 | Captions, muted labels |
+
+## Build & Deploy
+
+```bash
+npm run build        # Production build to dist/
+npm run preview      # Preview production build locally
+```
+
+Netlify deployment pending — will auto-deploy from main branch.
+
+## Critical Rules
+
+- One change per Claude Code prompt
+- Verify on localhost after every change
+- Do not modify fonts (Syne + Outfit locked in)
+- Do not change section order or component structure
+- Inline animations only — no external animation libraries beyond Framer Motion + GSAP
