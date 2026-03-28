@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { MagneticButton } from '../ui/MagneticButton'
 import { ParticleField } from '../effects/ParticleField'
@@ -18,6 +19,11 @@ const AVATARS = [
 ]
 
 export function Hero() {
+  const [btnHovered, setBtnHovered] = useState(false)
+
+  const primaryBtnRef = useRef<HTMLDivElement>(null)
+  const secondaryBtnRef = useRef<HTMLAnchorElement>(null)
+
   return (
     <section
       id="hero"
@@ -26,7 +32,12 @@ export function Hero() {
       {/* Background layers */}
       <div className="absolute inset-0 z-0">
         <GradientMesh colors={['#F59E0B', '#0d9488', '#0f2920']} className="opacity-40" />
-        <ParticleField />
+      </div>
+      <div
+        className="absolute inset-0 transition-none"
+        style={{ zIndex: btnHovered ? 20 : 0 }}
+      >
+        <ParticleField buttonRefs={[primaryBtnRef, secondaryBtnRef]} />
       </div>
 
       {/* Content */}
@@ -71,13 +82,22 @@ export function Hero() {
             className="flex flex-wrap items-center justify-center gap-4 mb-12"
             {...fadeUp(0.9)}
           >
-            <MagneticButton href="#contact">Start Your Project</MagneticButton>
+            <div
+              ref={primaryBtnRef}
+              onMouseEnter={() => setBtnHovered(true)}
+              onMouseLeave={() => setBtnHovered(false)}
+            >
+              <MagneticButton href="#contact">Start Your Project</MagneticButton>
+            </div>
             <a
+              ref={secondaryBtnRef}
               href="#casestudies"
               onClick={(e) => {
                 e.preventDefault()
                 document.querySelector('#casestudies')?.scrollIntoView({ behavior: 'smooth' })
               }}
+              onMouseEnter={() => setBtnHovered(true)}
+              onMouseLeave={() => setBtnHovered(false)}
               className="cursor-hover inline-block px-8 py-4 rounded-xl border border-nok-border text-nok-body font-semibold hover:border-nok-gold hover:text-nok-gold transition-colors duration-200"
             >
               View Our Work &rarr;
