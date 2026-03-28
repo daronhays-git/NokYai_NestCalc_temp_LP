@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+/* ── Design System: Tailwind v4 @theme ──────────────────────────── */
+@theme {
+  /* Backgrounds */
+  --color-nok-deep: #0f2920;
+  --color-nok-forest: #1a3a2a;
+  --color-nok-medium: #2d5a42;
+  --color-nok-surface: rgba(255, 255, 255, 0.08);
+  --color-nok-white: #FFFFFF;
+
+  /* Text */
+  --color-nok-gold: #F59E0B;
+  --color-nok-heading: #FFFFFF;
+  --color-nok-body: #FEF3C7;
+  --color-nok-caption: #D4C9A8;
+
+  /* Accents */
+  --color-nok-teal: #0d9488;
+  --color-nok-amber: #f59e0b;
+  --color-nok-red: #dc2626;
+
+  /* Borders */
+  --color-nok-border: rgba(255, 255, 255, 0.1);
+  --color-nok-border-light: rgba(255, 255, 255, 0.05);
+
+  /* Typography – font families */
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+
+  /* Animations */
+  --animate-float: float 3s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+  --animate-gradient-shift: gradient-shift 6s ease infinite;
+  --animate-fade-up: fade-up 0.6s ease-out both;
+  --animate-slide-in-right: slide-in-right 0.5s ease-out both;
+}
+
+/* ── Custom Typography Utilities ─────────────────────────────────── */
+@utility text-hero {
+  font-size: clamp(3rem, 8vw, 6rem);
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+@utility text-section {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+@utility text-card-title {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+/* ── Keyframes ──────────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mesh-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(5%, -8%) scale(1.05); }
+  50% { transform: translate(-4%, 6%) scale(0.95); }
+  75% { transform: translate(7%, 3%) scale(1.02); }
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── CSS Custom Properties (for non-Tailwind usage) ─────────────── */
+:root {
+  /* Backgrounds */
+  --nok-deep: #0f2920;
+  --nok-forest: #1a3a2a;
+  --nok-medium: #2d5a42;
+  --nok-surface: rgba(255, 255, 255, 0.08);
+  --nok-white: #FFFFFF;
+
+  /* Text */
+  --nok-gold: #F59E0B;
+  --nok-heading: #FFFFFF;
+  --nok-body: #FEF3C7;
+  --nok-caption: #D4C9A8;
+
+  /* Accents */
+  --nok-teal: #0d9488;
+  --nok-amber: #f59e0b;
+  --nok-red: #dc2626;
+
+  /* Borders */
+  --nok-border: rgba(255, 255, 255, 0.1);
+  --nok-border-light: rgba(255, 255, 255, 0.05);
+}
+
+/* ── Base Styles ────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--nok-deep);
+  color: var(--nok-body);
+  font-family: 'Outfit', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--nok-gold);
+  color: var(--nok-deep);
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--nok-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nok-gold);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #fbbf24;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--nok-gold) var(--nok-deep);
+}
+
+/* ── Custom Cursor (hide default on pointer devices) ────────────── */
+@media (pointer: fine) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
+}
+
+/* ── Utility: no-scrollbar ──────────────────────────────────────── */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

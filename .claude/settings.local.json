@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s http://localhost:5180/src/styles/globals.css)",
+      "Bash(npx tsc:*)",
+      "Bash(curl -s http://localhost:5183/src/styles/globals.css)",
+      "Bash(tr '\\\\\\\\n' '\\\\n')",
+      "Bash(ls c:/Users/daron/dev3/nokyai-lp/postcss.config.*)",
+      "Bash(cat c:/Users/daron/dev3/nokyai-lp/postcss.config.*)",
+      "Bash(npm ls:*)",
+      "Bash(npm install:*)",
+      "Bash(kill %1)"
+    ]
+  }
+}
