@@ -124,7 +124,10 @@ export function Contact() {
                 </div>
               ) : status === 'error' ? (
                 <div className="flex items-center gap-2 text-nok-red font-medium py-4">
-                  Something went wrong. Please email us directly at daron@NestCalc.ai.
+                  Something went wrong. Please email us directly at{' '}
+                  <a href="mailto:daron@nestcalc.ai" className="hover:text-nok-gold hover:underline transition-colors">
+                    daron@NestCalc.ai
+                  </a>.
                 </div>
               ) : (
                 <MagneticButton
@@ -172,7 +175,7 @@ export function Contact() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
               </div>
-              <span className="text-nok-body group-hover:text-white transition-colors">
+              <span className="text-nok-body group-hover:text-nok-gold group-hover:underline transition-colors">
                 daron@NestCalc.ai
               </span>
             </a>
@@ -189,23 +192,12 @@ export function Contact() {
               </span>
             </div>
 
-            {/* Decorative terminal element */}
-            <div className="bg-nok-surface border border-nok-border rounded-xl p-5 font-mono text-sm text-nok-caption animate-float">
-              <div className="flex items-center gap-1.5 mb-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                <span className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-              </div>
-              <p>
-                <span className="text-nok-teal">const</span>{' '}
-                <span className="text-nok-gold">project</span>{' '}
-                <span className="text-nok-caption">=</span>{' '}
-                <span className="text-nok-teal">await</span>{' '}
-                <span className="text-nok-gold">nestcalc</span>
-                <span className="text-nok-caption">.build(</span>
-                <span className="text-nok-body">yourIdea</span>
-                <span className="text-nok-caption">)</span>
-              </p>
+            <div className="flex items-center gap-3 text-xs text-nok-caption">
+              <span>Secure & confidential</span>
+              <span className="text-nok-border">|</span>
+              <span>Response within 24 hours</span>
+              <span className="text-nok-border">|</span>
+              <span>Based in Bangkok, Thailand</span>
             </div>
           </motion.div>
         </div>
