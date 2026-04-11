@@ -25,7 +25,7 @@ export function Contact() {
       name,
       email,
       message,
-    }).toString()
+    })
 
     try {
       const res = await fetch('/', {
@@ -58,7 +58,6 @@ export function Contact() {
             name="contact"
             method="POST"
             data-netlify="true"
-            netlify-honeypot="bot-field"
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -66,11 +65,6 @@ export function Contact() {
             transition={{ duration: 0.5 }}
             className="space-y-6"
           >
-            {/* Netlify honeypot */}
-            <p className="hidden">
-              <label>Don't fill this out: <input name="bot-field" /></label>
-            </p>
-
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-nok-body mb-2">
                 Name
