@@ -2,11 +2,12 @@
   command = "npm run build"
   publish = "dist"
 
-# SPA fallback — all routes serve index.html
+# SPA fallback — all routes serve index.html (GET only, POST handled by forms)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  conditions = {Method = ["GET"]}
 
 [build.environment]
   NODE_VERSION = "20"
