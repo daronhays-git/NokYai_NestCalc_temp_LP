@@ -28,7 +28,7 @@ export function GlowCard({
     const rotateY = (x - 0.5) * 12
 
     setTransform(
-      `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(20px)`
+      `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
     )
     setGradientPos({ x: x * 100, y: y * 100 })
   }
@@ -45,8 +45,8 @@ export function GlowCard({
   return (
     <div
       ref={cardRef}
-      className={`relative rounded-2xl transition-transform duration-300 ease-out ${className}`}
-      style={{ transform, transformStyle: 'preserve-3d' }}
+      className={`relative rounded-2xl transition-transform duration-300 ease-out overflow-visible ${className}`}
+      style={{ transform }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -71,7 +71,7 @@ export function GlowCard({
       />
 
       {/* Card content layer */}
-      <div className="relative rounded-2xl bg-nok-surface border border-nok-border p-6">
+      <div className="relative rounded-2xl bg-nok-surface border border-nok-border p-7 overflow-visible">
         {children}
       </div>
     </div>

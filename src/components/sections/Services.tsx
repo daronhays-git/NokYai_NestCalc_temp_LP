@@ -15,9 +15,9 @@ const SERVICES = [
     ),
   },
   {
-    title: 'Automation & Integration',
+    title: 'Websites and Landing Pages',
     description:
-      'Connect your systems with smart automation that eliminates repetitive work.',
+      'Modern Designs Using AI Enhanced SEO, GEO and E-E-A-T strategies to increase traffic, ranking, and engagement for your business.',
     gradient: 'from-nok-teal to-nok-gold',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-white">
@@ -28,7 +28,7 @@ const SERVICES = [
   {
     title: 'Web & Mobile Apps',
     description:
-      'Beautiful, performant applications with modern frameworks and exceptional UX.',
+      'Leading Edge Apps with Exceptional Design, Security and User Experience',
     gradient: 'from-nok-gold to-nok-amber',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-white">
@@ -39,7 +39,7 @@ const SERVICES = [
   {
     title: 'AI Strategy & Consulting',
     description:
-      'Navigate the AI landscape with expert guidance on what to build and when.',
+      'Benefit from expert guidance on AI solutions for your specific needs',
     gradient: 'from-nok-teal to-nok-gold',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-white">
@@ -51,10 +51,10 @@ const SERVICES = [
 
 export function Services() {
   return (
-    <section id="services" className="reveal-section py-24 lg:py-32 bg-nok-medium">
+    <section id="solutions" className="reveal-section py-24 lg:py-32 bg-nok-medium">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
-          title="What We Build"
+          title="Tech Solutions For You"
           subtitle="End-to-end AI solutions tailored to your business"
         />
 
@@ -68,19 +68,19 @@ export function Services() {
               transition={{ duration: 0.5, delay: i * 0.12 }}
             >
               <GlowCard>
-                <div className="flex flex-col gap-4">
+                <div className="flex items-start gap-4">
                   <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} flex items-center justify-center shrink-0`}>
                     {service.icon}
                   </div>
                   <div>
-                    <h3 className="font-display text-card-title text-white mb-2">
+                    <h3 className="font-display text-xl font-semibold text-white mb-2">
                       {service.title}
                     </h3>
                     <p className="text-nok-body text-sm leading-relaxed mb-4">
                       {service.description}
                     </p>
-                    <span className="text-nok-teal text-sm font-medium cursor-hover">
-                      Learn more &rarr;
+                    <span className="inline-block mt-1 text-xs font-medium uppercase tracking-widest text-nok-gold/60">
+                      Coming Soon
                     </span>
                   </div>
                 </div>

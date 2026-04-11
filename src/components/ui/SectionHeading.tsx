@@ -11,7 +11,7 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   return (
     <div className="mb-16">
-      <h2 className="font-display text-section text-white">{title}</h2>
+      <h2 className="font-display text-section text-nok-gold animate-[hero-glow_3s_ease-in-out_infinite]">{title}</h2>
       <div
         className="w-16 h-1 rounded-full mt-4"
         style={{ backgroundColor: accentColor }}

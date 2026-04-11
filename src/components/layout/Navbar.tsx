@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from '../ui/MagneticButton'
+import nokYaiLogo from '../../assets/NokYai-logo-gold-green.png'
 
 const NAV_LINKS = [
-  { label: 'Services', href: '#services' },
-  { label: 'Work', href: '#casestudies' },
-  { label: 'About', href: '#whynokyai' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Solutions', href: '#solutions' },
+  { label: 'Trust', href: '#trust' },
+  { label: 'Our Tech', href: '#ourtech' },
+  { label: 'Why NestCalc', href: '#whynestcalc' },
+  { label: 'Contact Us', href: '#contactus' },
 ]
 
 const SECTION_IDS = NAV_LINKS.map((l) => l.href.slice(1))
@@ -72,15 +74,10 @@ export function Navbar() {
           <a
             href="#hero"
             onClick={(e) => { e.preventDefault(); scrollTo('#hero') }}
-            className="font-display font-extrabold text-xl cursor-hover"
+            className="flex items-center gap-2 font-display font-extrabold text-xl cursor-hover"
           >
-            <span className="text-white">Nok</span>
-            <span
-              className="text-nok-gold"
-              style={{ textShadow: '0 0 20px rgba(245,158,11,0.4)' }}
-            >
-              Yai
-            </span>
+            <img src={nokYaiLogo} alt="NestCalc" className="h-10 w-auto" />
+            <span><span style={{ color: '#6ee7b7', textShadow: '0 0 20px rgba(110,231,183,0.3)' }}>Nest</span><span style={{ color: '#fcd34d', textShadow: '0 0 20px rgba(252,211,77,0.4)' }}>Calc.ai</span></span>
           </a>
 
           {/* Desktop nav links */}
@@ -109,9 +106,9 @@ export function Navbar() {
           {/* Desktop CTA */}
           <div className="hidden md:block">
             <MagneticButton
-              href="#contact"
+              href="#contactus"
               className="!px-5 !py-3 !text-sm !rounded-lg"
-              onClick={() => scrollTo('#contact')}
+              onClick={() => scrollTo('#contactus')}
             >
               Start a Project
             </MagneticButton>
@@ -177,9 +174,9 @@ export function Navbar() {
               transition={{ delay: 0.05 + NAV_LINKS.length * 0.07, duration: 0.3 }}
             >
               <MagneticButton
-                href="#contact"
+                href="#contactus"
                 className="!text-base"
-                onClick={() => scrollTo('#contact')}
+                onClick={() => scrollTo('#contactus')}
               >
                 Start a Project
               </MagneticButton>

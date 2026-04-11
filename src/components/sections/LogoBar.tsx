@@ -26,8 +26,8 @@ export function LogoBar() {
   const doubled = [...LOGOS, ...LOGOS]
 
   return (
-    <section id="logobar" className="reveal-section py-12 bg-nok-forest border-y border-nok-border-light">
-      <p className="text-xs font-medium uppercase tracking-widest text-nok-caption text-center mb-6">
+    <section id="logobar" className="reveal-section py-8 bg-nok-forest border-y border-nok-border-light">
+      <p className="text-xs font-medium uppercase tracking-widest text-nok-caption text-center mb-4">
         Trusted Technologies
       </p>
 

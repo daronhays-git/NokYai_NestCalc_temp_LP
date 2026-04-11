@@ -4,18 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f2920" />
-    <meta name="description" content="NokYai — AI-powered development studio. Custom AI applications, automation, and next-gen digital products built fast." />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="NestCalc — AI-powered development studio. Custom AI applications, automation, and next-gen digital products built fast." />
+    <link rel="icon" type="image/png" href="/favicon.png" />
 
     <!-- Google Fonts: preconnect + preload critical -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap" />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Outfit:wght@300;400;500;600&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-    <title>NokYai — AI-Powered Development Studio</title>
+    <title>NestCalc — AI-Powered Development Studio</title>
   </head>
   <body>
+    <!-- Netlify Forms: hidden form for build-bot detection -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <textarea name="message"></textarea>
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

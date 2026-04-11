@@ -1,67 +1,7 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { GlowCard } from '../ui/GlowCard'
-
-/* ── Count-up hook ──────────────────────────────────────────────── */
-function useCountUp(target: number, duration = 2000) {
-  const [value, setValue] = useState(0)
-  const ref = useRef<HTMLDivElement>(null)
-  const started = useRef(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !started.current) {
-          started.current = true
-          const start = performance.now()
-
-          const tick = (now: number) => {
-            const elapsed = now - start
-            const progress = Math.min(elapsed / duration, 1)
-            // easeOut: 1 - (1-t)^3
-            const eased = 1 - Math.pow(1 - progress, 3)
-            setValue(Math.round(eased * target))
-            if (progress < 1) requestAnimationFrame(tick)
-          }
-
-          requestAnimationFrame(tick)
-        }
-      },
-      { threshold: 0.5 }
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [target, duration])
-
-  return { value, ref }
-}
-
-/* ── Stats data ─────────────────────────────────────────────────── */
-const STATS: { target: number; suffix: string; label: string }[] = [
-  { target: 40, suffix: '+', label: 'Projects Delivered' },
-  { target: 6, suffix: ' Weeks', label: 'Average Time to Launch' },
-  { target: 5, suffix: '.0 ★', label: 'Client Satisfaction' },
-  { target: 3, suffix: 'x', label: 'Faster Than Traditional Dev' },
-]
-
-function StatItem({ target, suffix, label }: (typeof STATS)[number]) {
-  const { value, ref } = useCountUp(target)
-
-  return (
-    <div ref={ref} className="text-center">
-      <span className="font-display text-3xl sm:text-4xl lg:text-5xl bg-gradient-to-r from-nok-gold to-nok-body bg-clip-text text-transparent">
-        {value}
-        {suffix}
-      </span>
-      <p className="text-sm text-nok-caption mt-2">{label}</p>
-    </div>
-  )
-}
 
 /* ── Differentiator cards ───────────────────────────────────────── */
 const CARDS: { icon: ReactNode; title: string; description: string }[] = [
@@ -81,7 +21,7 @@ const CARDS: { icon: ReactNode; title: string; description: string }[] = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
       </svg>
     ),
-    title: 'Builder-Investor Mindset',
+    title: 'We Create Custom Solutions for Small Business Needs',
     description:
       'We think like business owners, not just developers. ROI is always the goal.',
   },
@@ -98,23 +38,14 @@ const CARDS: { icon: ReactNode; title: string; description: string }[] = [
 ]
 
 /* ── Component ──────────────────────────────────────────────────── */
-export function WhyNokYai() {
+export function WhyNestCalc() {
   return (
-    <section id="whynokyai" className="reveal-section bg-nok-deep">
-      {/* Part 1 — Stats bar */}
-      <div className="bg-nok-forest/50 py-16">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-          {STATS.map((stat) => (
-            <StatItem key={stat.label} {...stat} />
-          ))}
-        </div>
-      </div>
-
-      {/* Part 2 — Differentiator cards */}
+    <section id="whynestcalc" className="reveal-section bg-nok-deep">
+      {/* Differentiator cards */}
       <div className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6">
           <SectionHeading
-            title="Why NokYai"
+            title="Why NestCalc"
             subtitle="What makes us different"
           />
 
@@ -132,7 +63,7 @@ export function WhyNokYai() {
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-nok-gold to-nok-teal flex items-center justify-center shrink-0">
                       {card.icon}
                     </div>
-                    <h3 className="font-display text-card-title text-white">
+                    <h3 className="font-display text-xl font-semibold text-white">
                       {card.title}
                     </h3>
                     <p className="text-nok-body text-sm leading-relaxed">

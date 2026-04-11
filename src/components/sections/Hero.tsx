@@ -10,14 +10,6 @@ const fadeUp = (delay: number) => ({
   transition: { duration: 0.6, ease: 'easeOut' as const, delay },
 })
 
-const AVATARS = [
-  'https://i.pravatar.cc/80?img=1',
-  'https://i.pravatar.cc/80?img=2',
-  'https://i.pravatar.cc/80?img=3',
-  'https://i.pravatar.cc/80?img=4',
-  'https://i.pravatar.cc/80?img=5',
-]
-
 export function Hero() {
   const [btnHovered, setBtnHovered] = useState(false)
 
@@ -51,30 +43,24 @@ export function Hero() {
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-nok-gold animate-pulse" />
-            AI-Powered Development Studio
+            Building Leading Edge AI Applications - Small Business Focused
           </motion.div>
 
           {/* Headline */}
           <motion.h1
-            className="font-display text-hero mb-6"
+            className="font-display text-section text-nok-gold mb-6 animate-[hero-glow_3s_ease-in-out_infinite]"
             {...fadeUp(0.5)}
           >
-            <span className="text-white">We Build What </span>
-            <span
-              className="bg-gradient-to-r from-nok-gold to-nok-teal bg-clip-text text-transparent"
-              style={{ textShadow: '0 0 20px rgba(245,158,11,0.3)' }}
-            >
-              AI Makes Possible
-            </span>
+            Use AI to Increase Profits
           </motion.h1>
 
           {/* Subheadline */}
           <motion.p
-            className="text-lg lg:text-xl text-nok-body max-w-2xl mx-auto mb-10"
+            className="text-lg lg:text-xl text-nok-body max-w-3xl mx-auto mb-32 lg:mb-40"
             {...fadeUp(0.7)}
           >
-            Custom AI applications, intelligent automation, and next-gen digital
-            products — built fast, built right.
+            Custom AI applications, intelligent automation, and next-gen digital products
+            — increase sales, increase customer engagement.
           </motion.p>
 
           {/* CTA row */}
@@ -87,14 +73,14 @@ export function Hero() {
               onMouseEnter={() => setBtnHovered(true)}
               onMouseLeave={() => setBtnHovered(false)}
             >
-              <MagneticButton href="#contact">Start Your Project</MagneticButton>
+              <MagneticButton href="#contactus">Start Your Project</MagneticButton>
             </div>
             <a
               ref={secondaryBtnRef}
-              href="#casestudies"
+              href="#solutions"
               onClick={(e) => {
                 e.preventDefault()
-                document.querySelector('#casestudies')?.scrollIntoView({ behavior: 'smooth' })
+                document.querySelector('#solutions')?.scrollIntoView({ behavior: 'smooth' })
               }}
               onMouseEnter={() => setBtnHovered(true)}
               onMouseLeave={() => setBtnHovered(false)}
@@ -104,32 +90,6 @@ export function Hero() {
             </a>
           </motion.div>
 
-          {/* Social proof */}
-          <motion.div
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
-            {...fadeUp(1.1)}
-          >
-            <div className="flex items-center gap-3">
-              <div className="flex -space-x-2">
-                {AVATARS.map((src, i) => (
-                  <img
-                    key={i}
-                    src={src}
-                    alt=""
-                    width={32}
-                    height={32}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-8 h-8 rounded-full border-2 border-nok-deep object-cover"
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-nok-gold font-medium">★ 5.0</span>
-            </div>
-            <span className="text-sm text-nok-caption">
-              Trusted by <span className="text-white font-medium">40+ businesses</span> worldwide
-            </span>
-          </motion.div>
         </div>
       </div>
     </section>

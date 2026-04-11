@@ -133,7 +133,7 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
       }
 
       // Update bird perch position on resize
-      const perch = { x: w * 0.82, y: h * 0.42 }
+      const perch = { x: w * 0.82, y: h * 0.28 }
       birdPerchRef.current = perch
       birdPosRef.current = { x: perch.x, y: perch.y }
 
@@ -489,6 +489,19 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
           // Gentle breathing/bobbing at perch
           pos.x = birdPerchRef.current.x + Math.sin(t * 0.8) * 2
           pos.y = birdPerchRef.current.y + Math.sin(t * 1.2) * 1.5
+        }
+
+        // Clamp bird inside hero viewport bounds
+        {
+          const bScale = birdScaleRef.current
+          const birdW = (BIRD_BOUNDS.maxX - BIRD_BOUNDS.minX) * bScale
+          const birdH = (BIRD_BOUNDS.maxY - BIRD_BOUNDS.minY) * bScale
+          const margin = 10
+          if (pos.x - birdW / 2 < margin) { pos.x = margin + birdW / 2; vel.x = Math.max(vel.x, 0) }
+          if (pos.x + birdW / 2 > w - margin) { pos.x = w - margin - birdW / 2; vel.x = Math.min(vel.x, 0) }
+          const topMargin = 74 // navbar h-16 (64px) + 10px buffer
+          if (pos.y - birdH / 2 < topMargin) { pos.y = topMargin + birdH / 2; vel.y = Math.max(vel.y, 0) }
+          if (pos.y + birdH / 2 > h - margin) { pos.y = h - margin - birdH / 2; vel.y = Math.min(vel.y, 0) }
         }
 
         // Age and cull trail dots

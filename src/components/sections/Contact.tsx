@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { MagneticButton } from '../ui/MagneticButton'
 
-type Status = 'idle' | 'submitting' | 'success'
+type Status = 'idle' | 'submitting' | 'success' | 'error'
 
 const inputClass =
   'w-full bg-nok-forest border border-nok-border rounded-xl px-4 py-3 text-white placeholder:text-nok-caption outline-none transition-all duration-200 focus:border-nok-teal focus:ring-1 focus:ring-nok-teal/30 focus:shadow-[0_0_15px_rgba(13,148,136,0.1)]'
@@ -11,17 +11,36 @@ const inputClass =
 export function Contact() {
   const [status, setStatus] = useState<Status>('idle')
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setStatus('submitting')
-    setTimeout(() => setStatus('success'), 1500)
+
+    const form = e.currentTarget
+    const data = new FormData(form)
+    data.append('form-name', 'contact')
+
+    try {
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+      })
+      if (res.ok) {
+        setStatus('success')
+        form.reset()
+      } else {
+        setStatus('error')
+      }
+    } catch {
+      setStatus('error')
+    }
   }
 
   return (
-    <section id="contact" className="reveal-section py-24 lg:py-32 bg-nok-medium">
+    <section id="contactus" className="reveal-section py-24 lg:py-32 bg-nok-medium">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
-          title="Get In Touch"
+          title="Contact Us"
           subtitle="Tell us about your project"
         />
 
@@ -35,12 +54,18 @@ export function Contact() {
             transition={{ duration: 0.5 }}
             className="space-y-6"
           >
+            {/* Netlify honeypot */}
+            <p className="hidden">
+              <label>Don't fill this out: <input name="bot-field" /></label>
+            </p>
+
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-nok-body mb-2">
                 Name
               </label>
               <input
                 id="name"
+                name="name"
                 type="text"
                 required
                 placeholder="Your name"
@@ -54,6 +79,7 @@ export function Contact() {
               </label>
               <input
                 id="email"
+                name="email"
                 type="email"
                 required
                 placeholder="you@company.com"
@@ -67,6 +93,7 @@ export function Contact() {
               </label>
               <textarea
                 id="message"
+                name="message"
                 required
                 rows={5}
                 placeholder="Describe your idea, goals, and timeline..."
@@ -81,6 +108,10 @@ export function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                   </svg>
                   Message sent! We&rsquo;ll be in touch soon.
+                </div>
+              ) : status === 'error' ? (
+                <div className="flex items-center gap-2 text-nok-red font-medium py-4">
+                  Something went wrong. Please email us directly at daron@NestCalc.ai.
                 </div>
               ) : (
                 <MagneticButton
@@ -120,7 +151,7 @@ export function Contact() {
 
             {/* Email */}
             <a
-              href="mailto:hello@nokyai.com"
+              href="mailto:daron@NestCalc.ai"
               className="flex items-center gap-3 group cursor-hover mb-6"
             >
               <div className="w-10 h-10 rounded-xl bg-nok-surface border border-nok-border flex items-center justify-center group-hover:border-nok-teal transition-colors">
@@ -129,7 +160,7 @@ export function Contact() {
                 </svg>
               </div>
               <span className="text-nok-body group-hover:text-white transition-colors">
-                hello@nokyai.com
+                daron@NestCalc.ai
               </span>
             </a>
 
@@ -157,7 +188,7 @@ export function Contact() {
                 <span className="text-nok-gold">project</span>{' '}
                 <span className="text-nok-caption">=</span>{' '}
                 <span className="text-nok-teal">await</span>{' '}
-                <span className="text-nok-gold">nokyai</span>
+                <span className="text-nok-gold">nestcalc</span>
                 <span className="text-nok-caption">.build(</span>
                 <span className="text-nok-body">yourIdea</span>
                 <span className="text-nok-caption">)</span>
