@@ -28,9 +28,13 @@ export function Contact() {
     })
 
     try {
-      const res = await fetch('/', {
+      const res = await fetch(window.location.origin + '/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+          'Referer': window.location.href,
+        },
         body,
       })
       if (res.ok) {
@@ -57,6 +61,7 @@ export function Contact() {
           <motion.form
             name="contact"
             method="POST"
+            action="/"
             data-netlify="true"
             onSubmit={handleSubmit}
             initial={{ opacity: 0, y: 30 }}
@@ -65,6 +70,8 @@ export function Contact() {
             transition={{ duration: 0.5 }}
             className="space-y-6"
           >
+            <input type="hidden" name="form-name" value="contact" />
+
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-nok-body mb-2">
                 Name
