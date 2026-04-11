@@ -1,8 +1,10 @@
 # NokYai.com Landing Page
 
-**Version:** V1.1  
-**Status:** Re-skin complete + Guardian Bird feature — pending responsive polish + deploy  
+**Version:** V1.2  
+**Status:** Deployed — contact form working, pending responsive polish  
 **Branch:** main  
+**Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP  
+**Commit:** 38b5c73  
 **Dev Server:** http://localhost:5174  
 
 ---
@@ -21,7 +23,7 @@ npm run dev
 - Framer Motion (component animations)
 - GSAP + ScrollTrigger (scroll-driven animations)
 - 2D Canvas particle system (custom, mouse-reactive)
-- Path2D canvas eagle (Guardian Bird — cursor-following, button-aware)
+- Netlify Forms (contact form submissions)
 - Google Fonts: Syne (display) + Outfit (body)
 
 ## File Structure
@@ -29,7 +31,6 @@ npm run dev
 ```
 nokyai-lp/
 ├── src/
-│   ├── assets/            NokYai-logo.svg (simplified geometric eagle)
 │   ├── components/
 │   │   ├── layout/        Navbar.tsx, Footer.tsx
 │   │   ├── sections/      Hero, Services, CaseStudies, Process,
@@ -43,34 +44,38 @@ nokyai-lp/
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
 ├── tailwind.config.ts
 ├── vite.config.ts
+├── netlify.toml
 └── package.json
 ```
 
-## Color Palette (Implemented)
+## Color Palette
 
 | Token | Hex | Usage |
 |-------|-----|-------|
 | nok-deep | #0f2920 | Hero, WhyNokYai, Footer bg |
 | nok-forest | #1a3a2a | LogoBar, Cases, Testimonials bg |
 | nok-medium | #2d5a42 | Services, Process, Contact bg |
-| nok-gold | #F59E0B | CTAs, numbers, highlights, bird stroke |
+| nok-gold | #F59E0B | CTAs, numbers, highlights |
 | nok-teal | #0d9488 | Links, secondary accent |
 | nok-heading | #FFFFFF | Section headings |
 | nok-body | #FEF3C7 | Body text (warm wheat) |
 | nok-caption | #D4C9A8 | Captions, muted labels |
 
-## Guardian Bird
+## Git Remote
 
-The hero section features an interactive geometric eagle rendered as a gold outlined stroke on the particle field canvas. The bird follows the cursor with momentum-based flight physics, mirrors when flying left, leaves a gold particle trail, and reacts to CTA button hover with glow/pulse effects. It uses Path2D objects built from SVG path data in `src/lib/birdPaths.ts`.
+Single remote — `origin` points to `NokYai_NestCalc_temp_LP`:
+```bash
+git remote -v
+# origin  https://github.com/daronhays-git/NokYai_NestCalc_temp_LP.git
+```
 
 ## Build & Deploy
 
 ```bash
 npm run build        # Production build to dist/
 npm run preview      # Preview production build locally
+git push origin main # Auto-deploys to Netlify
 ```
-
-Netlify deployment pending — will auto-deploy from main branch.
 
 ## Critical Rules
 
@@ -78,5 +83,13 @@ Netlify deployment pending — will auto-deploy from main branch.
 - Verify on localhost after every change
 - Do not modify fonts (Syne + Outfit locked in)
 - Do not change section order or component structure
-- Do not modify bird flight physics without testing all states (idle, flying, returning, button hover)
-- Inline animations only — no external animation libraries beyond Framer Motion + GSAP
+- Do not change the color palette
+- Always push to origin (NokYai_NestCalc_temp_LP)
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| Contact form goes to spam | Use realistic content + different email addresses for testing |
+| mailto: link doesn't open | User has no default mail app — clipboard copy fallback handles this |
+| Pushing to wrong repo | Run `git remote -v` to verify origin before pushing |

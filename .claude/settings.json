@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"https://fonts.googleapis.com/css2?family=Syne:wght@700;800&display=swap\" -H \"User-Agent: Mozilla/5.0\")",
+      "Read(//c/Users/daron/dev3/nestcalcv4/nestcalc/src/**)",
+      "WebFetch(domain:nestcalc.ai)",
+      "Bash(gh api:*)",
+      "Bash(magick --version)",
+      "Bash(npx --yes sharp-cli -i src/assets/NokYai-logo-gold-green.png -o public/favicon.png resize 64 64)"
+    ]
+  }
+}
