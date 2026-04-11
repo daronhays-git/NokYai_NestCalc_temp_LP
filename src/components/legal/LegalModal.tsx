@@ -40,7 +40,7 @@ export function LegalModal({ open, onClose, title, lastUpdated, children }: Lega
               &larr; Back to NestCalc
             </button>
             <span className="font-display font-bold text-lg">
-              <span style={{ color: '#6ee7b7' }}>Nest</span>
+              <span style={{ color: '#6DC99E' }}>Nest</span>
               <span style={{ color: '#fcd34d' }}>Calc.ai</span>
             </span>
           </div>

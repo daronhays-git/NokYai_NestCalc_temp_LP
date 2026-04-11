@@ -57,7 +57,7 @@ export function Footer() {
               <a href="#hero" className="inline-flex flex-col items-start mb-3">
                 <img src={nokYaiLogo} alt="NestCalc" className="h-12 w-auto mb-2" />
                 <span className="font-display font-extrabold text-xl">
-                  <span style={{ color: '#6ee7b7', textShadow: '0 0 20px rgba(110,231,183,0.3)' }}>Nest</span>
+                  <span style={{ color: '#6DC99E', textShadow: '0 0 20px rgba(109,201,158,0.3)' }}>Nest</span>
                   <span style={{ color: '#fcd34d', textShadow: '0 0 20px rgba(252,211,77,0.4)' }}>Calc.ai</span>
                 </span>
               </a>
@@ -95,7 +95,7 @@ export function Footer() {
               &copy; 2026 NestCalc.ai. All rights reserved.
             </p>
             <p className="text-sm text-nok-caption">
-              Built with AI. Perfected by humans.
+              Built NestCalc.ai &mdash; What can we build for you?
             </p>
           </div>
         </div>
