@@ -1,15 +1,34 @@
-import { useState, type FormEvent } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useCallback, type FormEvent } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { MagneticButton } from '../ui/MagneticButton'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
+
+const EMAIL = 'daron@nestcalc.ai'
+const EMAIL_DISPLAY = 'daron@NestCalc.ai'
+
+const CopyIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
+    <rect x="9" y="9" width="13" height="13" rx="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
 
 const inputClass =
   'w-full bg-nok-forest border border-nok-border rounded-xl px-4 py-3 text-white placeholder:text-nok-caption outline-none transition-all duration-200 focus:border-nok-teal focus:ring-1 focus:ring-nok-teal/30 focus:shadow-[0_0_15px_rgba(13,148,136,0.1)]'
 
 export function Contact() {
   const [status, setStatus] = useState<Status>('idle')
+  const [copied, setCopied] = useState(false)
+
+  const handleEmailClick = useCallback((e: React.MouseEvent) => {
+    e.preventDefault()
+    navigator.clipboard.writeText(EMAIL)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 3000)
+    window.location.href = `mailto:${EMAIL}`
+  }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -123,11 +142,28 @@ export function Contact() {
                   Message sent! We&rsquo;ll be in touch soon.
                 </div>
               ) : status === 'error' ? (
-                <div className="flex items-center gap-2 text-nok-red font-medium py-4">
+                <div className="relative flex items-center gap-2 text-nok-red font-medium py-4">
                   Something went wrong. Please email us directly at{' '}
-                  <a href="mailto:daron@nestcalc.ai" className="hover:text-nok-gold hover:underline transition-colors">
-                    daron@NestCalc.ai
+                  <a
+                    href={`mailto:${EMAIL}`}
+                    onClick={handleEmailClick}
+                    className="inline-flex items-center gap-1 hover:text-nok-gold hover:underline transition-colors"
+                  >
+                    {EMAIL_DISPLAY}
+                    <CopyIcon className="w-3.5 h-3.5" />
                   </a>.
+                  <AnimatePresence>
+                    {copied && (
+                      <motion.span
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -4 }}
+                        className="absolute -bottom-8 left-0 bg-nok-gold text-nok-deep text-sm font-medium px-3 py-1.5 rounded-lg shadow-lg"
+                      >
+                        Email copied to clipboard!
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </div>
               ) : (
                 <MagneticButton
@@ -166,19 +202,35 @@ export function Contact() {
             </h3>
 
             {/* Email */}
-            <a
-              href="mailto:daron@NestCalc.ai"
-              className="flex items-center gap-3 group cursor-hover mb-6"
-            >
-              <div className="w-10 h-10 rounded-xl bg-nok-surface border border-nok-border flex items-center justify-center group-hover:border-nok-teal transition-colors">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5 text-nok-gold">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                </svg>
-              </div>
-              <span className="text-nok-body group-hover:text-nok-gold group-hover:underline transition-colors">
-                daron@NestCalc.ai
-              </span>
-            </a>
+            <div className="relative mb-6">
+              <a
+                href={`mailto:${EMAIL}`}
+                onClick={handleEmailClick}
+                className="flex items-center gap-3 group cursor-hover"
+              >
+                <div className="w-10 h-10 rounded-xl bg-nok-surface border border-nok-border flex items-center justify-center group-hover:border-nok-teal transition-colors">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-5 h-5 text-nok-gold">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                  </svg>
+                </div>
+                <span className="text-nok-body group-hover:text-nok-gold group-hover:underline transition-colors">
+                  {EMAIL_DISPLAY}
+                </span>
+                <CopyIcon className="w-4 h-4 text-nok-caption group-hover:text-nok-gold transition-colors" />
+              </a>
+              <AnimatePresence>
+                {copied && (
+                  <motion.span
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    className="absolute top-full left-13 mt-2 bg-nok-gold text-nok-deep text-sm font-medium px-3 py-1.5 rounded-lg shadow-lg"
+                  >
+                    Email copied to clipboard!
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Response time */}
             <div className="flex items-center gap-3 mb-10">
