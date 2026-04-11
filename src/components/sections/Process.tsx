@@ -98,7 +98,7 @@ export function Process() {
   }, [])
 
   return (
-    <section id="process" className="reveal-section py-24 lg:py-32 bg-nok-medium" ref={sectionRef}>
+    <section id="process" className="reveal-section py-12 sm:py-16 lg:py-32 bg-nok-medium" ref={sectionRef}>
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           title="How We Work"
@@ -166,7 +166,7 @@ export function Process() {
             />
 
             {/* Step nodes */}
-            <div className="flex flex-col gap-12">
+            <div className="flex flex-col gap-8 lg:gap-12">
               {STEPS.map((step, i) => (
                 <div
                   key={step.number}

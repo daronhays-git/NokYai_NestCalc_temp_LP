@@ -2,12 +2,12 @@ import { SectionHeading } from '../ui/SectionHeading'
 
 export function Testimonials() {
   return (
-    <section id="trust" className="reveal-section py-24 lg:py-32 bg-nok-forest">
+    <section id="trust" className="reveal-section py-12 sm:py-16 lg:py-32 bg-nok-forest">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading title="What Our Clients Say" />
 
         <div className="max-w-3xl mx-auto">
-          <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-12 text-center">
+          <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 sm:p-8 md:p-12 text-center">
             <svg
               className="mx-auto mb-4 w-12 h-12 text-nok-gold/30"
               viewBox="0 0 24 24"

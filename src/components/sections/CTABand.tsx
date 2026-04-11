@@ -11,7 +11,7 @@ export function CTABand() {
   return (
     <section
       id="ctaband"
-      className="reveal-section relative py-24 overflow-hidden"
+      className="reveal-section relative py-12 sm:py-16 lg:py-24 overflow-hidden"
       style={{
         background:
           'linear-gradient(135deg, #1a3a2a 0%, #2d5a42 50%, #1a3a2a 100%)',
@@ -39,7 +39,7 @@ export function CTABand() {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6">
-        <h2 className="font-display text-4xl lg:text-5xl text-white max-w-3xl mx-auto">
+        <h2 className="font-display text-section text-white max-w-3xl mx-auto">
           Ready to Build Something Extraordinary?
         </h2>
         <p className="text-lg text-nok-body mt-4 max-w-xl mx-auto">

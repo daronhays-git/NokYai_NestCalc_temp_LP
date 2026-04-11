@@ -1,10 +1,10 @@
 # NokYai.com Landing Page
 
-**Version:** V1.2  
-**Status:** Deployed — contact form working, pending responsive polish  
+**Version:** V1.3.0  
+**Status:** Deployed — responsive, SEO complete, pending content replacement  
 **Branch:** main  
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP  
-**Commit:** 38b5c73  
+**Commit:** 167bb5a  
 **Dev Server:** http://localhost:5174  
 
 ---
@@ -42,6 +42,13 @@ nokyai-lp/
 │   ├── styles/globals.css
 │   ├── lib/               animations.ts, constants.ts, birdPaths.ts
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
+├── public/
+│   ├── favicon.svg        Green eagle favicon
+│   ├── favicon.png        48x48 PNG version
+│   ├── apple-touch-icon.png  180x180 iOS icon
+│   ├── og-image.png       1200x630 OG image
+│   ├── robots.txt
+│   └── sitemap.xml
 ├── tailwind.config.ts
 ├── vite.config.ts
 ├── netlify.toml
@@ -93,3 +100,4 @@ git push origin main # Auto-deploys to Netlify
 | Contact form goes to spam | Use realistic content + different email addresses for testing |
 | mailto: link doesn't open | User has no default mail app — clipboard copy fallback handles this |
 | Pushing to wrong repo | Run `git remote -v` to verify origin before pushing |
+| Favicon not showing | Hard refresh (Ctrl+Shift+R) — browsers cache favicons aggressively |

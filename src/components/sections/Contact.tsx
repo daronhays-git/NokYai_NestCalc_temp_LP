@@ -68,14 +68,14 @@ export function Contact() {
   }
 
   return (
-    <section id="contactus" className="reveal-section py-24 lg:py-32 bg-nok-medium">
+    <section id="contactus" className="reveal-section py-12 sm:py-16 lg:py-32 bg-nok-medium">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           title="Contact Us"
           subtitle="Tell us about your project"
         />
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           {/* LEFT — Form */}
           <motion.form
             name="contact"
@@ -244,12 +244,10 @@ export function Contact() {
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-xs text-nok-caption">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-nok-caption">
               <span>Secure & confidential</span>
-              <span className="text-nok-border">|</span>
+              <span className="text-nok-border hidden sm:inline">|</span>
               <span>Response within 24 hours</span>
-              <span className="text-nok-border">|</span>
-              <span>Based in Bangkok, Thailand</span>
             </div>
           </motion.div>
         </div>

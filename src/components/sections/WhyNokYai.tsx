@@ -42,14 +42,14 @@ export function WhyNestCalc() {
   return (
     <section id="whynestcalc" className="reveal-section bg-nok-deep">
       {/* Differentiator cards */}
-      <div className="py-24 lg:py-32">
+      <div className="py-12 sm:py-16 lg:py-32">
         <div className="max-w-7xl mx-auto px-6">
           <SectionHeading
             title="Why NestCalc"
             subtitle="What makes us different"
           />
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {CARDS.map((card, i) => (
               <motion.div
                 key={card.title}

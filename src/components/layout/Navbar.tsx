@@ -155,7 +155,7 @@ export function Navbar() {
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollTo(link.href) }}
                 className={[
-                  'text-2xl font-body font-medium transition-colors py-2',
+                  'text-2xl font-body font-medium transition-colors py-3 min-h-[44px]',
                   activeId === link.href.slice(1) ? 'text-white' : 'text-nok-caption',
                 ].join(' ')}
                 initial={{ opacity: 0, y: 20 }}

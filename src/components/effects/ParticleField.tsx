@@ -97,9 +97,14 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
   const buttonHoverActiveRef = useRef(false)
   const buttonZonesRef = useRef<{ x: number; y: number; w: number; h: number }[]>([])
 
-  const getCount = useCallback(() => {
-    return window.matchMedia('(max-width: 768px)').matches ? 60 : 120
+  const isMobile = useCallback(() => {
+    return window.matchMedia('(max-width: 768px)').matches ||
+           window.matchMedia('(pointer: coarse)').matches
   }, [])
+
+  const getCount = useCallback(() => {
+    return isMobile() ? 60 : 120
+  }, [isMobile])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -156,9 +161,11 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
     }
     resize()
 
-    // --- Build Path2D objects from SVG path data ---
-    birdPathsRef.current = BIRD_PATHS.map((d) => new Path2D(d))
-    birdScaleRef.current = 128 / (BIRD_BOUNDS.maxX - BIRD_BOUNDS.minX)
+    // --- Build Path2D objects from SVG path data (desktop only) ---
+    if (!isMobile()) {
+      birdPathsRef.current = BIRD_PATHS.map((d) => new Path2D(d))
+      birdScaleRef.current = 128 / (BIRD_BOUNDS.maxX - BIRD_BOUNDS.minX)
+    }
 
     // --- Mouse tracking ---
     function onMouseMove(e: MouseEvent) {
@@ -582,9 +589,11 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
 
     animate()
 
-    // --- Bird reveal after 1.2 seconds ---
+    // --- Bird reveal after 1.2 seconds (desktop only) ---
     const birdTimer = setTimeout(() => {
-      birdReadyRef.current = true
+      if (!isMobile()) {
+        birdReadyRef.current = true
+      }
     }, 1200)
 
     // --- Event listeners ---

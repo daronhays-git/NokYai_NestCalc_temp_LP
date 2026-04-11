@@ -1,7 +1,7 @@
 # NokYai.com LP — Roadmap
 
 **Last Updated:** April 11, 2026  
-**Current Status:** V1.2 complete — deployed, contact form working
+**Current Status:** V1.3.0 complete — deployed, responsive + SEO done (commit 167bb5a)
 
 ---
 
@@ -12,39 +12,59 @@
 | Phase 1-6: Full LP Build | V1.0 | Project scaffold, all 12 sections, effects, animations, performance |
 | Green/Gold Re-skin | V1.1 | NestCalc DNA palette applied, Guardian Bird feature added |
 | Contact Form & Polish | V1.2 | Netlify Forms working, email link with clipboard copy, trust badges, git remote fix |
+| Responsive & SEO | V1.3.0 | Full responsive pass, SEO meta tags, favicon, OG image, robots/sitemap, padding tightening |
 
 ---
 
-## Next Session (V1.3)
+## Next Session (V1.4.0)
 
-**Priority:** Responsive polish + SEO
+**Priority:** Replace placeholder content + analytics
 
-1. Responsive design pass (375px, 768px, 1024px, 1440px)
-2. SEO meta tags (title, description, OG tags, Twitter cards)
-3. robots.txt and sitemap.xml
-4. Favicon and apple-touch-icon
+1. Add Google Analytics 4 tracking
+2. Replace placeholder testimonials with real quotes
+3. Replace case study gradient placeholders with real screenshots
+4. Replace tech logo placeholders with actual SVGs
+5. Lighthouse performance audit
 
 ---
 
-## Backlog (Post V1.3)
+## Backlog (Post V1.4.0)
 
 ### Content
-- [ ] Replace placeholder testimonials with real quotes
-- [ ] Replace gradient placeholder images with real project screenshots
-- [ ] Replace tech logo placeholders with actual SVG logos
 - [ ] Write final copy for all sections
 - [ ] Add NokYai animated bird logo video (need clean file with matching bg)
 
 ### SEO & Marketing
-- [ ] Google Analytics or Plausible tracking
 - [ ] Performance audit (Lighthouse 90+)
-- [ ] Social sharing preview image
+- [ ] Social sharing preview image (verify OG renders correctly)
 
 ### Future Enhancements
 - [ ] Blog/content section
 - [ ] Case study detail pages
 - [ ] Client portal link
 - [ ] Pricing section (if applicable)
+
+---
+
+## What Changed — V1.3.0
+
+**Session (April 11, 2026)**
+- Full responsive pass at 375px, 768px, 1024px, 1440px — 9 files changed
+- Hero headline scales with clamp(3rem, 8vw, 6rem)
+- Services cards 2-col at 768px (md breakpoint)
+- WhyNokYai cards progressive 1→2→3 grid
+- Testimonials progressive padding
+- Contact gap tightened, info bar wraps on mobile
+- CTABand heading uses clamp() scaling
+- Footer + Navbar touch targets 44px minimum
+- Guardian Bird hidden on mobile/touch devices
+- SEO meta tags: title, description, OG, Twitter cards, canonical URL
+- Green eagle favicon (SVG + PNG), apple-touch-icon, OG image (1200x630)
+- robots.txt + sitemap.xml created and build-verified
+- Removed Bangkok location trust badge from Contact
+- Footer mobile: 2x2 grid, reduced padding, compact layout
+- All content sections padding: py-24 → py-12 sm:py-16 lg:py-32
+- Process mobile steps gap: gap-12 → gap-8 lg:gap-12
 
 ---
 

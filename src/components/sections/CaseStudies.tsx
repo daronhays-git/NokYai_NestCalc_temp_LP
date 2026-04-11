@@ -33,7 +33,7 @@ const OFFSETS = [
 
 export function CaseStudies() {
   return (
-    <section id="casestudies" className="reveal-section py-24 lg:py-32 overflow-hidden bg-nok-forest">
+    <section id="casestudies" className="reveal-section py-12 sm:py-16 lg:py-32 overflow-hidden bg-nok-forest">
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           title="Our Work"
