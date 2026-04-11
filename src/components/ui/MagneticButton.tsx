@@ -10,6 +10,7 @@ interface MagneticButtonProps {
   className?: string
   href?: string
   onClick?: () => void
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export function MagneticButton({
@@ -17,6 +18,7 @@ export function MagneticButton({
   className = '',
   href,
   onClick,
+  type = 'submit',
 }: MagneticButtonProps) {
   const ref = useRef<HTMLElement>(null)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
@@ -81,6 +83,7 @@ export function MagneticButton({
 
   return (
     <button
+      type={type}
       ref={ref as React.RefObject<HTMLButtonElement>}
       className={baseClass}
       style={style}
