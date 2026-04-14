@@ -1,0 +1,71 @@
+name: Scribe Documentation Watch
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+
+jobs:
+  scribe-watch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Ensure Scribe labels exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create "scribe" \
+            --color "0052CC" \
+            --description "Documentation currency flag from Scribe agent" \
+            2>/dev/null || true
+          gh label create "documentation" \
+            --color "0075CA" \
+            --description "Documentation changes needed" \
+            2>/dev/null || true
+
+      - name: Run Scribe watch
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: "--dangerously-skip-permissions"
+          prompt: |
+            You are running a Scribe documentation watch check on a pull request.
+
+            Read .claude/commands/scribe.md — specifically Step 2 (filter rules) and Step 3 (doc-to-code coverage map). These are your rules for this run.
+
+            Step 1 — Get the list of changed files:
+              git diff origin/${{ github.base_ref }}...HEAD --name-only
+
+            Step 2 — Apply the filters from scribe.md Step 2. Remove any file that matches the filter patterns: test files, build/VCS config, lock files, build artifacts, .github/workflows/**, .claude/**, Beacon and Finance managed outputs, session handoff files, and documentation files that are themselves inventory targets (the full list is in scribe.md Step 2).
+
+            Step 3 — Cross-reference the remaining files against the doc-to-code coverage map in scribe.md Step 3. For each remaining file, identify which docs cover that area of the codebase.
+
+            Step 4 — If any docs are potentially stale, create a single GitHub Issue:
+              gh issue create \
+                --title "📝 Scribe: Docs may need updating" \
+                --label "scribe" \
+                --label "documentation" \
+                --body "BODY"
+
+            Use this body format:
+
+              ## Docs Potentially Stale
+              | Doc | Changed File(s) | Why Potentially Stale |
+              |-----|----------------|----------------------|
+              | `module-map.md` | `src/components/Foo.jsx` | module-map.md inventories all component files; new file may not be listed |
+
+              ## Files Checked (after filtering)
+              - `src/components/Foo.jsx`
+
+              ---
+              *Scribe watch — PR #${{ github.event.pull_request.number }}*
+
+            Step 5 — If no files remain after filtering, or if the remaining files don't match any doc in the coverage map, do not create an issue. Exit silently.
+          max_turns: "10"

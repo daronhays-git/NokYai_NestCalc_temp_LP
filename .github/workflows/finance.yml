@@ -1,0 +1,240 @@
+name: Finance Weekly Report
+
+# Runs every Monday at 13:00 UTC (8:00 AM EST).
+# Can also be triggered manually from the Actions tab.
+on:
+  schedule:
+    - cron: '0 13 * * 1'
+  workflow_dispatch:
+
+jobs:
+  finance-report:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Required to commit finance-report.md back to the repo
+
+    env:
+      # Set NETLIFY_SITE_ID in repo secrets (Settings → Secrets → Actions)
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+    steps:
+
+      # ── 1. Checkout ──────────────────────────────────────────────────────
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # ── 2. Install Node dependencies ─────────────────────────────────────
+      # If package.json is at the repo root, remove the cache-dependency-path
+      # and working-directory directives from these two steps.
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 3. Build and capture Vite output ─────────────────────────────────
+      # tee writes the build log to vite-build.txt for the parse step below.
+      - name: Run Vite build
+        run: npm run build 2>&1 | tee vite-build.txt
+
+      # ── 4. Parse chunk names and sizes from build output ─────────────────
+      # Vite prints lines like:
+      #   dist/assets/index-AbCd1234.js   1,951.47 kB │ gzip: 538.49 kB
+      # We extract each chunk name, raw KB, and gzip KB into bundle-stats.json.
+      - name: Parse bundle sizes
+        run: |
+          python3 - <<'PYEOF'
+          import re, json
+
+          with open('vite-build.txt') as f:
+              text = f.read()
+
+          chunks = []
+          pattern = r'dist/([^\s]+)\s+([\d,]+\.?\d*)\s+kB(?:\s+[│|]\s+gzip:\s+([\d,]+\.?\d*)\s+kB)?'
+          for m in re.finditer(pattern, text):
+              chunks.append({
+                  'name':    m.group(1),
+                  'raw_kb':  float(m.group(2).replace(',', '')),
+                  'gzip_kb': float(m.group(3).replace(',', '')) if m.group(3) else 0.0,
+              })
+
+          js_chunks  = [c for c in chunks if c['name'].endswith('.js')]
+          total_raw  = sum(c['raw_kb']  for c in js_chunks)
+          total_gzip = sum(c['gzip_kb'] for c in js_chunks)
+
+          print(f"Chunks found: {len(chunks)}")
+          print(f"Total JS: {total_raw:.2f} KB raw / {total_gzip:.2f} KB gzip")
+
+          with open('bundle-stats.json', 'w') as f:
+              json.dump({'chunks': chunks,
+                         'total_js_raw_kb':  round(total_raw,  2),
+                         'total_js_gzip_kb': round(total_gzip, 2)}, f, indent=2)
+          PYEOF
+
+      # ── 5 & 6. Compare against previous report; flag >10% growth ─────────
+      # Reads the Total JS line from the committed finance-report.md (if present)
+      # and flags any metric that grew more than 10% since the last run.
+      - name: Compare with previous report
+        run: |
+          python3 - <<'PYEOF'
+          import re, json, os
+
+          with open('bundle-stats.json') as f:
+              current = json.load(f)
+
+          prev_total = None
+          if os.path.exists('finance-report.md'):
+              text = open('finance-report.md').read()
+              # Matches the "| **Total JS** | **2,132.63 KB** | ..." table row
+              m = re.search(r'\*\*Total JS\*\*\s*\|\s*\*\*([\d,]+\.?\d*)\s*KB\*\*', text)
+              if m:
+                  prev_total = float(m.group(1).replace(',', ''))
+                  print(f"Previous total JS: {prev_total:.2f} KB")
+
+          regressions = []
+          delta_pct   = None
+
+          if prev_total:
+              delta_pct = (current['total_js_raw_kb'] - prev_total) / prev_total * 100
+              if delta_pct > 10:
+                  regressions.append(
+                      f"Total JS grew {delta_pct:.1f}% "
+                      f"(was {prev_total:.0f} KB, now {current['total_js_raw_kb']:.0f} KB)"
+                  )
+              print(f"Delta: {delta_pct:+.1f}%")
+          else:
+              print("No previous report found — treating this run as the baseline.")
+
+          with open('bundle-comparison.json', 'w') as f:
+              json.dump({'prev_total_kb': prev_total,
+                         'delta_pct':     delta_pct,
+                         'regressions':   regressions}, f, indent=2)
+
+          if regressions:
+              print(f"⚠️  REGRESSION DETECTED: {regressions[0]}")
+          else:
+              print("✓ No regressions above 10% threshold")
+          PYEOF
+
+      # ── 7. Count Netlify deploys in the last 7 days ──────────────────────
+      # Fetches the 100 most recent deploys and counts those within the last week.
+      # Requires NETLIFY_AUTH_TOKEN in repo secrets. If missing, reports N/A.
+      - name: Count Netlify deploys
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          python3 - <<'PYEOF'
+          import urllib.request, json, os
+          from datetime import datetime, timezone, timedelta
+
+          token = os.environ.get('NETLIFY_AUTH_TOKEN', '')
+
+          if not token:
+              print("⚠️  NETLIFY_AUTH_TOKEN not set — skipping deploy count")
+              with open('netlify-stats.json', 'w') as f:
+                  json.dump({'deploy_count_7d': 'N/A', 'note': 'token missing'}, f)
+          else:
+              site_id = os.environ['NETLIFY_SITE_ID']
+              req = urllib.request.Request(
+                  f'https://api.netlify.com/api/v1/sites/{site_id}/deploys?per_page=100',
+                  headers={'Authorization': f'Bearer {token}'}
+              )
+              with urllib.request.urlopen(req) as resp:
+                  deploys = json.loads(resp.read())
+
+              cutoff = datetime.now(timezone.utc) - timedelta(days=7)
+              recent = [
+                  d for d in deploys
+                  if datetime.fromisoformat(d['created_at'].replace('Z', '+00:00')) >= cutoff
+              ]
+
+              print(f"Deploys last 7 days: {len(recent)}  (of {len(deploys)} fetched)")
+              with open('netlify-stats.json', 'w') as f:
+                  json.dump({'deploy_count_7d': len(recent)}, f)
+          PYEOF
+
+      # ── 8. Generate finance-report.md and commit it ───────────────────────
+      # Overwrites finance-report.md with this week's numbers, then commits.
+      # Writes REPORT_DATE to $GITHUB_ENV for use in the commit message below.
+      - name: Generate and commit finance-report.md
+        run: |
+          python3 - <<'PYEOF'
+          import json, os
+          from datetime import date
+
+          stats   = json.load(open('bundle-stats.json'))
+          comp    = json.load(open('bundle-comparison.json'))
+          netlify = json.load(open('netlify-stats.json'))
+
+          today      = date.today().isoformat()
+          js_total   = stats['total_js_raw_kb']
+          gz_total   = stats['total_js_gzip_kb']
+
+          # Delta label shown in the header
+          delta_label = ''
+          if comp['delta_pct'] is not None:
+              sign        = '+' if comp['delta_pct'] >= 0 else ''
+              delta_label = f" ({sign}{comp['delta_pct']:.1f}% vs last report)"
+
+          # Callout block when a regression was found
+          reg_block = ''
+          if comp['regressions']:
+              lines     = '\n'.join(f'> - ⚠️ {r}' for r in comp['regressions'])
+              reg_block = f"\n> **Regression detected (>10% growth):**\n{lines}\n"
+
+          # Chunk table rows, largest first
+          chunk_rows = '\n'.join(
+              f'| `{c["name"]}` | {c["raw_kb"]:.2f} KB | {c["gzip_kb"]:.2f} KB |'
+              for c in sorted(stats['chunks'], key=lambda x: -x['raw_kb'])
+          )
+
+          report = "\n".join([
+              "# NestCalc.ai Finance Report",
+              f"**Date:** {today}",
+              f"**Total JS (raw):** {js_total:.2f} KB{delta_label}",
+              f"**Total JS (gzip):** {gz_total:.2f} KB",
+              f"**Netlify deploys (last 7 days):** {netlify['deploy_count_7d']}",
+              reg_block,
+              "---", "",
+              "## Bundle Summary", "",
+              "| Chunk | Raw | Gzip |",
+              "|-------|-----|------|",
+              chunk_rows,
+              f"| **Total JS** | **{js_total:.2f} KB** | **{gz_total:.2f} KB** |",
+              "", "---", "",
+              "## Dependency Health",
+              "_Run `/dep-audit` locally for full dependency health analysis._",
+              "", "---", "",
+              "## Notes",
+              "- Regressions are flagged when Total JS grows >10% vs. the previous committed report.",
+              "- Run `/dep-audit` locally for full analysis with tree-shaking and optimization recommendations.",
+              f"- Netlify site: {os.environ['NETLIFY_SITE_ID']}",
+          ]) + "\n"
+
+          with open('finance-report.md', 'w') as f:
+              f.write(report)
+
+          # Expose today's date for the commit message in the next step
+          with open(os.environ['GITHUB_ENV'], 'a') as env_file:
+              env_file.write(f"REPORT_DATE={today}\n")
+
+          print(f"finance-report.md written for {today}")
+          PYEOF
+
+      - name: Commit finance-report.md
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add finance-report.md
+          # Only commit when the file actually changed; exit 0 quietly if nothing to commit
+          git diff --cached --quiet \
+            && echo "No changes — report is identical to last run" \
+            || (git commit -m "chore: finance report ${{ env.REPORT_DATE }}" && git push)
+
+      # ── 9. Email delivery (placeholder) ──────────────────────────────────
+      # TODO: add an email step once a delivery action is confirmed.
+      # Options to evaluate: dawidd0610/action-send-mail (SMTP),
+      # or a Netlify/SendGrid function triggered by this workflow.

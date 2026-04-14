@@ -1,0 +1,77 @@
+name: Beacon Intake
+
+# Triggers when a new issue is opened or labeled with "feedback".
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  intake:
+    # Only run when the "feedback" label is present on the issue.
+    if: >
+      (github.event.action == 'labeled' && github.event.label.name == 'feedback') ||
+      (github.event.action == 'opened' && contains(toJson(github.event.issue.labels.*.name), 'feedback'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # Required to commit feedback-log.md back to the repo
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Prepend feedback entry to feedback-log.md
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE:  ${{ github.event.issue.title }}
+          ISSUE_BODY:   ${{ github.event.issue.body }}
+          ISSUE_DATE:   ${{ github.event.issue.created_at }}
+        run: |
+          python3 - <<'PYEOF'
+          import os
+
+          number = os.environ["ISSUE_NUMBER"]
+          title  = os.environ["ISSUE_TITLE"]
+          body   = os.environ["ISSUE_BODY"]
+          date   = os.environ["ISSUE_DATE"][:10]  # YYYY-MM-DD
+
+          description = body[:500] + ("..." if len(body) > 500 else "")
+
+          entry = (
+              f"### [{date}] — {title}\n"
+              f"- **Source:** github-issue\n"
+              f"- **Category:** uncategorized\n"
+              f"- **Severity:** unscored\n"
+              f"- **Status:** new\n"
+              f"- **GitHub Issue:** #{number}\n"
+              f"- **Description:** {description}\n"
+              f"\n"
+              f"---\n"
+              f"\n"
+          )
+
+          with open("feedback-log.md", "r") as f:
+              content = f.read()
+
+          marker = "## Log\n"
+          idx = content.find(marker)
+          if idx == -1:
+              raise SystemExit("ERROR: '## Log' heading not found in feedback-log.md")
+
+          insert_at = idx + len(marker)
+          rest = content[insert_at:].lstrip("\n")
+
+          new_content = content[:insert_at] + "\n" + entry + rest
+
+          with open("feedback-log.md", "w") as f:
+              f.write(new_content)
+
+          print(f"Prepended entry for issue #{number}: {title}")
+          PYEOF
+
+      - name: Commit feedback-log.md
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add feedback-log.md
+          git diff --cached --quiet || git commit -m "beacon: intake issue #${{ github.event.issue.number }}"
+          git push

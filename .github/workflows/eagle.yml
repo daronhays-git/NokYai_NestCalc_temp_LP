@@ -1,0 +1,31 @@
+name: Eagle Design Review
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [main]
+
+jobs:
+  eagle-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: "--dangerously-skip-permissions"
+          prompt: |
+            Read design-tokens.md and .claude/commands/eagle.md. Then review the PR diff for UI component files only (src/components/, src/pages/):
+            1. Design Token Compliance — raw hex values not in design-tokens.md, typography outside the type scale, undocumented border-radius or shadow values
+            2. Accessibility — missing alt text, missing aria-label on interactive elements, keyboard navigation gaps, color contrast issues
+            3. Responsive Patterns — fixed px font sizes, one-off layout values outside the documented spacing system
+            4. Architecture — styling approach violations as defined in REVIEW.md §1
+            If no UI component files were changed, post: "Eagle: no UI files in this PR — skipping design review."
+            Post findings as a PR comment with: Verdict (PASS / NEEDS ATTENTION / FAIL) and File | Line | Severity | Category | Finding | Recommendation
+          max_turns: "10"

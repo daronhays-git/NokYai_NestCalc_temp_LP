@@ -1,0 +1,120 @@
+name: Lighthouse Audit
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Core Web Vitals & Quality Audit
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write   # Required to open regression issues
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Lighthouse
+        id: lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://nestcalc.ai/
+          uploadArtifacts: true
+          temporaryPublicStorage: false
+          configPath: ./.lighthouserc.json
+
+      - name: Parse results and check thresholds
+        id: check
+        run: |
+          REPORT=$(ls .lighthouseci/lhr-*.json | head -1)
+          echo "report=$REPORT" >> $GITHUB_OUTPUT
+
+          PERF=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(Math.round(r.categories.performance.score*100))")
+          A11Y=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(Math.round(r.categories.accessibility.score*100))")
+          BP=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(Math.round(r.categories['best-practices'].score*100))")
+          SEO=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(Math.round(r.categories.seo.score*100))")
+          LCP=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(Math.round(r.audits['largest-contentful-paint'].numericValue))")
+          FCP=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(Math.round(r.audits['first-contentful-paint'].numericValue))")
+          TBT=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(Math.round(r.audits['total-blocking-time'].numericValue))")
+          CLS=$(node -e "const r=JSON.parse(require('fs').readFileSync('$REPORT','utf8')); console.log(r.audits['cumulative-layout-shift'].numericValue.toFixed(3))")
+
+          echo "perf=$PERF"   >> $GITHUB_OUTPUT
+          echo "a11y=$A11Y"   >> $GITHUB_OUTPUT
+          echo "bp=$BP"       >> $GITHUB_OUTPUT
+          echo "seo=$SEO"     >> $GITHUB_OUTPUT
+          echo "lcp=$LCP"     >> $GITHUB_OUTPUT
+          echo "fcp=$FCP"     >> $GITHUB_OUTPUT
+          echo "tbt=$TBT"     >> $GITHUB_OUTPUT
+          echo "cls=$CLS"     >> $GITHUB_OUTPUT
+
+          # Determine pass/fail (thresholds: perf 70, a11y 90, bp 80, seo 80)
+          FAILED=false
+          FAILURES=""
+          [ "$PERF" -lt 70 ] && FAILED=true && FAILURES="$FAILURES\n- Performance: $PERF / 100 (threshold: 70)"
+          [ "$A11Y" -lt 90 ] && FAILED=true && FAILURES="$FAILURES\n- Accessibility: $A11Y / 100 (threshold: 90)"
+          [ "$BP"   -lt 80 ] && FAILED=true && FAILURES="$FAILURES\n- Best Practices: $BP / 100 (threshold: 80)"
+          [ "$SEO"  -lt 80 ] && FAILED=true && FAILURES="$FAILURES\n- SEO: $SEO / 100 (threshold: 80)"
+
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+          # Store failures as multiline (use delimiter)
+          {
+            echo "failures<<EOF"
+            echo -e "$FAILURES"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+          echo "Scores — Perf: $PERF | A11y: $A11Y | BP: $BP | SEO: $SEO"
+          echo "CWV   — LCP: ${LCP}ms | FCP: ${FCP}ms | TBT: ${TBT}ms | CLS: $CLS"
+
+      - name: Open GitHub Issue on regression
+        if: steps.check.outputs.failed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const scores = {
+              perf: '${{ steps.check.outputs.perf }}',
+              a11y: '${{ steps.check.outputs.a11y }}',
+              bp:   '${{ steps.check.outputs.bp }}',
+              seo:  '${{ steps.check.outputs.seo }}',
+              lcp:  '${{ steps.check.outputs.lcp }}',
+              fcp:  '${{ steps.check.outputs.fcp }}',
+              tbt:  '${{ steps.check.outputs.tbt }}',
+              cls:  '${{ steps.check.outputs.cls }}',
+            };
+            const failures = `${{ steps.check.outputs.failures }}`;
+            const runUrl = `https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
+            const commit = '${{ github.sha }}'.slice(0, 7);
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `⚡ Lighthouse regression on main (${commit})`,
+              labels: ['lighthouse', 'performance'],
+              body: [
+                '## Lighthouse Regression',
+                '',
+                `**Commit:** [\`${commit}\`](https://github.com/${{ github.repository }}/commit/${{ github.sha }})`,
+                `**Run:** [View full report](${runUrl})`,
+                '',
+                '### Scores',
+                '| Category | Score | Threshold | Status |',
+                '|----------|-------|-----------|--------|',
+                `| Performance   | ${scores.perf} | 70 | ${parseInt(scores.perf) >= 70 ? '✅' : '❌'} |`,
+                `| Accessibility | ${scores.a11y} | 90 | ${parseInt(scores.a11y) >= 90 ? '✅' : '❌'} |`,
+                `| Best Practices| ${scores.bp}   | 80 | ${parseInt(scores.bp)   >= 80 ? '✅' : '❌'} |`,
+                `| SEO           | ${scores.seo}  | 80 | ${parseInt(scores.seo)  >= 80 ? '✅' : '❌'} |`,
+                '',
+                '### Core Web Vitals',
+                `- LCP: ${scores.lcp} ms (pass ≤ 2500, warn ≤ 4000)`,
+                `- FCP: ${scores.fcp} ms (pass ≤ 1800, warn ≤ 3000)`,
+                `- TBT: ${scores.tbt} ms (pass ≤ 200, warn ≤ 600)`,
+                `- CLS: ${scores.cls} (pass ≤ 0.10, warn ≤ 0.25)`,
+                '',
+                '### Failing Thresholds',
+                failures,
+                '',
+                '_Opened automatically by the Lighthouse CI workflow. Close this issue once the regression is resolved and a passing run is confirmed._',
+              ].join('\n'),
+            });

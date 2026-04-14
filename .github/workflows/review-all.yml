@@ -1,0 +1,209 @@
+# review-all.yml — PR Gate: Eagle + Shield + Lighthouse
+#
+# Runs the combined review against every PR targeting main.
+# Posts a single unified comment (summary → critical → warnings → info → GO/NO-GO).
+# Fails the check if critical findings are detected; passes with a warning annotation
+# if only warnings remain.
+#
+# Relationship to other workflows:
+#   shield.yml     — fires on all PRs; posts its own focused report
+#   eagle.yml      — fires on all PRs; posts its own focused report
+#   scribe.yml     — fires on PRs to master; creates GitHub issues for stale docs
+#   lighthouse.yml — fires on push to master; CWV + regression issue via treosh
+#   review-all.yml — fires on PRs targeting master ONLY; unified PR gate with GO/NO-GO verdict
+#
+# This workflow is additive, not a replacement. shield.yml and eagle.yml continue
+# to post their own detailed reports. review-all.yml adds the unified summary and
+# the merge-blocking check status.
+
+name: Review-All (PR Gate)
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+jobs:
+  review-all:
+    name: "Eagle + Shield + Lighthouse"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Phase 1–7: Run all three review agents and post the unified comment ──
+      - name: Run Review-All (Eagle + Shield + Lighthouse)
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          claude_args: "--dangerously-skip-permissions"
+          prompt: |
+            Read .claude/commands/review-all.md for the full specification, then
+            execute every phase against this PR. The target branch is main.
+
+            ── PHASE 1 — SCOPE ──────────────────────────────────────────────────
+
+            Get the PR changeset:
+              git -C $GITHUB_WORKSPACE diff origin/main...HEAD --name-only
+
+            This is the changeset for Eagle and Shield.
+            Lighthouse always reads its fixed file list regardless of changeset.
+
+            ── PHASE 2 — EAGLE ──────────────────────────────────────────────────
+
+            Read design-tokens.md, REVIEW.md §1–2, and lessons.md.
+
+            Run Eagle checks on any .jsx, .tsx, .vue, or .js UI files in
+            src/components/ or src/pages/ that appear
+            in the changeset.
+
+            If no UI files appear: note "🦅 Eagle: no UI files in this PR — skipping."
+
+            Check (per review-all.md Phase 2):
+            - Design token compliance: raw hex values, typography outside type scale,
+              non-canonical token access, Beacon rules from REVIEW.md §5
+            - Accessibility: missing alt, missing aria-label, focus/keyboard gaps,
+              color contrast violations
+            - Responsive: fixed px body font sizes, horizontal scroll outside
+              documented scrollable containers
+
+            ── PHASE 3 — SHIELD ─────────────────────────────────────────────────
+
+            Read REVIEW.md §2–4, module-map.md, CLAUDE.md, and lessons.md.
+
+            Run Shield checks on all code files in the changeset.
+
+            If changeset contains only docs/markdown files: note
+            "🛡️ Shield: no code changes in scope — skipping."
+
+            Check (per review-all.md Phase 3):
+            - Security: VITE_ secrets in frontend source,
+              direct external API calls from src/ (must go through server-side),
+              third-party client inline instantiation (should use shared config module),
+              dangerouslySetInnerHTML or equivalent, wildcard CORS,
+              Beacon rules from REVIEW.md §5
+            - Error handling: unhandled promise rejections, silent catch blocks
+            - Logic: changes near `handleSubmit` in Contact.tsx or `initScrollAnimations` in lib/animations.ts (flag as Critical),
+              hooks after conditional returns (Critical),
+              state initialization in render, race conditions
+            - Performance: missing memoization on expensive computation paths,
+              tab/route conditional content moved outside its guard,
+              new external production dependencies without justification
+            - Architecture: locked file modifications (Critical), new features
+              added to main.tsx directly instead of extracted components
+
+            ── PHASE 4 — LIGHTHOUSE ─────────────────────────────────────────────
+
+            Lighthouse source checks run regardless of the PR changeset.
+            Skip live CWV run if https://nestcalc.ai/ is not publicly accessible
+            (e.g., password-protected pre-launch or deployed to wrong environment).
+
+            Read and check (per review-all.md Phase 4 and lighthouse.md Steps 1–15):
+
+            SEO (Steps 1–2): Read index.html — verify all required meta tags,
+            OG tags, Twitter Card, and the Organization JSON-LD schema (if present).
+            Missing required element → 🔴 Critical. Suboptimal but present → 🟡 Warning.
+
+            SEO (Steps 3–4): No SEO library in use — meta tags are hand-authored in index.html;
+            verify robots.txt; cross-reference sitemap.xml URLs against public/ files.
+
+            SEO heading hierarchy (Step 5): Check src/App.tsx and index.html for
+            heading skips and duplicate h1. Static HTML only — do not re-flag
+            the same issue from Eagle's component heading checks.
+
+            AEO/GEO (Steps 6–10): Check index.html for JSON-LD
+            presence, definitional opening paragraph, authoritative sourcing language,
+            extractable content structures, and citation-ready headings.
+
+            EEAT (Steps 11–15): Check for experience signals in index.html
+            and src/components/WhyNokYai.tsx (AEO informational only); expertise signals
+            (author bio / About page); authority signals in src/components/Footer.tsx
+            and index.html Organization schema; trust signals in main.tsx
+            footer and src/components/Footer.tsx.
+
+            Known Lighthouse baselines: None documented yet — all failures are treated
+            as new regressions until baselines are recorded after the first passing run.
+
+            ── PHASE 5–7 — MERGE AND REPORT ─────────────────────────────────────
+
+            Apply the severity model from review-all.md:
+              Eagle error / Shield Critical / Lighthouse new ❌  → 🔴 Critical
+              Eagle warn  / Shield Major   / Lighthouse ⚠️       → 🟡 Warning (CODE)
+              Eagle info  / Shield Minor                         → 🟡 Warning (CODE)
+              Lighthouse ⚠️ / baseline ❌                        → 🟡 Warning (SEO)
+              Informational ✅ notes                             → 🔵 Info
+
+            Within 🟡 Warning: CODE items (Eagle/Shield) appear before SEO items
+            (Lighthouse) in the CONDITIONAL GO caveat list.
+
+            Deduplicate: same file+line flagged by Eagle and Shield → one merged row.
+            Do NOT merge Eagle JSX/component heading findings with Lighthouse HTML
+            heading findings — different file scopes, both are valid.
+
+            Detect cross-agent conflicts per review-all.md Phase 6.
+
+            Post a single GitHub PR comment with the exact output format from
+            review-all.md:
+              ## Review-All Report — [date]
+              Scope / Agents run line
+              ### Summary (total counts, per-agent status)
+              ### 🔴 Critical
+              ### 🟡 Warnings
+              ### 🔵 Info
+              ### ⚡ Cross-Agent Conflicts
+              ### Agent Summaries
+              ### GO / CONDITIONAL GO / NO-GO verdict
+
+            ── STATUS FILE ──────────────────────────────────────────────────────
+
+            After posting the PR comment, write the outcome to
+            $GITHUB_WORKSPACE/review-status.txt using exactly one of these words:
+
+              critical  — one or more 🔴 Critical findings exist
+              warning   — no Critical findings; one or more 🟡 Warnings remain
+              clean     — only 🔵 Info findings, or none at all
+
+            Example:
+              echo "critical" > $GITHUB_WORKSPACE/review-status.txt
+
+          max_turns: "10"
+
+      # ── Enforce the GO/NO-GO decision as a check status ──────────────────────
+      - name: Enforce check status from review outcome
+        run: |
+          STATUS_FILE="$GITHUB_WORKSPACE/review-status.txt"
+
+          if [ ! -f "$STATUS_FILE" ]; then
+            echo "::warning::review-status.txt was not written by the review agent."
+            echo "::warning::Defaulting to clean. Inspect the agent log above to confirm."
+            exit 0
+          fi
+
+          STATUS=$(cat "$STATUS_FILE" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]')
+          echo "Review outcome: $STATUS"
+
+          case "$STATUS" in
+            critical)
+              echo "::error::🔴 Critical findings detected. This PR cannot be merged until all blockers are resolved. See the Review-All comment above for the full findings table."
+              exit 1
+              ;;
+            warning)
+              echo "::warning::🟡 Warnings found. Merge is allowed. Address CODE warnings before the next release and SEO warnings before public launch."
+              exit 0
+              ;;
+            clean)
+              echo "✅ All review checks passed — GO."
+              exit 0
+              ;;
+            *)
+              echo "::warning::Unrecognised status value '$STATUS' in review-status.txt. Defaulting to clean."
+              exit 0
+              ;;
+          esac
