@@ -98,9 +98,6 @@ src/
 
   assets/
     NokYai-logo-gold-green.png   — Primary logo (optimized, ~21KB)
-    NokYai-logo-gold.jpg         — Alternate logo variant
-    NokYai-logo.svg              — SVG logo variant
-    hero.png                     — Hero section background image
 
   styles/
     globals.css                  — @theme block (authoritative), base styles, keyframes

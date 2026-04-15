@@ -47,10 +47,18 @@ export function LegalModal({ open, onClose, title, lastUpdated, children }: Lega
 
           {/* Content */}
           <div className="max-w-3xl w-full px-6 pt-24 pb-16">
-            <h1 className="font-display text-section text-white mb-2">{title}</h1>
+            <h2 className="font-display text-section text-white mb-2">{title}</h2>
             <p className="text-sm text-nok-caption italic mb-10">Last Updated: {lastUpdated}</p>
             <div className="legal-content text-nok-body text-base leading-relaxed">
               {children}
+            </div>
+            <div className="mt-12 pt-8 border-t border-nok-border/50 flex justify-center">
+              <button
+                onClick={onClose}
+                className="text-nok-body hover:text-white transition-colors text-sm font-medium"
+              >
+                &larr; Back to NestCalc
+              </button>
             </div>
           </div>
         </motion.div>

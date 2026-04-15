@@ -24,7 +24,7 @@ function TechCard({ name, icon, category }: (typeof TECH)[number]) {
           <span className="text-xl leading-none">{icon}</span>
           <div>
             <p className="text-xs font-medium text-nok-body whitespace-nowrap">{name}</p>
-            <p className="text-[9px] uppercase tracking-wider text-nok-gold/60">{category}</p>
+            <p className="text-[9px] uppercase tracking-wider text-nok-caption">{category}</p>
           </div>
         </div>
       </GlowCard>

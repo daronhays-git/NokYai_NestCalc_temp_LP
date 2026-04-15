@@ -64,11 +64,7 @@ nokyai-lp/
 │   │   └── constants.ts              — Module-level constants (currently empty — TODO)
 │   │
 │   └── assets/
-│       ├── NokYai-logo-gold-green.png
-│       ├── NokYai-logo-gold.jpg
-│       ├── NokYai-logo.svg
-│       ├── hero.png
-│       └── (vite/react defaults)
+│       └── NokYai-logo-gold-green.png
 │
 └── public/
     ├── robots.txt

@@ -62,7 +62,8 @@ export function Contact() {
       } else {
         setStatus('error')
       }
-    } catch {
+    } catch (error) {
+      console.error(error)
       setStatus('error')
     }
   }

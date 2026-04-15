@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import nokYaiLogo from '../../assets/NokYai-logo-gold-green.png'
 import { LegalModal } from '../legal/LegalModal'
 import { PrivacyPolicyContent } from '../legal/PrivacyPolicy'
 import { TermsOfServiceContent } from '../legal/TermsOfService'
 import { DisclaimerContent } from '../legal/Disclaimer'
+import nokYaiLogo from '../../assets/NokYai-logo-gold-green.png'
 
 type LegalPage = 'privacy' | 'terms' | 'disclaimer' | null
 
@@ -55,7 +55,7 @@ export function Footer() {
             {/* Brand */}
             <div className="col-span-2 lg:col-span-1">
               <a href="#hero" className="inline-flex flex-col items-start mb-3">
-                <img src={nokYaiLogo} alt="NestCalc" className="h-12 w-auto mb-2" />
+                <img src={nokYaiLogo} alt="NestCalc" width={200} height={200} className="h-12 w-auto mb-2" />
                 <span className="font-display font-extrabold text-xl">
                   <span style={{ color: '#6DC99E', textShadow: '0 0 20px rgba(109,201,158,0.3)' }}>Nest</span>
                   <span style={{ color: '#fcd34d', textShadow: '0 0 20px rgba(252,211,77,0.4)' }}>Calc.ai</span>
@@ -95,11 +95,11 @@ export function Footer() {
               &copy; 2026 NestCalc.ai. All rights reserved.
             </p>
             <p className="text-sm text-nok-caption">
-              Built NestCalc.ai &mdash; What can we build for you?
+              Built by NestCalc.ai &mdash; What can we build for you?
             </p>
           </div>
 
-          <p className="text-xs text-center pt-4" style={{ color: '#D4C9A8' }}>
+          <p className="text-xs text-center pt-4 text-nok-caption">
             v1.3
           </p>
         </div>

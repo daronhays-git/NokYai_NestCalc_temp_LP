@@ -71,6 +71,10 @@ export function Hero() {
               ref={primaryBtnRef}
               onMouseEnter={() => setBtnHovered(true)}
               onMouseLeave={() => setBtnHovered(false)}
+              onClick={(e) => {
+                e.preventDefault()
+                document.querySelector('#contactus')?.scrollIntoView({ behavior: 'smooth' })
+              }}
             >
               <MagneticButton href="#contactus">Start Your Project</MagneticButton>
             </div>
@@ -85,7 +89,7 @@ export function Hero() {
               onMouseLeave={() => setBtnHovered(false)}
               className="cursor-hover inline-block px-8 py-4 rounded-xl border border-nok-border text-nok-body font-semibold hover:border-nok-gold hover:text-nok-gold transition-colors duration-200"
             >
-              View Our Work &rarr;
+              Explore Services &rarr;
             </a>
           </motion.div>
 

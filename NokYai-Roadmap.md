@@ -1,7 +1,7 @@
 # NokYai.com LP — Roadmap
 
 **Last Updated:** April 15, 2026  
-**Current Status:** V1.3.1 complete — agent stack ported, CI active (commit 57790c2)
+**Current Status:** V1.4.0 complete — agent fixes applied, Lighthouse 99/94/100/100 (commit 198782e)
 
 ---
 
@@ -14,22 +14,23 @@
 | Contact Form & Polish | V1.2 | Netlify Forms working, email link with clipboard copy, trust badges, git remote fix |
 | Responsive & SEO | V1.3.0 | Full responsive pass, SEO meta tags, favicon, OG image, robots/sitemap, padding tightening |
 | Agent Stack Porting | V1.3.1 | Font config fix, dead code removal, Foundation configs, 4 agent commands, 5 GitHub Actions, baseline snapshot |
+| Agent Fixes & Polish | V1.4.0 | Agent quick wins fixed, title tags, JSON-LD, Lighthouse audit, contrast fix, favicons, UX improvements |
 
 ---
 
-## Next Session (V1.4.0)
+## Next Session (V1.4.1)
 
-**Priority:** Fix agent-flagged issues, replace placeholder content, add analytics
+**Priority:** Fix favicon SVG, set up GA4 analytics, begin content replacement
 
-1. Fix 5 quick-win agent findings (Contact catch, Footer import/color, LegalModal h1, Services nok-amber)
-2. Fix stale title tags in index.html
-3. Add Organization JSON-LD schema
-4. Add Google Analytics 4 tracking
-5. Lighthouse performance audit
+1. Fix favicon SVG manually (eagle logo — needs design tool, not Claude Code)
+2. Add Google Analytics 4 (after domain/bank setup complete)
+3. Re-run Lighthouse audit (expect accessibility improvement from contrast fix)
+4. Audit and begin replacing placeholder content
+5. Validate JSON-LD schema with Google Rich Results Test
 
 ---
 
-## Backlog (Post V1.4.0)
+## Backlog (Post V1.4.1)
 
 ### Content
 - [ ] Replace placeholder testimonials with real quotes
@@ -42,7 +43,7 @@
 - [ ] Rewrite legal documents for AI services (currently references old RE product)
 
 ### SEO & Marketing
-- [ ] Performance audit (Lighthouse 90+)
+- [ ] Performance audit (Lighthouse 90+ all categories)
 - [ ] Social sharing preview image (verify OG renders correctly)
 - [ ] Add email link to Footer
 - [ ] Add operating entity statement to Footer
@@ -54,6 +55,26 @@
 - [ ] Client portal link
 - [ ] Pricing section (if applicable)
 - [ ] FAQ schema when content expands
+
+---
+
+## What Changed — V1.4.0
+
+**Session (April 15, 2026)**
+- P1: Fixed 5 agent-flagged quick wins — Contact.tsx catch block, Footer import order + inline color, LegalModal h1→h2, Services nok-amber→nok-gold
+- P2: Fixed stale title tags in index.html — all three now "Custom AI Development Studio | NestCalc.ai"
+- P3: Added Organization JSON-LD schema to index.html
+- P5: Lighthouse desktop audit — scored 99/94/100/100
+- P6: Fixed 9 accessibility contrast failures — text-nok-gold/60 → text-nok-caption in Services, TechStack, Testimonials
+- P8a: Added width={200} height={200} to both logo img tags (Navbar + Footer) — eliminates CLS
+- P8b: Removed 3 orphaned asset files — hero.png, NokYai-logo-gold.jpg, NokYai-logo.svg (636 KB reclaimed)
+- P8c: Fixed stale asset references in module-map.md and doc-inventory.md
+- P9: Fixed Footer typo "Built NestCalc.ai" → "Built by NestCalc.ai"
+- P11: Added duplicate "Back to NestCalc" button at bottom of LegalModal
+- P12a: Fixed Hero primary CTA — added smooth scroll to #contactus (was hard-jumping)
+- P12b: Renamed Hero secondary CTA "View Our Work →" → "Explore Services →"
+- P13a: Generated eagle favicon PNGs (48x48 + 180x180) from logo — SVG silhouette needs manual redo
+- Parked: P4 (GA4 — waiting on domain setup), Rich Results Test (post-deploy)
 
 ---
 

@@ -76,7 +76,7 @@ export function Navbar() {
             onClick={(e) => { e.preventDefault(); scrollTo('#hero') }}
             className="flex items-center gap-2 font-display font-extrabold text-xl cursor-hover"
           >
-            <img src={nokYaiLogo} alt="NestCalc" className="h-10 w-auto" />
+            <img src={nokYaiLogo} alt="NestCalc" width={200} height={200} className="h-10 w-auto" />
             <span><span style={{ color: '#6DC99E', textShadow: '0 0 20px rgba(109,201,158,0.3)' }}>Nest</span><span style={{ color: '#fcd34d', textShadow: '0 0 20px rgba(252,211,77,0.4)' }}>Calc.ai</span></span>
           </a>
 

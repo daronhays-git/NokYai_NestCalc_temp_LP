@@ -15,7 +15,7 @@ export function Testimonials() {
             >
               <path d="M11.3 2.7c-4.2 1.8-7 5.6-7 10.2 0 3.4 2.1 5.8 4.7 5.8 2.3 0 4-1.7 4-4.1 0-2.2-1.5-3.8-3.5-3.8-.4 0-.9.1-1.2.2.5-2.7 2.8-5.4 5.5-6.7L11.3 2.7zm10.2 0c-4.2 1.8-7 5.6-7 10.2 0 3.4 2.1 5.8 4.7 5.8 2.3 0 4-1.7 4-4.1 0-2.2-1.5-3.8-3.5-3.8-.4 0-.9.1-1.2.2.5-2.7 2.8-5.4 5.5-6.7L21.5 2.7z" />
             </svg>
-            <span className="inline-block text-xs font-medium uppercase tracking-widest text-nok-gold/60">
+            <span className="inline-block text-xs font-medium uppercase tracking-widest text-nok-caption">
               Coming Soon
             </span>
           </div>

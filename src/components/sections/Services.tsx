@@ -29,7 +29,7 @@ const SERVICES = [
     title: 'Web & Mobile Apps',
     description:
       'Leading Edge Apps with Exceptional Design, Security and User Experience',
-    gradient: 'from-nok-gold to-nok-amber',
+    gradient: 'from-nok-gold to-nok-gold',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-6 h-6 text-white">
         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
@@ -79,7 +79,7 @@ export function Services() {
                     <p className="text-nok-body text-sm leading-relaxed mb-4">
                       {service.description}
                     </p>
-                    <span className="inline-block mt-1 text-xs font-medium uppercase tracking-widest text-nok-gold/60">
+                    <span className="inline-block mt-1 text-xs font-medium uppercase tracking-widest text-nok-caption">
                       Coming Soon
                     </span>
                   </div>

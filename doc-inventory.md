@@ -131,9 +131,6 @@ These files were accurate at the time of writing. They are not maintained; treat
 | File | Purpose |
 |------|---------|
 | `src/assets/NokYai-logo-gold-green.png` | Primary brand logo — gold + green variant (~21KB, optimized) |
-| `src/assets/NokYai-logo-gold.jpg` | Alternate logo — gold only variant |
-| `src/assets/NokYai-logo.svg` | SVG logo variant |
-| `src/assets/hero.png` | Hero section background image |
 
 ### `src/components/layout/`
 
