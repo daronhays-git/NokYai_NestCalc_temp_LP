@@ -30,7 +30,7 @@ export default {
         },
       },
       fontFamily: {
-        display: ['Syne', 'sans-serif'],
+        display: ['Space Grotesk', 'sans-serif'],
         body: ['Outfit', 'sans-serif'],
       },
       fontSize: {

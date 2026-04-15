@@ -98,6 +98,10 @@ export function Footer() {
               Built NestCalc.ai &mdash; What can we build for you?
             </p>
           </div>
+
+          <p className="text-xs text-center pt-4" style={{ color: '#D4C9A8' }}>
+            v1.3
+          </p>
         </div>
       </footer>
 

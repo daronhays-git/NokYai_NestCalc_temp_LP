@@ -1,157 +1,167 @@
-# Template — customize for your project. See SETUP.md for placeholder reference.
+# /shield — Code Quality & Security Review
 
-# /shield — Code & Security Review
+Read-only review agent. Do not modify any files.
 
-## Purpose
-Review code changes for security vulnerabilities, logic errors, error handling gaps, performance anti-patterns, and architectural drift against [PROJECT_NAME]'s documented standards. Shield is the gatekeeper that catches problems before they reach production — every finding is tied back to a rule in `REVIEW.md`, `module-map.md`, or `CLAUDE-AGENTS.md`, not generic best practices.
+## Setup
 
----
-
-## Files to Read Before Reviewing
-1. `REVIEW.md` — Module Isolation, Security Patterns, and Performance Standards sections (per REVIEW.md conventions)
-2. `module-map.md` — locked file list, serverless function inventory, auth flow
-3. `CLAUDE-AGENTS.md` — Code Reviewer + Security Reviewer agent roles
-4. `CLAUDE.md` — dev conventions
-5. `lessons.md` — known false positive patterns to skip
+Read these files before reviewing anything:
+1. `CLAUDE.md` — project identity, architecture, coding rules, locked files
+2. `REVIEW.md` — enforcement rules for §2 Code Quality, §4 Animation Performance, §5 TypeScript
 
 ---
 
-## What Shield Checks
+## Review Steps
 
-### 1. Security (per REVIEW.md Security Patterns)
+### 1. TypeScript Strictness (REVIEW.md §5)
 
-**API Keys & Secrets**
-- No API keys, service-role credentials, or secrets in frontend code (`[PROJECT_SRC]`).
-- All external API calls proxy through `[SERVERLESS_PATH]` — never direct from the browser.
-- Serverless functions use the project's auth validation utility for authenticated endpoints.
-- Public env var prefix (e.g., `VITE_`) is used only for values safe to expose to the browser. Any secret behind a public env var is Critical.
+Read `tsconfig.app.json` and verify these flags are present and set to `true`:
+- `strict`
+- `noUnusedLocals`
+- `noUnusedParameters`
+- `verbatimModuleSyntax`
+- `erasableSyntaxOnly`
 
-**Payment Integration**
-- Webhook handlers verify provider signatures before processing events.
-- Checkout/payment sessions are created server-side — never from the client.
-- Payment mode (test vs. live) is controlled by an env var, not hardcoded keys.
-- Price/product IDs come from a config file — never hardcoded in components.
+Scan all `.ts` and `.tsx` files under `src/` for:
+- `any` type used without an inline comment justification — flag each occurrence with file and line
+- Type-only imports missing the `type` keyword (e.g. `import { Foo }` where Foo is only used as a type)
+- Components with more than 2 props that have no named `interface` or `type` alias for their props
 
-**Database & Auth**
-- Row-level security (or equivalent) is assumed — no client-side code that bypasses it.
-- Database client is imported from the project's config module — never instantiated inline.
-- Auth tokens are managed by the project's auth context — never stored in `localStorage` manually.
-- No client-side role or tier elevation in auth/tier context files.
+### 2. Security Patterns (REVIEW.md §2.4)
 
-**Input Validation & XSS**
-- Numeric inputs are clamped/validated before use.
-- User-supplied strings are sanitized before passing to external APIs.
-- No `dangerouslySetInnerHTML` unless the content source is fully trusted.
-- No dynamic URL construction without sanitization.
+Scan all `src/` files for:
+- Hardcoded credentials or API keys — strings matching `sk-`, `Bearer `, or base64 blobs longer than 30 characters
+- `dangerouslySetInnerHTML` — flag any occurrence; verify content source is documented as trusted
+- Environment variables accessed in client code that are not prefixed with `VITE_`
+- Direct browser fetch calls to third-party APIs that should route through a serverless function
 
-**CORS**
-- Serverless functions set CORS headers for the project's domain.
-- No wildcard (`*`) CORS in production functions.
+### 3. Error Handling (REVIEW.md §2.1, §6.4)
 
-### 2. Error Handling
-- External calls (fetch, database, payment provider) are wrapped in `try/catch` — failures never surface as unhandled promise rejections.
-- User-facing errors use the project's i18n/translation strings and render via documented error patterns (see design-tokens.md).
-- Graceful degradation: when a serverless function or data call fails, the UI shows a fallback state rather than crashing or blocking the user.
-- No silent `catch {}` blocks that swallow errors without logging or user feedback.
+Scan all `src/` files for:
+- `async/await` calls not wrapped in `try/catch`
+- Empty `catch` blocks with no `console.error` call
+- `.then()` chains with no `.catch()` and no trailing `try/catch`
+- UI error states that show no user-visible recovery path
 
-### 3. Logic
-- Calculation accuracy: any change near core calculation functions listed in `module-map.md` is Critical — those functions are locked.
-- State management: `useState` setters are not called during render; dependent state uses derived values or `useEffect`.
-- Race conditions: async effects that set state guard against stale responses (cancellation flag, mounted ref, or sequence token).
-- Hooks come before any conditional returns in component bodies.
+Reference: `src/components/sections/Contact.tsx` is the correct pattern — idle → submitting → success/error with a direct email fallback link on failure.
 
-### 4. Performance (per REVIEW.md Performance Standards)
+### 4. Animation Cleanup (REVIEW.md §4.3, §4.4)
 
-**Rendering**
-- Expensive computations use `useMemo` with correct dependency arrays.
-- Event handlers that don't depend on render state use `useCallback`.
-- List renders include stable `key` props — never array index for reorderable lists.
-- Components rendered inside tab conditionals must stay inside the conditional — moving them outside forces rendering when the tab is inactive.
+**ParticleField** (`src/components/effects/ParticleField.tsx`):
+- Confirm `cancelAnimationFrame` is called in the cleanup `return` of the main `useEffect`
+- Confirm any `IntersectionObserver` instance is `.disconnect()`ed on cleanup
 
-**Bundle & Loading**
-- No new external dependencies without justification — see `package.json` for the project's sanctioned dependency set.
-- Fonts/external resources loaded once in the main component — no duplicate `<link>` tags.
-- Images in the static directory are optimized — no uncompressed PNGs above 200 KB.
+**App.tsx** (`src/App.tsx`):
+- Confirm `initScrollAnimations()` is called exactly once, inside a `useEffect`
+- Confirm `cleanupScrollAnimations()` is called in that `useEffect`'s cleanup return
+- Search all of `src/` for any other call to `initScrollAnimations()` — there must be none
 
-**Network**
-- API calls use the project's caching pattern where applicable.
-- Debounce user-input-driven API calls — no API call per keystroke.
-- No `await` inside render paths — async lives in `useEffect` or event handlers.
+**GSAP in other components**:
+- If any component outside `src/lib/animations.ts` creates a `ScrollTrigger` instance, confirm `.kill()` is called on unmount
+- Confirm `willChange` is set before GSAP animates an element and reverted after
 
-### 5. Architecture (per REVIEW.md Module Isolation)
+### 5. Netlify Form Integrity (REVIEW.md §6.6)
 
-**File Boundaries**
-- New features go in their own file under `[PROJECT_SRC]/components/` — not added to `[APP_ENTRY]`.
-- Only files under `[PROJECT_SRC]` are edited — any legacy source copy directories must not be used.
-- New config → `[PROJECT_SRC]/config/`. New utilities → `[PROJECT_SRC]/utils/`.
+Read both files:
+- `index.html`
+- `src/components/sections/Contact.tsx`
 
-**Locked Files (Critical if modified without explicit unlock)**
-- See `module-map.md` for the full locked file list.
+Extract the hidden form field names from `index.html` (`<input name="...">`, `<textarea name="...">`).
+Extract the field names appended to the `URLSearchParams` body in `Contact.tsx`.
 
-**Import Conventions**
-- Theme tokens accessed via the project's theme variable (set at render time), not by importing theme constants directly.
-- Tier/role constants imported from the config module using named exports.
-- Translations imported from the i18n module.
-- Database client imported from the config module.
-- Payment logic goes through the payments config module — never direct provider calls from components.
+- Confirm both sets are identical
+- Confirm the hidden form still has `name="contact"` and `data-netlify="true"`
+- Flag any field name present in one but not the other
 
-**Component Contract**
-- New components receive theming, responsive, and i18n props as defined in `CLAUDE.md`.
-- Components do not manage their own dark mode state.
+### 6. Architectural Drift (CLAUDE.md §Component Patterns)
+
+**Lazy loading** — read `src/App.tsx`:
+- Every section below Hero must be loaded with `React.lazy()`
+- Each lazy import must be wrapped in `<Suspense fallback={null}>`
+- Flag any section component imported directly (not lazy)
+
+**Eager components** (these must NOT be lazy — flag if they are):
+`Navbar`, `Hero`, `CustomCursor`, `ScrollProgress`, `NoiseOverlay`
+
+**Component isolation** — scan `src/components/`:
+- No component function (`function Foo()` or `const Foo = () =>`) defined inside another component's render body
+- No reusable custom hook defined inline in a component file — hooks belong in `src/hooks/`
+- All React hooks appear before any conditional return in every component file
+
+**Locked files**:
+- `src/lib/birdPaths.ts` — if git is available, check `git diff` or `git status` for changes; flag if modified
+- `src/styles/globals.css` `@theme` block — note if any token hex value differs from the values in `design-tokens.md`
+
+### 7. Import Order (REVIEW.md §6.1)
+
+Sample at least 6 component files across `src/components/` and verify the import order in each:
+1. React and React hooks
+2. Third-party libraries (`framer-motion`, `gsap`, `three`, `@react-three/*`)
+3. Internal components (`../components/`, `./`)
+4. Internal hooks (`../hooks/`)
+5. Internal lib/utils (`../lib/`)
+6. Assets (images, SVGs)
+
+Flag files where third-party and internal imports are interleaved, or where assets appear before internal modules.
+
+### 8. Section ID Integrity (REVIEW.md §6.7)
+
+Read `src/components/layout/Navbar.tsx` and each section file.
+
+Extract `id` attributes from section root elements. Extract `href` values from Navbar links.
+
+Expected IDs: `hero`, `solutions`, `ourtech`, `trust`, `whynestcalc`, `contactus`
+
+Flag any section `id` or nav `href` that does not match this set.
+
+### 9. Logging and Dead Code (REVIEW.md §2.2)
+
+Scan all `src/` files for:
+- `console.log(` — warn on each occurrence
+- Commented-out code blocks longer than 2 lines
+- `debugger` statements
 
 ---
 
 ## Output Format
 
-```markdown
-## Shield Review: [commit sha / file path / range]
-
-### Verdict
-**PASS** / **FAIL** — [one-line summary]
-
-### Findings
-| File | Line | Severity | Category | Finding | Recommendation |
-|------|------|----------|----------|---------|----------------|
-| [PROJECT_SRC]/components/Foo.jsx | 42 | Critical | Security | Secret key referenced via public env var — exposed to browser bundle | Move call to [SERVERLESS_PATH], use a non-public env var |
-| [PROJECT_SRC]/components/Bar.jsx | 118 | Major | Performance | Core calc re-runs every render — no `useMemo` | Wrap in `useMemo` with correct deps |
-| [PROJECT_SRC]/components/Baz.jsx | 7 | Minor | Architecture | Imports theme constant directly instead of using theme prop | Accept theme as a prop per REVIEW.md conventions |
-
-### Severity Levels
-- **Critical** — Security vulnerability, locked file modification, broken calculation, or data loss risk. Blocks merge.
-- **Major** — Error handling gap, missing `useMemo` on expensive path, direct external API call from frontend, auth/RLS assumption violation. Must fix before merge.
-- **Minor** — Import convention drift, missing `useCallback`, non-stable list keys, architectural inconsistency that doesn't cause immediate harm.
-
-### Summary
-[1–3 sentences: overall quality, the most important fixes required before merge, and anything notable that passed cleanly.]
 ```
+## Shield Review — [date]
+
+### TypeScript
+✅ ...
+⚠️ ...
+❌ ...
+
+### Security
+...
+
+### Error Handling
+...
+
+### Animation Cleanup
+...
+
+### Netlify Form Integrity
+...
+
+### Architecture
+...
+
+### Import Order
+...
+
+### Section IDs
+...
+
+### Logging / Dead Code
+...
 
 ---
+### Recommendations
+- (optional improvements — not rule violations)
+```
 
-## How To Run
-
-**Default:** Review the most recent commit on the current branch.
-```
-/shield
-```
-Runs `git show --stat HEAD` + `git diff HEAD~1 HEAD` to gather the changeset, then applies every check above to the modified lines (and any surrounding context needed to judge them).
-
-**Specific file:**
-```
-/shield [PROJECT_SRC]/components/SomeComponent.jsx
-```
-Reviews the entire file as if it were all-new code.
-
-**Commit range:**
-```
-/shield HEAD~5..HEAD
-/shield main..feature-branch
-```
-Reviews every commit in the range, consolidating findings into a single table.
-
-**Rules while running:**
-1. Read `REVIEW.md` first, every run — rules change.
-2. Only flag findings tied to a specific rule in REVIEW.md, module-map.md, or CLAUDE-AGENTS.md. Generic advice is not a Shield finding.
-3. Cite `file:line` for every row — no vague "somewhere in this component".
-4. Do not modify code. Shield is review-only; fixes go through the normal edit flow.
-5. If the changeset is empty or only touches docs/markdown, return `PASS — no code changes in scope` without a findings table.
-6. When running git commands, always use `git -C [PROJECT_PATH]` instead of `cd <path> && git ...`. This ensures commands match the allowed tool patterns in `.claude/settings.json`.
+**Severity key:**
+- ✅ **Passing** — rule followed correctly
+- ⚠️ **Warning** — not broken but should be addressed
+- ❌ **Issue** — violation that must be fixed

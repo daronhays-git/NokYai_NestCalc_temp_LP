@@ -4,8 +4,8 @@
 **Status:** Deployed — responsive, SEO complete, pending content replacement  
 **Branch:** main  
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP  
-**Commit:** 167bb5a  
-**Dev Server:** http://localhost:5174  
+**Commit:** 444e3db  
+**Dev Server:** http://localhost:5173  
 
 ---
 
@@ -18,13 +18,14 @@ npm run dev
 
 ## Tech Stack
 
-- Vite + React 18 + TypeScript
-- Tailwind CSS 3.4 (custom design tokens)
+- Vite + React 19.2.4 + TypeScript
+- Tailwind CSS 4.2.2 (CSS-first custom design tokens in globals.css)
 - Framer Motion (component animations)
 - GSAP + ScrollTrigger (scroll-driven animations)
 - 2D Canvas particle system (custom, mouse-reactive)
 - Netlify Forms (contact form submissions)
-- Google Fonts: Syne (display) + Outfit (body)
+- Google Fonts: Space Grotesk (display) + Outfit (body)
+- Agent stack: Shield, Eagle, Lighthouse, Scribe (CI via GitHub Actions)
 
 ## File Structure
 
@@ -33,14 +34,14 @@ nokyai-lp/
 ├── src/
 │   ├── components/
 │   │   ├── layout/        Navbar.tsx, Footer.tsx
-│   │   ├── sections/      Hero, Services, CaseStudies, Process,
-│   │   │                  Testimonials, TechStack, WhyNokYai,
-│   │   │                  CTABand, Contact, LogoBar
+│   │   ├── sections/      Hero, Services, TechStack, WhyNokYai,
+│   │   │                  Testimonials, Contact
 │   │   ├── ui/            MagneticButton, GlowCard, SectionHeading,
 │   │   │                  CustomCursor, ScrollProgress
-│   │   └── effects/       ParticleField, GradientMesh, NoiseOverlay
+│   │   ├── effects/       ParticleField, GradientMesh, NoiseOverlay
+│   │   └── legal/         LegalModal, PrivacyPolicy, TermsOfService, Disclaimer
 │   ├── styles/globals.css
-│   ├── lib/               animations.ts, constants.ts, birdPaths.ts
+│   ├── lib/               animations.ts, birdPaths.ts
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
 ├── public/
 │   ├── favicon.svg        Green eagle favicon
@@ -88,7 +89,7 @@ git push origin main # Auto-deploys to Netlify
 
 - One change per Claude Code prompt
 - Verify on localhost after every change
-- Do not modify fonts (Syne + Outfit locked in)
+- Do not modify fonts (Space Grotesk + Outfit locked in)
 - Do not change section order or component structure
 - Do not change the color palette
 - Always push to origin (NokYai_NestCalc_temp_LP)

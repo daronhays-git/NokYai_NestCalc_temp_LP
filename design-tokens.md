@@ -1,552 +1,432 @@
-# NestCalc.ai — Design Tokens
+# NokYai LP — Design Tokens
+
+Canonical design system reference. All values extracted from `src/styles/globals.css` `@theme` block and `tailwind.config.ts`.
+Eagle references this file during design compliance reviews.
 
 ---
 
 ## Color Palette
 
-<!-- Foundation fills this from Q7: colors and aesthetic.
-     Choose meaningful names for your two main hues (e.g., "Forest Green", "Slate Blue").
-     If the project has a secondary brand color, fill in §Color — Secondary.
-     If single-hue, delete §Color — Secondary and §Color — Accent. -->
+### Backgrounds
 
-### Primary Color — Forest Green
-<!-- Example name: "Forest Green", "Ocean Blue", "Midnight" -->
+| Token | Tailwind class | Hex | Usage |
+|-------|---------------|-----|-------|
+| nok-deep | `bg-nok-deep` | `#0f2920` | Page root, hero, footer, navbar (scrolled), legal modal overlay |
+| nok-forest | `bg-nok-forest` | `#1a3a2a` | TechStack section, Testimonials section, form input backgrounds |
+| nok-medium | `bg-nok-medium` | `#2d5a42` | Services section, Contact section |
+| nok-surface | `bg-nok-surface` | `rgba(255,255,255,0.08)` | GlowCard content layer, card inner surfaces |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `primary[900]` | `#0f2920` | Darkest — headers, primary text on light surfaces |
-| `primary[800]` | `#1a3a2a` | Strong emphasis — card title text, gradient ends |
-| `primary[700]` | `#2d5a42` | Active states — active tab background, focus rings |
-| `primary[600]` | `#2d5a42` | Default brand color — buttons, links, accents |
-| `primary[500]` | `#6DC99E` | Mid-tone — success indicators, status chips |
-| `primary[400]` | `rgba(255,255,255,0.1)` | Border highlights — focused input borders |
-| `primary[300]` | `rgba(255,255,255,0.05)` | Soft accents — glow shadows, decorative lines |
-| `primary[200]` | `rgba(255,255,255,0.08)` | Tinted text on dark backgrounds — header subtext |
-| `primary[100]` | `#D4C9A8` | Light backgrounds — badge fills, highlighted rows |
-| `primary[50]`  | `#FEF3C7`  | Whisper tint — highlighted input background |
+**Section background flow (top to bottom):**
+```
+Hero         → nok-deep
+Services     → nok-medium
+TechStack    → nok-forest
+WhyNokYai    → (inherits page bg — nok-deep)
+Testimonials → nok-forest
+Contact      → nok-medium
+Footer       → nok-deep
+```
 
-<!-- Example (delete after filling in):
-| `primary[900]` | `#0B3D2E` | Darkest forest green |
-| `primary[600]` | `#1A7D55` | Default brand green — buttons, links |
--->
+### Text
 
----
+| Token | Tailwind class | Hex | Usage |
+|-------|---------------|-----|-------|
+| nok-heading | `text-nok-heading` | `#FFFFFF` | Section headings, card titles |
+| nok-body | `text-nok-body` | `#FEF3C7` | Body copy, paragraph text, warm wheat tone |
+| nok-caption | `text-nok-caption` | `#D4C9A8` | Captions, muted labels, subtitles, form labels |
+| nok-white | `text-nok-white` | `#FFFFFF` | Pure white when distinction from nok-heading matters |
 
-### Secondary Color — Gold
-<!-- Example name: "Gold", "Coral", "Sky" — delete this section if the project is single-hue -->
+### Accents
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `secondary[700]` | `#fcd34d` | Gradient end — logo, icon accents |
-| `secondary[500]` | `#F59E0B` | Default secondary — upgrade badges, tier accents |
-| `secondary[400]` | `#f59e0b` | Decorative text — `.ai` suffix, section underlines |
+| Token | Tailwind class | Hex | Usage |
+|-------|---------------|-----|-------|
+| nok-gold | `text-nok-gold` / `bg-nok-gold` | `#F59E0B` | Primary accent — CTAs, numbers, highlights, hero headline, SectionHeading, accent bars |
+| nok-teal | `text-nok-teal` | `#0d9488` | Secondary accent — links, focus rings, gradient second stop, GlowCard glow |
+| nok-amber | `text-nok-amber` | `#f59e0b` | **Duplicate of nok-gold** — do not use in new code; use `nok-gold` instead |
 
----
+### UI States
 
-### Accent Color — Teal
-<!-- Optional. Use for a third brand hue, highlight color, or call-to-action contrast.
-     Delete this section if not needed. -->
+| Token | Tailwind class | Hex | Usage |
+|-------|---------------|-----|-------|
+| nok-red | `text-nok-red` | `#dc2626` | Error states only (form errors, error messages) |
+| nok-border | `border-nok-border` | `rgba(255,255,255,0.1)` | Default borders — cards, inputs, navbar, footer divider |
+| nok-border-light | `border-nok-border-light` | `rgba(255,255,255,0.05)` | Subtle borders — background separators |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `accent[600]` | `#0d9488` | Primary accent use |
-| `accent[400]` | `#14b8a6` | Lighter accent — hover states, borders |
-| `accent[100]` | `rgba(13,148,136,0.1)` | Accent tint — chip backgrounds |
+### Raw Hex Exceptions — Documented, Do Not Flag
 
----
+These values appear as hardcoded hex in specific locations. They are intentional and reviewed.
 
-### Neutrals / Grays
-
-<!-- Foundation fills this from Q7: these are the grays that form the UI chrome —
-     inputs, cards, labels, borders, and backgrounds. -->
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `gray[900]` | `#FFFFFF` | Near-black — darkest body text |
-| `gray[800]` | `#FEF3C7` | Strong text — input values, headings |
-| `gray[700]` | `#D4C9A8` | Neutral text — secondary data |
-| `gray[600]` | `rgba(255,255,255,0.6)` | Muted text — inactive tabs, form labels |
-| `gray[500]` | `rgba(255,255,255,0.4)` | Placeholder text — card sub-labels |
-| `gray[400]` | `rgba(255,255,255,0.25)` | Faint text — sub-labels, fine print |
-| `gray[300]` | `rgba(255,255,255,0.15)` | Loading / skeleton states |
-| `gray[200]` | `rgba(255,255,255,0.1)` | Default borders — input borders, dividers |
-| `gray[100]` | `rgba(255,255,255,0.05)` | UI structure — card borders, table dividers |
-| `gray[50]`  | `rgba(255,255,255,0.08)`  | Surface tints — disabled inputs, chip backgrounds |
-
-<!-- Example:
-| `gray[800]` | `#2D3A4A` | Input value text |
-| `gray[200]` | `#D0D9E0` | Default input border |
--->
-
----
-
-### Semantic Colors
-
-<!-- Foundation fills this from Q7. These map to system states, not brand identity.
-     Semantic colors must work on both light and dark surfaces. -->
-
-| Token | Light Value | Dark Value | Usage |
-|-------|-------------|------------|-------|
-| `color.success` | `#10b981` | `#34d399` | Positive outcomes, completed states |
-| `color.warning` | `#F59E0B` | `#fbbf24` | Caution indicators, near-limit states |
-| `color.danger`  | `#dc2626`  | `#ef4444`  | Errors, destructive actions, negative values |
-| `color.info`    | `#0d9488`    | `#2dd4bf`    | Informational — tooltips, notices |
-
-<!-- Example:
-| `color.success` | `#1E8C60` | `#2ECC71` | Positive values, completed states |
-| `color.danger`  | `#C0392B` | `#E74C3C` | Errors, negative values |
--->
-
----
-
-### Surface Colors
-
-<!-- These are the page-level and component-level backgrounds. -->
-
-| Token | Light Value | Dark Value | Usage |
-|-------|-------------|------------|-------|
-| `surface.bg`      | `#0f2920`   | `#0f2920`   | Page background |
-| `surface.card`    | `#1a3a2a` | `#1a3a2a` | Card, input, nav background |
-| `surface.overlay` | `rgba(0,0,0,0.5)`      | `rgba(0,0,0,0.7)`     | Modal backdrop |
-
-<!-- Example:
-| `surface.bg`   | `#FAFBFC` | `#0F1419` | Page background |
-| `surface.card` | `#FFFFFF`  | `#1A2332` | Card background |
--->
-
----
-
-### Hard-Coded Exceptions
-<!-- List any hex values that appear in code but are NOT in the token system.
-     Each exception needs a documented reason. Delete rows that don't apply. -->
-
-| Hex | Usage | Reason for exception |
-|-----|-------|----------------------|
-| `#6DC99E` | Logo "Nest" text glow | Brand-specific glow; not in nok-* scale |
-| `#fcd34d` | Logo ".ai" text glow | Matches secondary[700] / Tailwind amber-300 |
-
-_Add exceptions here as they are identified. Prefer adding tokens over accumulating exceptions._
-
----
-
-## Project-Specific Token System (nok-*)
-
-The `nok-*` palette is defined as CSS custom properties in `src/styles/globals.css` and consumed via Tailwind v4 class names (e.g., `bg-nok-deep`, `text-nok-heading`).
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `nok-deep`         | `#0f2920`               | Page background |
-| `nok-forest`       | `#1a3a2a`               | Card / section background |
-| `nok-medium`       | `#2d5a42`               | Section background variant |
-| `nok-surface`      | `rgba(255,255,255,0.08)` | Frosted surface / glass effect |
-| `nok-gold`         | `#F59E0B`               | Primary brand accent (gold) |
-| `nok-heading`      | `#FFFFFF`               | Heading text |
-| `nok-body`         | `#FEF3C7`               | Body text — warm cream |
-| `nok-caption`      | `#D4C9A8`               | Secondary / muted text |
-| `nok-teal`         | `#0d9488`               | Secondary accent |
-| `nok-amber`        | `#f59e0b`               | Gold alias |
-| `nok-red`          | `#dc2626`               | Danger / destructive |
-| `nok-border`       | `rgba(255,255,255,0.1)` | Card / nav borders |
-| `nok-border-light` | `rgba(255,255,255,0.05)`| Subtle borders |
+| Value | Location | Reason |
+|-------|----------|--------|
+| `#6DC99E` | `Navbar.tsx`, `Footer.tsx`, `LegalModal.tsx` logo text | Brand exception — distinct green tint for "Nest" in split-color wordmark |
+| `#fcd34d` | `Navbar.tsx`, `Footer.tsx`, `LegalModal.tsx` logo text | Brand exception — distinct gold tint for ".ai" in split-color wordmark |
+| `#F59E0B`, `#0d9488`, `#0f2920` in array | `GradientMesh.tsx` Three.js/R3F color props | Raw hex required by Three.js; Tailwind classes cannot be used here; values map to `nok-gold`, `nok-teal`, `nok-deep` |
+| `#fbbf24` | `globals.css` scrollbar `:hover` | One-off scrollbar hover brightening |
 
 ---
 
 ## Typography
 
-<!-- Foundation fills this from Q7: fonts and aesthetic direction.
-     If using Google Fonts, list the import URL in CLAUDE.md.
-     If using system fonts only, document the stack and delete the import note. -->
-
 ### Font Families
 
-| Token | Stack | Loaded Weights | Role |
-|-------|-------|----------------|------|
-| `font.display` | `'Space Grotesk', sans-serif` | `600, 700` | Headings, hero text, section titles |
-| `font.body`    | `'Outfit', sans-serif`       | `300, 400, 500, 600`    | UI labels, body copy, buttons |
+Both fonts are loaded from Google Fonts in `index.html` with `<link rel="preconnect">` and preload optimization.
 
-<!-- Example:
-| `font.display` | `'Playfair Display', Georgia, serif`       | 400, 600, 700, 800 | Headings |
-| `font.body`    | `'DM Sans', 'Segoe UI', sans-serif`        | 400, 500, 600, 700 | Labels, buttons |
-| `font.mono`    | `'JetBrains Mono', 'Fira Code', monospace` | 400, 500, 600, 700 | Data values |
--->
+| Token | CSS property | Family | Weights loaded | Tailwind utility | Usage |
+|-------|-------------|--------|---------------|-----------------|-------|
+| display | `--font-display` | Space Grotesk | 600, 700 | `font-display` | Headings, nav links, CTA labels, badge text, logo wordmark |
+| body | `--font-body` | Outfit | 300, 400, 500, 600 | `font-body` | Body copy, paragraph text, form labels, footer links |
 
-<!-- Foundation: if the project uses only one or two font families, delete unused rows. -->
+### Fluid Typography Scale
 
----
+Defined as `@utility` in `globals.css`. These are the authoritative values for Tailwind v4 — the `fontSize` entries in `tailwind.config.ts` are inactive in v4.
 
-### Type Scale
+| Utility class | `font-size` | `line-height` | `font-weight` | Usage |
+|--------------|-------------|---------------|---------------|-------|
+| `text-hero` | `clamp(2.5rem, 5vw, 4rem)` | 1.05 | 800 | Hero `<h1>` only |
+| `text-section` | `clamp(2rem, 4vw, 3.5rem)` | 1.15 | 700 | Section `<h2>` headings |
+| `card-title` | `1.25rem` | 1.5 | 600 | Card and subsection `<h3>` titles |
 
-<!-- Foundation fills this from Q7 and Q8 (key user flow).
-     Map each UI element to font family, size, weight, and line height. -->
+### Additional Type Sizes in Use
 
-| Element | Font | Size | Weight | Line Height |
-|---------|------|------|--------|-------------|
-| Page title (`h1`) | display | `clamp(2.5rem, 5vw, 4rem)` | `800` | `1.05` |
-| Section header (`h2`) | display | `clamp(2rem, 4vw, 3.5rem)` | `700` | default |
-| Card header (`h3`) | display | `1.25rem` | `600` | default |
-| Body / labels | body | `1rem` | `400` | `1.45` |
-| Small / sub-labels | body | `0.875rem` | `400` | default |
-| Caption / fine print | body | `0.75rem` | default | default |
-| Input fields | mono | `1rem` | default | default |
-| Badges / chips | body | `0.875rem` | `500` | default |
-| Buttons (primary) | body | `1rem` | `700` | default |
+These Tailwind defaults appear in the codebase but are not part of the custom scale:
 
-<!-- Example sizes (all in rem):
-h1: 1.7rem / 800 weight
-h2: 1.6rem / 700 weight
-h3: 1.25rem–1.4rem / 700 weight
-body: 0.95rem / 500 weight / 1.5 line-height
-caption: 0.75rem–0.78rem
-data-lg: 2.1rem / 700 weight
-input: 1.1rem
-badge: 0.78rem–0.82rem / 600–700 weight
--->
+| Tailwind class | Size | Usage |
+|---------------|------|-------|
+| `text-xl` | 1.25rem | Subheadline (`lg:text-xl`), contact sidebar heading |
+| `text-lg` | 1.125rem | Subheadline base, SectionHeading subtitle |
+| `text-sm` | 0.875rem | Badge text, form labels, legal timestamps |
+| `text-xs` | 0.75rem | TechCard names, status labels |
+| `text-[9px]` | 9px | TechCard category label only (intentional micro-label) |
 
 ---
 
-### Weight Scale
+## Spacing
 
-| Name | Value | Typical use |
-|------|-------|-------------|
-| `weight.regular` | 400 | Body text, default |
-| `weight.medium`  | 500 | Labels, secondary UI |
-| `weight.semibold`| 600 | Badge text, small emphasis |
-| `weight.bold`    | 700 | Headings, active states |
-| `weight.black`   | 800 | Hero titles, pricing display |
+### Section Padding
 
----
+Two patterns in use — apply consistently when adding new sections:
 
-### Letter Spacing
+| Pattern | Classes | Sections using it |
+|---------|---------|------------------|
+| Standard | `py-12 sm:py-16 lg:py-32` | Services, Testimonials, Contact, WhyNokYai |
+| Compact | `py-16 lg:py-20` | TechStack (marquee layout requires less vertical space) |
+| Footer | `py-8 lg:py-16` | Footer only |
 
-| Context | Value |
-|---------|-------|
-| Badges / chips / tier labels | `0.05em` |
-| Section sub-labels | `0.05em` |
-| All-caps elements | `0.1em` |
+### Container
 
-<!-- Example: badge: 0.03em–0.05em / label: 0.08em / caps: 0.1em -->
+All sections use the same container wrapper:
 
----
+```
+max-w-7xl mx-auto px-6
+```
 
-## Spacing System
+Maximum content width: `1280px` (Tailwind `max-w-7xl`). Horizontal padding: `24px` (Tailwind `px-6`).
 
-<!-- Foundation fills this from Q7 and Q3 (tech stack — Tailwind has its own scale).
-     If using Tailwind, map these names to Tailwind spacing classes instead of px/rem values.
-     If ad-hoc (no formal scale), document the values extracted from the source. -->
+### Grid Gaps
 
-### Base Unit
+| Pattern | Classes | Where used |
+|---------|---------|-----------|
+| Card grid | `gap-6` | Services 2-col, WhyNokYai 3-col |
+| Large 2-col | `gap-10 lg:gap-16` | Contact form + sidebar |
+| CTA buttons | `gap-4` | Hero CTA row |
+| Marquee cards | `gap-4` | TechStack carousel |
+| Form elements | `gap-3` | Contact sidebar items |
 
-- **Spacing base:** `4px`
-<!-- Example: 4px (most design systems) or 8px (Material, Radix) -->
+### Component-Level Spacing
 
-### Scale
-
-| Token | Value | Common use |
-|-------|-------|------------|
-| `spacing.xs`  | `4px`  | Tight gaps — icon-to-label, chip internal padding |
-| `spacing.sm`  | `8px`  | Close elements — form field gap, badge padding |
-| `spacing.md`  | `16px`  | Standard — card internal padding, list item gap |
-| `spacing.lg`  | `24px`  | Sections — between major UI groups |
-| `spacing.xl`  | `32px`  | Page sections — between cards, below headers |
-| `spacing.2xl` | `48px` | Page-level — section margin, hero padding |
-
-<!-- Example (4px base):
-xs: 4px / sm: 8px / md: 16px / lg: 24px / xl: 32px / 2xl: 48px
--->
+| Component | Key spacing |
+|-----------|------------|
+| `SectionHeading` wrapper | `mb-16` below the heading block |
+| Accent bar | `mt-4` below h2; `mt-4` above subtitle |
+| `GlowCard` content | `p-7` internal padding |
+| `MagneticButton` | `px-8 py-4` |
+| Form inputs | `px-4 py-3` |
+| Form stack | `space-y-6` between fields |
+| Form label to input | `mb-2` |
 
 ---
 
-### Layout
+## Animation Keyframes
 
-| Element | Desktop value | Mobile value |
-|---------|--------------|--------------|
-| Max content width | `1280px` | — |
-| Page padding | `24px` | `24px` |
-| Header padding | `64px` | `64px` |
-| Section title margin | `48px` | — |
-| Card padding | `24px` | `16px` |
-| Grid gap (tight) | `16px` | — |
-| Grid gap (standard) | `24px` | — |
+All defined in `src/styles/globals.css`. Used via Tailwind `animate-[]` arbitrary syntax or direct `animation` inline style.
 
-<!-- Example:
-Max width: 1360px / Page desktop: 20px 32px 60px / Page mobile: 12px 14px 60px
-Card padding: 24px 28px
--->
+### float
+```css
+0%, 100% { transform: translateY(0); }
+50%       { transform: translateY(-10px); }
+```
+- **Default duration:** `3s ease-in-out infinite`
+- **Usage:** Gentle floating effect on icons or decorative elements
 
----
+### glow-pulse
+```css
+0%, 100% { opacity: 1; }
+50%       { opacity: 0.5; }
+```
+- **Default duration:** `2s ease-in-out infinite`
+- **Usage:** Pulsing glow on accent elements
 
-## Breakpoints
+### gradient-shift
+```css
+0%   { background-position: 0% 50%; }
+50%  { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+```
+- **Default duration:** `6s ease infinite`
+- **Usage:** Animated gradient backgrounds (requires `background-size: 200%`)
 
-<!-- Foundation fills this from Q7 and Q8 (mobile strategy from Q2 user context). -->
+### fade-up
+```css
+from { opacity: 0; transform: translateY(20px); }
+to   { opacity: 1; transform: translateY(0); }
+```
+- **Default duration:** `0.6s ease-out both`
+- **Usage:** Entrance animation for GSAP scroll targets (`.reveal-section`)
 
-| Name | Min width | CSS media query |
-|------|-----------|-----------------|
-| `bp.mobile`  | `0px`              | _base (mobile-first)_ |
-| `bp.tablet`  | `640px`  | `@media (min-width: 640px)` |
-| `bp.desktop` | `768px` | `@media (min-width: 768px)` |
-| `bp.wide`    | `1280px`    | `@media (min-width: 1280px)` |
+### hero-glow
+```css
+0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.15), 0 0 30px rgba(255,255,255,0.05); }
+50%       { text-shadow: 0 0 20px rgba(255,255,255,0.4),  0 0 50px rgba(255,255,255,0.15); }
+```
+- **Default duration:** `3s ease-in-out infinite` (from usage: `animate-[hero-glow_3s_ease-in-out_infinite]`)
+- **Usage:** Hero `<h1>`, `SectionHeading` h2 — pulsing white halo glow on text
+- **Note:** Animates `text-shadow` — not GPU-composited; isolated to two elements by design
 
-<!-- Example: tablet: 640px / desktop: 1024px / wide: 1280px
-     Common alternatives: tablet: 768px / desktop: 1200px / wide: 1440px -->
+### slide-in-right
+```css
+from { opacity: 0; transform: translateX(40px); }
+to   { opacity: 1; transform: translateX(0); }
+```
+- **Default duration:** `0.5s ease-out both`
+- **Usage:** Right-to-left entrance animations
 
-- **Minimum supported viewport:** `375px`
-  <!-- Example: 375px (iPhone SE, the standard mobile floor) -->
+### mesh-drift
+```css
+0%, 100% { transform: translate(0, 0) scale(1); }
+25%       { transform: translate(5%, -8%) scale(1.05); }
+50%       { transform: translate(-4%, 6%) scale(0.95); }
+75%       { transform: translate(7%, 3%) scale(1.02); }
+```
+- **Default duration:** `24s ease-in-out infinite` (from usage: `animate-[mesh-drift_24s_ease-in-out_infinite]`)
+- **Stagger delays:** blob 1 = `0s`, blob 2 = `-7s`, blob 3 = `-14s`
+- **Usage:** `GradientMesh` blobs only
 
----
-
-## Border Radius Scale
-
-<!-- Foundation fills this from Q7: sharp (0–2px), rounded (4–8px), or pill-forward (≥10px). -->
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `radius.none` | `0px`             | No rounding — tables, flush components |
-| `radius.sm`   | `4px`   | Subtle rounding — small badges, tags |
-| `radius.md`   | `8px`   | Standard — inputs, buttons, tabs |
-| `radius.lg`   | `12px`   | Cards, dropdowns |
-| `radius.xl`   | `16px`   | Large panels, modals |
-| `radius.2xl`  | `24px`  | Hero cards, featured panels |
-| `radius.full` | `9999px`          | Pills, avatar circles, toggle tracks |
-
-<!-- Example (rounded aesthetic):
-sm: 4px / md: 8px / lg: 10px / xl: 14px / 2xl: 20px
-NestCalc specific: inputs 8px / buttons+tabs 10px / standard cards 12px / getCardStyle cards 14px / pills 20px
--->
-
----
-
-## Shadow / Elevation Scale
-
-<!-- Foundation fills this from Q7: flat (no shadow), subtle, or expressive.
-     Use rgba(0,0,0,N) values for shadows that work in both light and dark modes. -->
-
-| Token | Value | Usage |
-|-------|-------|-------|
-| `shadow.none` | `none` | Flat elements, inline chips |
-| `shadow.sm`   | `0 1px 4px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2)`  | Subtle lift — cards on light background |
-| `shadow.md`   | `0 8px 24px rgba(0,0,0,0.4)`  | Standard — modal, active dropdown |
-| `shadow.lg`   | `0 20px 60px rgba(0,0,0,0.5)`  | Elevated — large modal, sticky nav |
-| `shadow.xl`   | `0 24px 80px rgba(0,0,0,0.6)`  | Dramatic — hero element, featured card |
-| `shadow.inner`| `inset 0 2px 4px rgba(0,0,0,0.3)` | Recessed — pressed button, inset panel |
-
-<!-- Example:
-sm:  0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)
-md:  0 8px 24px rgba(0,0,0,0.12)
-lg:  0 20px 60px rgba(0,0,0,0.20)
-xl:  0 24px 80px rgba(0,0,0,0.40)
-inner: inset 0 2px 4px rgba(0,0,0,0.10)
--->
+### marquee-scroll
+```css
+0%   { transform: translateX(0); }
+100% { transform: translateX(-50%); }
+```
+- **Default duration:** `35s linear infinite` (from usage: `animation: 'marquee-scroll 35s linear infinite'`)
+- **Usage:** `TechStack` infinite scrolling carousel. Array is doubled to create seamless loop; translateX(-50%) lands exactly at the midpoint (start of second copy).
+- **Pause on hover:** `group-hover:[animation-play-state:paused]`
 
 ---
 
 ## Component Patterns
 
-<!-- Foundation fills this from Q7 and Q8.
-     Each component block defines the default visual style using the tokens above.
-     Update these after finalizing the token values so the specs are internally consistent. -->
+### GlowCard
 
-### Cards (Default)
+Three-layer structure. Used in Services, TechStack, WhyNokYai.
 
 ```
-background:   surface.card
-borderRadius: radius.lg          /* 12px */
-padding:      24px
-boxShadow:    shadow.sm
-border:       1px solid gray[100]
-transition:   background-color 0.3s ease, border-color 0.3s ease
+[outer wrapper]  relative rounded-2xl transition-transform duration-300 ease-out overflow-visible
+  │              style: transform: perspective(1000px) rotateX(±12deg) rotateY(±12deg)
+  │
+  ├─ [glow halo]   absolute -inset-1 rounded-2xl -z-10
+  │                filter: blur(16px)
+  │                background: conic-gradient(from 0deg at {x}% {y}%, #F59E0B, #0d9488, #F59E0B)
+  │                opacity: 0 → 0.6 on hover (transition-opacity 500ms)
+  │
+  ├─ [gradient border]  absolute -inset-px rounded-2xl
+  │                     background: same conic-gradient (no blur)
+  │                     opacity: 0 → 1 on hover (transition-opacity 500ms)
+  │
+  └─ [content]  relative rounded-2xl bg-nok-surface border border-nok-border p-7
 ```
 
-<!-- Example:
-borderRadius: 14px / padding: 24px 28px
-boxShadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04)
--->
+**Props:** `glowColor` (default: `#F59E0B`). The conic gradient uses `glowColor` as first/third stop and `#0d9488` (nok-teal) as the middle stop.
+
+**Tilt limits:** ±12° on both axes. `perspective(1000px)`.
 
 ---
 
-### Buttons
+### MagneticButton
 
-#### Primary (CTA)
-
-```
-fontFamily:   font.body
-fontSize:     1rem
-fontWeight:   weight.bold
-padding:      16px 32px
-height:       56px
-borderRadius: radius.md          /* 8px */
-border:       none
-background:   linear-gradient(135deg, primary[600], primary[800])
-color:        #fff
-boxShadow:    0 4px 14px primary[300]
-```
-
-#### Secondary / Outlined
+Renders as `<a>` when `href` is provided, `<button>` otherwise.
 
 ```
-fontFamily:   font.body
-fontSize:     1rem
-fontWeight:   weight.semibold
-padding:      16px 32px
-height:       56px
-borderRadius: radius.md
-border:       2px solid primary[400]
-background:   surface.card
-color:        primary[700]
+Base:    cursor-hover inline-block font-bold px-8 py-4 rounded-xl
+         bg-nok-gold text-nok-deep
+Hover:   scale-[1.02]  shadow-[0_0_24px_rgba(245,158,11,0.4)]
+Active:  scale-[0.98]
+
+Magnetic pull:
+  radius    100px
+  strength  1 - (distance / 100)
+  max pull  offset × 0.3
+
+Transition (returning to center):  0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+Transition (tracking cursor):      0.15s ease-out
 ```
 
-#### Ghost / Cancel
-
-```
-fontFamily:   font.body
-fontSize:     0.875rem
-fontWeight:   weight.regular
-padding:      12px 20px
-border:       none
-background:   transparent
-color:        gray[400]
-```
-
-#### Danger
-
-```
-/* Same shape as Primary but with semantic danger color */
-background:   color.danger
-boxShadow:    0 4px 14px rgba(220, 38, 38, 0.3)
-```
-
-<!-- Foundation: document additional button variants (icon buttons, toggle buttons, tab buttons) here as they are designed. -->
+Add `cursor-hover` class to any element that should expand the custom cursor ring.
 
 ---
 
-### Inputs (Default State)
+### SectionHeading
 
+```jsx
+<div className="mb-16">
+  <h2 className="font-display text-section text-nok-gold animate-[hero-glow_3s_ease-in-out_infinite]">
+    {title}
+  </h2>
+  <div className="w-16 h-1 rounded-full mt-4" style={{ backgroundColor: accentColor }} />
+  {subtitle && (
+    <p className="text-nok-caption text-lg mt-4">{subtitle}</p>
+  )}
+</div>
 ```
-fontFamily:   font.mono
-fontSize:     1rem
-padding:      12px 16px
-height:       48px
-borderRadius: radius.sm          /* 4px */
-border:       1px solid gray[200]
-background:   surface.card
-color:        gray[800]
-outline:      none
-```
 
-#### Input States
-
-| State | Border | Background |
-|-------|--------|------------|
-| Default | `1px solid gray[200]` | `surface.card` |
-| Focus / active | `1px solid primary[400]` | `surface.card` |
-| Highlighted (pre-filled) | `1px solid primary[300]` | `primary[50]` |
-| Disabled | `1px solid gray[200]` | `gray[50]` |
-| Error | `1px solid color.danger` | `rgba(danger, 0.05)` |
+**Props:** `title` (required), `subtitle` (optional), `accentColor` (default: `#F59E0B`).
+Accent bar dimensions: `64px × 4px`, `rounded-full`.
 
 ---
 
-### Modals
+### Glass Surface
 
-#### Overlay
+Two variants in use:
 
+**Deep glass** (modals, navbar):
 ```
-background: rgba(0,0,0,0.5)
-zIndex:     9999   /* Example: 9999 */
-```
-
-#### Standard Modal Container
-
-```
-background:   surface.card
-borderRadius: radius.xl          /* 16px */
-padding:      24px
-maxWidth:     672px
-width:        90%
-boxShadow:    shadow.lg
+bg-nok-deep/95 backdrop-blur-xl
+bg-nok-deep/90 backdrop-blur-md    (lighter — navbar scrolled, modal top bar)
+bg-nok-deep/80 backdrop-blur-xl    (navbar scrolled — before reaching /90 state)
 ```
 
-#### z-index Stacking
-
-| Layer | z-index | Usage |
-|-------|---------|-------|
-| Sticky nav | `50` | Main navigation |
-| Dropdown / tooltip | `49` | Popovers, tooltips |
-| Standard modal | `9999` | Primary modal layer |
-| Top-of-stack | `99999` | Critical overlays (e.g., generating screens) |
-
-<!-- Example: nav: 100 / dropdown: 200 / modal: 9999 / top: 99999 -->
+**White glass** (content cards):
+```
+bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl
+```
+Used in: Testimonials card. Opacity `5%` white fill + `10%` white border.
 
 ---
 
-### Badges / Chips
+### Hero Badge (Pill)
 
 ```
-fontFamily:   font.body
-fontSize:     0.875rem
-fontWeight:   weight.semibold
-padding:      6px 16px
-borderRadius: radius.full        /* pill */
-letterSpacing: 0.05em
-textTransform: uppercase
+inline-flex items-center gap-2
+px-4 py-1.5 rounded-full
+border border-nok-gold/30 bg-nok-gold/5
+text-nok-gold text-sm font-medium
 ```
 
-Semantic variants:
-- **Success badge:** `bg: primary[100]`, `color: primary[700]`
-- **Warning badge:** `bg: secondary[100]`, `color: secondary[700]`
-- **Danger badge:** `bg: #FDE8E8` (or `color.danger` tint), `color: color.danger`
+Pulse dot inside: `w-1.5 h-1.5 rounded-full bg-nok-gold animate-pulse`
 
 ---
 
-## Dark Mode
+### Secondary Button (Ghost)
 
-This project uses a **fixed dark-only theme** — no light/dark mode switching. All colors are designed for dark surfaces only. Do not add light mode variants or theme toggling.
+```
+cursor-hover inline-block
+px-8 py-4 rounded-xl
+border border-nok-border
+text-nok-body font-semibold
+hover:border-nok-gold hover:text-nok-gold
+transition-colors duration-200
+```
 
-The page background is always `nok-deep: #0f2920`. All token values in this document are the single canonical values for all contexts.
-
----
-
-## Animations & Transitions
-
-<!-- Foundation fills this from Q7: "minimal/instant" vs "expressive/animated". -->
-
-| Element | Property | Duration | Easing |
-|---------|----------|----------|--------|
-| Interactive elements (buttons, tabs) | `all` | `200ms ease` | default |
-| Input focus | `border`, `background` | `200ms ease` | default |
-| Modal open | `opacity`, `transform` | `250ms ease-out` | ease-out |
-| Hover lift | `transform`, `box-shadow` | `200ms ease` | default |
-
-<!-- Example: theme: 300ms / interactive: 250ms / input: 200ms / modal: 200ms / hover: 150ms -->
-
-**Hover lift rule:** `transform: translateY(-2px)` + shadow intensity increases ~2× on hover.
+Used in Hero "View Our Work" link. Same padding as `MagneticButton` — the two buttons align visually side-by-side.
 
 ---
 
-## Styling Architecture
+### Form Input
 
-<!-- Foundation fills this from Q3 and Q7.
-     Document the styling approach so Eagle can enforce it. -->
+```
+w-full
+bg-nok-forest border border-nok-border rounded-xl
+px-4 py-3
+text-white placeholder:text-nok-caption
+outline-none
+transition-all duration-200
+focus:border-nok-teal
+focus:ring-1 focus:ring-nok-teal/30
+focus:shadow-[0_0_15px_rgba(13,148,136,0.1)]
+```
 
-- **Approach:** `Tailwind v4 utility classes`
-  <!-- Example: "Inline styles only — no CSS files, modules, or styled-components anywhere in the project" -->
-  <!-- Example: "Tailwind utility classes — inline style props only for dynamic values not expressible in Tailwind" -->
-  <!-- Example: "CSS Modules — one .module.css per component, no inline style props except for dynamic values" -->
-
-- **Theme access:** CSS custom properties via Tailwind v4 — use `nok-*` class names (e.g., `bg-nok-deep`, `text-nok-heading`) defined in `src/styles/globals.css`
-
-- **Dynamic values:** Inline `style` props for values derived from JS state or props; Tailwind classes for all static values
+Focus glow uses `nok-teal` — a subtle teal halo at 10% opacity.
 
 ---
 
-## Known Token Issues
+### Active Nav Indicator
 
-<!-- Document gaps, inconsistencies, or decisions pending resolution.
-     Eagle flags violations of documented tokens; this section tracks tokens not yet fully documented. -->
+Gold dot below active nav link (desktop):
 
-_No known issues at project start. Add entries as token gaps are discovered._
+```
+absolute -bottom-1.5 left-1/2 -translate-x-1/2
+w-0.5 h-0.5 rounded-full bg-nok-gold
+```
 
-<!-- Example entries:
-- `AuthModal` references `T.muted`, `T.text`, `T.border` — not in the documented token set.
-  Resolution needed: formally add tokens or replace with canonical equivalents.
-- Input component uses 15px / DM Sans, diverging from the documented InputField spec (1.1rem / font.mono).
-  Resolution needed: design decision on whether auth inputs are intentionally different.
--->
+---
+
+## Gradients
+
+### Gradient Mesh (GradientMesh.tsx)
+
+Three radial gradient blobs layered for ambient background lighting. Used in Hero at `opacity-40`.
+
+```
+Blob size:    40vw × 40vw
+Blur:         blur-[120px]
+Shape:        radial-gradient(circle, {color}44 0%, transparent 70%)
+              (hex 44 = ~27% opacity)
+
+Blob 1:  left 20%,  top 20%  — #F59E0B44  (gold)    animationDelay: 0s
+Blob 2:  left 60%,  top 50%  — #0d948844  (teal)    animationDelay: -7s
+Blob 3:  left 40%,  top 70%  — #0f292044  (deep)    animationDelay: -14s
+```
+
+Animation: `mesh-drift 24s ease-in-out infinite` per blob.
+
+**Props:** `colors` accepts a `[string, string, string]` tuple. Default is `['#F59E0B', '#0d9488', '#0f2920']`.
+
+---
+
+### GlowCard Conic Gradient
+
+Mouse-tracking gradient used for both the blurred glow halo and the sharp gradient border:
+
+```
+conic-gradient(from 0deg at {mouseX}% {mouseY}%, #F59E0B, #0d9488, #F59E0B)
+```
+
+Position updates on `mousemove`. Defaults to `50% 50%` at rest (centered).
+
+---
+
+### ScrollProgress Gradient
+
+Linear gold-to-teal gradient on the 3px top progress bar:
+
+```
+background: linear-gradient(to right, #F59E0B, #0d9488)
+box-shadow: 0 0 10px rgba(245, 158, 11, 0.5)
+```
+
+---
+
+### Opacity Modifier Patterns
+
+Tailwind opacity modifiers used throughout the codebase:
+
+| Pattern | Value | Usage |
+|---------|-------|-------|
+| `nok-gold/5` | 5% opacity gold | Hero badge background fill |
+| `nok-gold/30` | 30% opacity gold | Hero badge border |
+| `nok-gold/60` | 60% opacity gold | TechCard category text |
+| `nok-teal/30` | 30% opacity teal | Focus ring on inputs |
+| `nok-border/50` | 50% opacity border | Navbar border, modal top bar border |
+| `white/5` | 5% opacity white | Testimonials glass card bg |
+| `white/10` | 10% opacity white | Testimonials glass card border |
+| `nok-deep/80` | 80% opacity deep | Navbar scrolled bg |
+| `nok-deep/90` | 90% opacity deep | Modal top bar bg |
+| `nok-deep/95` | 95% opacity deep | Mobile nav overlay, legal modal overlay |

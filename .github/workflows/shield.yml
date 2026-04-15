@@ -1,31 +1,60 @@
 name: Shield Review
+
 on:
-  pull_request:
-    types: [opened, synchronize]
-    branches: [main]
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
 
 jobs:
-  shield-review:
+  shield:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: read
-      id-token: write
+
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+
+      - name: Ensure "shield" label exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "shield" \
+            --color "B60205" \
+            --description "Automated Shield code review findings" \
+            2>/dev/null || true
+
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: "--dangerously-skip-permissions"
+          max_turns: "30"
           prompt: |
-            Read REVIEW.md and .claude/commands/shield.md. Then review the PR diff for:
-            1. Security — API key exposure, VITE_ prefix rules, server-side-only external calls
-            2. Error Handling — try/catch coverage, no silent catch blocks
-            3. Logic — calculation accuracy, state management bugs, race conditions
-            4. Performance — React 19 memoization rules, bundle impact
-            5. Architecture — module isolation, locked file modifications (flag as Critical)
-            Post findings as a PR comment with: File | Line | Severity | Category | Finding | Recommendation
-          max_turns: "10"
+            Commit being reviewed: ${{ github.sha }}
+            Short hash for the issue title: first 7 characters of that SHA.
+
+            Read CLAUDE.md, REVIEW.md, and .claude/commands/shield.md.
+            Run the complete 9-step Shield review:
+              1. TypeScript strictness — tsconfig.app.json flags, any scan, verbatimModuleSyntax
+              2. Security patterns — credentials, dangerouslySetInnerHTML, VITE_ prefix
+              3. Error handling — async/await coverage, empty catch, no recovery path
+              4. Animation cleanup — ParticleField cancelAnimationFrame + IntersectionObserver, App.tsx initScrollAnimations once + cleanup, GSAP kill on unmount
+              5. Netlify form integrity — field names in index.html vs Contact.tsx must match
+              6. Architectural drift — lazy loading, eager components, component isolation, locked file modifications
+              7. Import order — sample 6 component files for the 6-group import convention
+              8. Section ID integrity — 6 expected IDs vs Navbar hrefs and section root elements
+              9. Logging and dead code — console.log, debugger statements, commented-out blocks
+
+            Format the output using the Shield Review report format defined in .claude/commands/shield.md.
+
+            After completing all 9 steps:
+            - If there are any ❌ (Issue) or ⚠️ (Warning) findings:
+                1. Write the complete report to /tmp/shield_report.md
+                2. Run: gh issue create --title "Shield Review — SHORT_SHA" --label "shield" --body-file /tmp/shield_report.md
+                   (replace SHORT_SHA with the first 7 characters of the commit SHA above)
+            - If every finding is ✅ Passing:
+                Print "Shield review clean — no issues found." and stop. Do not create an issue.

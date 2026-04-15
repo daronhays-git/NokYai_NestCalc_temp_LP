@@ -38,7 +38,7 @@
 
 /* ── Custom Typography Utilities ─────────────────────────────────── */
 @utility text-hero {
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.05;
   font-weight: 800;
 }

@@ -1,180 +1,335 @@
-<!-- Foundation generates the initial version of this file during /foundation setup.
-     Beacon-rules appends to §5 as recurring feedback patterns are detected.
-     Builders add project-specific rules to any section as conventions solidify.
-     Every rule references an actual pattern in this codebase — delete stubs that
-     don't apply and add specifics before the first agent-driven review. -->
+# NokYai LP — Review Rules
 
-# NestCalc.ai — Review Rules
+Reference for Shield, Eagle, Scribe, and Lighthouse agents.
+All rules derive from the actual codebase. Do not flag items listed as documented exceptions.
 
-These rules apply to all code reviews, whether human or agent-driven. Every rule derives from this project's actual conventions. Reference the source documents for full context: `design-tokens.md`, `module-map.md`, `project-brief.md`.
-
-_Enforced by: Eagle (§1), Shield (§2), Scribe (§3), Lighthouse (§4). Beacon appends to §5._
+_Enforced by: Eagle (§1 Design), Shield (§2 Code Quality), Lighthouse (§3 Performance), Shield (§4 Animation), Shield (§5 TypeScript). Beacon appends to §6._
 
 ---
 
-## §1 — Design System Rules
+## §1 — Design Token Compliance
 _Enforced by: Eagle_
 
 ### §1.1 Color Tokens
 
-- [ ] **[error]** All colors reference the project token system defined in `design-tokens.md` — no raw hex values except documented hard-coded exceptions listed in `design-tokens.md §Exceptions`.
-  <!-- Foundation: replace "token system" with the actual approach — e.g., "the T theme object", "Tailwind config", "CSS custom properties in tokens.css" -->
-- [ ] **[error]** Semantic status colors are used for status indicators: `nok-teal (#0d9488)` for positive, `nok-red (#dc2626)` for negative, `nok-gold (#F59E0B)` for caution.
-  <!-- Foundation: fill in actual token names from design-tokens.md -->
-- [ ] **[warning]** This project uses a fixed dark theme — all new color usage must be verified against dark surfaces (`nok-deep: #0f2920`, `nok-forest: #1a3a2a`). No light mode exists.
+All colors must use a `nok-*` Tailwind utility class or the corresponding CSS custom property. Raw hex values are only permitted in the documented exceptions below.
 
-### §1.2 Typography
+**Canonical token table** (source: `src/styles/globals.css` `@theme` block):
 
-- [ ] **[error]** All font families use the documented token references — no bare font family strings (`'Inter'`, `'Helvetica'`, etc.).
-  <!-- Foundation: replace with the actual font token names, e.g., "font.display, font.body, font.mono" -->
-- [ ] **[warning]** Font sizes fall within the type scale defined in `design-tokens.md §Typography` — no arbitrary sizes outside the documented range.
-- [ ] **[error]** Heading hierarchy is maintained: one `<h1>` per page, `<h2>` for section headers, `<h3>` for card or subsection headers.
+| Token | Tailwind class | Value | Usage |
+|-------|---------------|-------|-------|
+| nok-deep | `bg-nok-deep` | `#0f2920` | Page background, hero, footer, navbar |
+| nok-forest | `bg-nok-forest` | `#1a3a2a` | Alternating section backgrounds |
+| nok-medium | `bg-nok-medium` | `#2d5a42` | Alternating section backgrounds |
+| nok-surface | `bg-nok-surface` | `rgba(255,255,255,0.08)` | Card backgrounds |
+| nok-white | `text-nok-white` | `#FFFFFF` | Pure white elements |
+| nok-gold | `text-nok-gold` / `bg-nok-gold` | `#F59E0B` | CTAs, numbers, highlights, primary accent |
+| nok-heading | `text-nok-heading` | `#FFFFFF` | Section headings |
+| nok-body | `text-nok-body` | `#FEF3C7` | Body text (warm wheat) |
+| nok-caption | `text-nok-caption` | `#D4C9A8` | Captions, muted labels |
+| nok-teal | `text-nok-teal` | `#0d9488` | Secondary accent, links |
+| nok-red | `text-nok-red` | `#dc2626` | Error states only |
+| nok-border | `border-nok-border` | `rgba(255,255,255,0.1)` | Default borders |
+| nok-border-light | `border-nok-border-light` | `rgba(255,255,255,0.05)` | Subtle borders |
 
-### §1.3 Styling Conventions
+- **[error]** Any hardcoded hex value not in the table above and not listed as a documented exception below.
+- **[warning]** `nok-amber` (`#f59e0b`) and `nok-gold` (`#F59E0B`) are the same value. Use `nok-gold` — `nok-amber` is a duplicate and should not be referenced in new code.
 
-- [ ] **[error]** All styles follow the project's styling approach: `Tailwind v4 utility classes`.
-  <!-- Foundation: fill in — e.g., "inline JavaScript objects only — no className props, CSS files, or styled-components" OR "Tailwind utility classes — no inline style props except for dynamic values" -->
-- [ ] **[warning]** Spacing values follow the spacing scale in `design-tokens.md §Spacing` — no arbitrary `px` values outside the scale.
-- [ ] **[warning]** Border radius values follow the documented component scale — inputs, buttons, cards, and badges each have a designated radius.
-  <!-- Foundation: fill in the specific values from design-tokens.md after the design system is finalized -->
+**Documented exceptions — do not flag:**
 
-### §1.4 Responsive Design
+| Value | Location | Reason |
+|-------|----------|--------|
+| `#6DC99E` | `Footer.tsx`, `Navbar.tsx` logo text | Brand exception — distinct green tint for "Nest" in the split-color wordmark |
+| `#fcd34d` | `Footer.tsx`, `Navbar.tsx` logo text | Brand exception — distinct gold tint for ".ai" in the split-color wordmark |
+| `#F59E0B`, `#0d9488`, `#0f2920` as array values | `GradientMesh.tsx` Three.js color props | R3F requires raw hex arrays; Tailwind classes cannot be passed to Three.js color props; values map to canonical tokens |
+| `#fbbf24` | `globals.css` scrollbar hover | One-off scrollbar hover state |
 
-- [ ] **[error]** New UI is tested at minimum viewport width: `375px`.
-  <!-- Foundation: fill in — common values: 375 (iPhone SE), 320 (older devices) -->
-- [ ] **[warning]** Touch targets are minimum `44px` height on mobile.
-  <!-- Foundation: fill in — standard: 44px (Apple HIG), 48px (Material) -->
-- [ ] **[warning]** Horizontal scroll is not introduced by new components except in documented scrollable containers.
+### §1.2 Fonts
 
-### §1.5 Accessibility Minimums
+- **[error]** Display/heading text must use `font-display` → Space Grotesk (weights 600, 700).
+- **[error]** Body/paragraph text must use `font-body` → Outfit (weights 300–600).
+- **[error]** Any font family other than Space Grotesk or Outfit. `font-sans` or `font-mono` fallbacks are only acceptable in `<code>` or `<pre>` elements.
+- **[warning]** `font-sans` used where `font-body` should be.
 
-- [ ] **[error]** All interactive elements (buttons, inputs, links, tabs) are keyboard-navigable.
-- [ ] **[error]** Form inputs have associated `<label>` elements or `aria-label` attributes.
-- [ ] **[error]** Images have non-empty `alt` text; decorative images use `alt=""`.
-- [ ] **[warning]** Text contrast meets WCAG AA minimum: 4.5:1 for body text, 3:1 for large text (18px+ or 14px+ bold).
-- [ ] **[warning]** No `tabIndex` values above 0 unless justified — tab order follows visual layout.
+### §1.3 Typography Scale
 
----
+Use defined scale utilities. Do not introduce arbitrary font sizes when a named utility covers the use case.
 
-## §2 — Code Quality Rules
-_Enforced by: Shield_
+| Utility | Usage |
+|---------|-------|
+| `text-hero` | Hero headline only (`clamp(2.5rem, 5vw, 4rem)`) |
+| `text-section` | Section `<h2>` headings (`clamp(2rem, 4vw, 3.5rem)`) |
+| `card-title` | Card titles (`1.25rem`, weight 600) |
 
-### §2.1 Error Handling
+- **[warning]** Arbitrary Tailwind font size (e.g. `text-[2.3rem]`) when a named scale utility covers the use case.
+- **[error]** More than one `<h1>` per page. One `<h1>` (Hero headline), `<h2>` for sections, `<h3>` for cards.
 
-- [ ] **[error]** All `async/await` calls are wrapped in `try/catch` — unhandled promise rejections are a reject.
-- [ ] **[error]** API errors surface a user-facing message — silent failures are not acceptable.
-- [ ] **[warning]** Error boundaries wrap major UI sections so a component crash does not take down the full page.
-  <!-- Foundation: delete if the project does not use React or a framework with error boundaries -->
+### §1.4 Inline Styles
 
-### §2.2 Logging and Debug Code
+Inline `style` props are only permitted for values that are computed at runtime and cannot be expressed as Tailwind utilities.
 
-- [ ] **[error]** No `console.log`, `console.warn`, or `console.error` in production code — use the project logger if one exists, or remove before merge.
-  <!-- Foundation: if a logger utility exists, reference it here: "Use logger.ts instead of console.*" -->
-- [ ] **[error]** No commented-out code blocks — if code is unused, delete it.
-- [ ] **[warning]** No `debugger` statements in any file.
+**Permitted inline styles:**
+- Dynamic `transform` values (e.g. 3D tilt in `GlowCard`, magnetic offset in `MagneticButton`)
+- Mouse/scroll-computed positions
+- Three.js color arrays
+- Split-color logo text (`#6DC99E` / `#fcd34d` brand exceptions, in `Navbar.tsx` and `Footer.tsx`)
 
-### §2.3 Input Validation
+- **[error]** Static color values, static spacing, static font sizes, or static layout properties in `style={}` when a Tailwind utility class exists.
 
-- [ ] **[error]** User-supplied inputs are validated or sanitized before use — assume hostile input at all system boundaries (forms, URL params, API responses).
-- [ ] **[error]** Numeric inputs are validated to expected ranges before calculation — guard against `NaN`, `Infinity`, and empty string.
-- [ ] **[error]** No `dangerouslySetInnerHTML` (React) or equivalent raw HTML injection unless the content source is fully trusted and documented.
-  <!-- Foundation: adjust verb to match the framework — e.g., "[v-html]" for Vue, "innerHTML =" for vanilla JS -->
+### §1.5 Responsive Design
 
-### §2.4 Security Patterns
-
-- [ ] **[error]** No API keys, secrets, or credentials in frontend source code — all secrets go in environment variables and are accessed server-side only.
-  <!-- Foundation: list the specific secrets for this project, e.g., "Stripe secret key, Supabase service-role key, AI API key" -->
-- [ ] **[error]** Environment variables intended for client-side use are prefixed with `VITE_` — all others are server-only.
-  <!-- Foundation: fill in the framework's public env prefix — e.g., "VITE_" for Vite, "NEXT_PUBLIC_" for Next.js, "REACT_APP_" for CRA -->
-- [ ] **[error]** External API calls that require secrets go through server-side routes or serverless functions — never directly from the browser.
-  <!-- Foundation: reference the specific backend path, e.g., "netlify/functions/ for all authenticated calls" -->
-- [ ] **[warning]** CORS is restricted to known domains in production — no wildcard `*` on endpoints that handle user data or authentication.
-
-### §2.5 Module Isolation
-
-- [ ] **[error]** New features go in their own file under `src/` — do not expand the main entry file indefinitely.
-- [ ] **[error]** Locked files are not modified without explicit review:
-  - `src/lib/birdPaths.ts` — Guardian Bird SVG path data; exact values are production-calibrated
-  - `src/styles/globals.css` — authoritative design token source (@theme block)
-- [ ] **[warning]** New utilities go in `src/utils/`, new config in `src/config/` — follow established directory conventions.
-  <!-- Foundation: adjust paths to match actual project structure -->
-
-### §2.6 React Conventions
-
-- [ ] **[error]** Hooks come before any conditional returns in component bodies.
-- [ ] **[warning]** Expensive computations use memoization with correct dependency arrays.
-- [ ] **[warning]** Dynamic list renders include stable `key` props — never array index as key for reorderable lists.
-- [ ] **[warning]** No `await` inside render paths — async operations go in effects or event handlers.
+- **[error]** New UI not tested at 375px minimum viewport width.
+- **[warning]** Horizontal scroll introduced outside a documented scrollable container.
+- **[warning]** Section background colors deviating from the established alternating pattern: `nok-deep` / `nok-forest` / `nok-medium`.
 
 ---
 
-## §3 — Documentation Rules
-_Enforced by: Scribe_
+## §2 — Accessibility Requirements
+_Enforced by: Eagle_
 
-### §3.1 Docs-to-Code Accuracy
+### §2.1 Contrast
 
-- [ ] **[error]** `module-map.md` reflects the current component and module structure — any new file or renamed export requires a corresponding update.
-- [ ] **[warning]** `design-tokens.md` is updated when a new token is added to the theme — no token is used in code before it appears in the canonical token file.
-- [ ] **[warning]** `project-brief.md` is updated when the tech stack, monetization model, or target user changes significantly.
+The site is dark-only. All text must meet WCAG AA minimum contrast against its section background.
 
-### §3.2 Changelog and Release Notes
+| Background | Hex | Minimum |
+|-----------|-----|---------|
+| nok-deep | `#0f2920` | 4.5:1 normal text · 3:1 large text |
+| nok-forest | `#1a3a2a` | 4.5:1 normal text · 3:1 large text |
+| nok-medium | `#2d5a42` | 4.5:1 normal text · 3:1 large text |
 
-- [ ] **[warning]** `CHANGELOG.md` is updated before any release tag — new entries follow the existing format (date, version, summary of changes).
-  <!-- Foundation: delete if the project uses a different release tracking system, or update to reference it -->
-- [ ] **[warning]** Breaking changes to the public API or data schema include a migration note in the changelog entry.
+Known compliant pairings: white (`#FFFFFF`) on any nok-* background passes AA. Gold (`#F59E0B`) on `nok-deep` passes for large/bold text.
 
-### §3.3 Inline Documentation
+- **[warning]** New text/background combinations not already present in the codebase without a contrast verification.
+- **[warning]** `nok-caption` (`#D4C9A8`) used as body text on `nok-medium` — verify contrast before use.
 
-- [ ] **[warning]** Functions with non-obvious behavior include a comment explaining the intent — not the mechanics.
-- [ ] **[warning]** Complex business logic (calculations, state machines, tier gates) includes a reference to the source document or product decision that governs it.
+### §2.2 ARIA
+
+Decorative elements must be hidden from screen readers. The following are correctly marked — maintain them:
+
+| Element | Required attribute |
+|---------|------------------|
+| `ParticleField` canvas | `aria-hidden="true"` |
+| `NoiseOverlay` | `aria-hidden="true"` |
+| `GradientMesh` | `aria-hidden="true"` |
+| `CustomCursor` divs | `aria-hidden="true"` |
+| `ScrollProgress` bar | `aria-hidden="true"` |
+
+- **[error]** Decorative effect components without `aria-hidden="true"`.
+- **[error]** Icon-only buttons or controls without `aria-label` describing the action.
+- **[error]** Form inputs without a `<label>` or `aria-label`.
+- **[error]** The Navbar hamburger button must retain `aria-label` that updates to "Open menu" / "Close menu" based on state. (Currently implemented — do not remove.)
+
+### §2.3 Keyboard Navigation
+
+- **[error]** Interactive elements not reachable by Tab key.
+- **[error]** Modal opened without focus trap — keyboard focus must not escape to the background page while a `LegalModal` is open.
+- **[error]** `LegalModal` must close on `Escape` key. (Currently implemented — do not remove the `onKey` handler in `LegalModal.tsx`.)
+- **[warning]** No visible focus ring on interactive elements. `cursor: none` is applied on pointer devices — ensure keyboard focus styles remain visible.
+- **[warning]** `tabIndex` values above `0` without documented justification.
+
+### §2.4 Touch Targets
+
+- **[warning]** Buttons or links with a hit area smaller than 44×44px on mobile viewports.
+- `MagneticButton` default padding (`px-8 py-4`) meets this requirement — do not reduce it.
+
+### §2.5 prefers-reduced-motion
+
+**Current status:** Not yet implemented in this codebase. This is a known gap, not a regression.
+
+- **[warning]** Any new animation added without a `prefers-reduced-motion` fallback. Note the gap is pre-existing.
+
+When implementing:
+- CSS: wrap animation declarations in `@media (prefers-reduced-motion: no-preference) { ... }` or provide a `reduce` block that disables them
+- Framer Motion: use `useReducedMotion()` hook and conditionally set `transition={{ duration: 0 }}`
+- `ParticleField`: detect preference and skip RAF loop or reduce to a static render
+- GSAP: check `window.matchMedia('(prefers-reduced-motion: reduce)').matches` before initializing scroll animations
 
 ---
 
-## §4 — Performance Rules
+## §3 — Performance Rules
 _Enforced by: Lighthouse_
 
-### §4.1 Bundle Size Budget
+### §3.1 Lazy Loading
 
-- [ ] **[error]** No new production dependency is added without justification. The existing stack handles: `React 19, Framer Motion, GSAP + ScrollTrigger, Three.js / React Three Fiber, Tailwind v4`. A library for something achievable with existing tools is a reject.
-  <!-- Foundation: fill in the core libraries — e.g., "React 18, Recharts, Supabase client" -->
-- [ ] **[error]** No single production dependency contributes more than `50`KB gzipped to the bundle without an approved exemption.
-  <!-- Foundation: set a threshold appropriate for the project — default recommendation: 50 KB -->
-- [ ] **[warning]** Known heavy packages have lighter alternatives considered before adoption — see `docs/reports/dep-audit.md §Lighter Alternatives`.
+All section components below `Hero` must be loaded via `React.lazy` + `<Suspense fallback={null}>` in `App.tsx`.
 
-### §4.2 Core Web Vitals Targets
+**Eager-loaded (correct, do not change):** `Navbar`, `Hero`, `CustomCursor`, `ScrollProgress`, `NoiseOverlay`
 
-- [ ] **[warning]** Largest Contentful Paint (LCP) ≤ `2500`ms on mobile.
-  <!-- Foundation: standard Good threshold: 2500ms -->
-- [ ] **[warning]** Cumulative Layout Shift (CLS) ≤ `0.1`.
-  <!-- Foundation: standard Good threshold: 0.1 -->
-- [ ] **[warning]** Interaction to Next Paint (INP) ≤ `200`ms.
-  <!-- Foundation: standard Good threshold: 200ms -->
+- **[error]** A section component directly imported (not via `React.lazy`) in `App.tsx`.
 
-### §4.3 Asset Optimization
+### §3.2 Chunk Splitting
 
-- [ ] **[error]** Images in `public/` are optimized — no uncompressed PNGs above `200`KB.
-  <!-- Foundation: fill in asset path and threshold — recommendation: 200KB -->
-- [ ] **[warning]** New fonts are loaded efficiently — no duplicate `<link>` or `@import` font declarations.
-- [ ] **[warning]** New third-party scripts load with `async` or `defer` — no render-blocking scripts.
+`vite.config.ts` defines three manual chunks. Do not collapse them.
 
-### §4.4 Rendering Efficiency
+| Chunk | Contents |
+|-------|----------|
+| `three-vendor` | `three`, `@react-three/fiber`, `@react-three/drei` |
+| `animation-vendor` | `framer-motion`, `gsap` |
+| default | Application code |
 
-- [ ] **[warning]** Expensive computations use memoization with accurate dependency arrays — avoid recalculating on every render.
-- [ ] **[warning]** API and data-fetch calls debounce user input — no request on every keystroke.
-- [ ] **[warning]** Previously fetched data is checked before re-fetching the same resource — avoid redundant network requests.
+- **[error]** Changes to `vite.config.ts` manual chunk config that merge these into fewer chunks.
 
-### §4.5 Mobile Performance
+### §3.3 Image Optimization
 
-- [ ] **[warning]** New UI is tested on a mid-range simulated device (Lighthouse mobile preset) — not just desktop.
-- [ ] **[warning]** Animations and transitions use `transform` and `opacity` — avoid properties that trigger layout recalculation.
+- **[error]** Any image in `src/assets/` or `public/` exceeding 200KB.
+- Reference: `NokYai-logo-gold-green.png` is ~21KB — this is the target size class for logos.
+- Prefer `.webp` for photography; `.png` for logos requiring transparency; `.svg` for icons/illustrations.
+- **[warning]** New images committed without checking file size.
+
+### §3.4 Canvas Performance
+
+- **[warning]** Increases to `ParticleField` particle count (currently 120 desktop / 60 mobile) without a performance justification.
+- **[error]** Removal of the `IntersectionObserver` pause logic in `ParticleField` — it must pause the animation loop when the canvas is off-screen.
+- DPR cap at 2 must remain in place.
+
+### §3.5 Dependencies
+
+- **[error]** New production dependency added for functionality achievable with existing libraries (React 19, Framer Motion, GSAP, Three.js/R3F, Tailwind v4).
+- **[warning]** New dependency without a check that it is tree-shakeable.
 
 ---
 
-## §5 — Beacon-Generated Rules
-_Rules appended by `/beacon-rules` after confirming recurring feedback patterns._
-_Rule IDs use the `B-` prefix, continuing from the last entry in this section._
+## §4 — Animation Performance Rules
+_Enforced by: Shield_
 
-<!-- /beacon-rules appends here. Do not manually edit rule IDs in this section —
-     Beacon manages the B-XX numbering. Add human-authored rules to §1–§4 instead. -->
+### §4.1 GPU-Accelerated Properties Only
+
+Animations must only transition `transform` and `opacity`. These are composited by the GPU and do not trigger layout or paint.
+
+- **[error]** Animating `width`, `height`, `top`, `left`, `right`, `bottom`, `margin`, `padding`, or `border-width`.
+- **[error]** Animating `background-color` as a CSS transition on an element that changes frequently.
+- **[warning]** Animating `filter` (blur, brightness) — permissible but expensive; document the intent.
+
+**Known exception — do not flag:**
+- `hero-glow` keyframe animates `text-shadow` — pre-existing design decision for the hero headline; isolated to one element.
+
+### §4.2 Framer Motion Conventions
+
+- **[error]** `whileInView` with `once: false` — entrance animations must fire once only.
+- **[warning]** Sequential `delay` props used as a manual stagger instead of `staggerChildren` in a `variants` object.
+- **[error]** `AnimatePresence` removed from modal or mobile menu wrappers — it is required for exit animations.
+
+### §4.3 GSAP Conventions
+
+- **[error]** `initScrollAnimations()` called anywhere other than the `useEffect` in `App.tsx`.
+- **[error]** `cleanupScrollAnimations()` not called in the `App.tsx` `useEffect` cleanup return.
+- **[error]** `.reveal-section` or `.stagger-children` class names changed — these are the GSAP scroll animation targets.
+- **[warning]** `willChange` set/revert pattern removed from `animations.ts` — it must be set before GSAP animates an element and reverted after for performance.
+
+### §4.4 Canvas Cleanup
+
+- **[error]** `cancelAnimationFrame` not called in the cleanup function of `ParticleField`'s main `useEffect`. Missing cleanup causes memory leaks and runaway animation loops.
+
+### §4.5 No Layout-Triggering Reads in Animation Loops
+
+- **[warning]** `getBoundingClientRect()`, `offsetWidth`, `offsetHeight`, `clientWidth`, or `scrollTop` read inside a `requestAnimationFrame` loop. One-time setup or resize event reads are acceptable.
+
+### §4.6 CSS Keyframe Animations
+
+All CSS keyframes defined in `globals.css` use only `transform` and `opacity` — except `hero-glow` (noted above) and `mesh-drift` (uses `transform` — acceptable). This must be maintained for new keyframes added.
+
+- **[error]** New `@keyframes` block that animates a layout-triggering property.
+
+---
+
+## §5 — TypeScript Strictness
+_Enforced by: Shield_
+
+### §5.1 Required Compiler Flags
+
+These flags in `tsconfig.app.json` must not be disabled:
+
+| Flag | Required value |
+|------|---------------|
+| `strict` | `true` |
+| `noUnusedLocals` | `true` |
+| `noUnusedParameters` | `true` |
+| `verbatimModuleSyntax` | `true` |
+| `erasableSyntaxOnly` | `true` |
+
+- **[error]** Any of these flags set to `false` or removed.
+
+### §5.2 No `any`
+
+- **[error]** `any` used as a prop type, state type, or function return type without an inline comment justification.
+- Permitted alternatives: `unknown` with a type guard, specific union types, generics.
+
+### §5.3 Props Interfaces
+
+- **[warning]** Components with more than 2 props that use inline destructured types without a named `interface` or `type` alias.
+
+### §5.4 Type-Only Imports
+
+- **[error]** Type-only imports missing the `type` keyword (required by `verbatimModuleSyntax`).
+
+  Correct: `import type { Foo } from './foo'`
+  Wrong: `import { Foo } from './foo'` when `Foo` is only used as a type
+
+---
+
+## §6 — Code Quality
+_Enforced by: Shield_
+
+### §6.1 Import Order
+
+Enforce this order within each file (blank line between groups is optional but preferred):
+
+1. React and React hooks
+2. Third-party libraries (`framer-motion`, `gsap`, `three`, `@react-three/*`)
+3. Internal components (`../components/`, `./`)
+4. Internal hooks (`../hooks/`)
+5. Internal lib/utils (`../lib/`)
+6. Assets (images, SVGs)
+
+- **[warning]** Assets imported before internal modules. Third-party imports interleaved with internal imports.
+
+### §6.2 Component Structure
+
+- **[error]** A component function defined inside another component's function body (not just JSX — referring to `function Foo() {}` or `const Foo = () =>` declared inside render scope).
+- **[warning]** Multiple unrelated exported components in a single file.
+- Section-specific subcomponents used only within that file may be co-located in the same file — this is correct and expected.
+
+### §6.3 Hook Rules
+
+- **[error]** Any React hook called after a conditional return.
+- **[error]** Reusable custom hook logic defined inline in a component file — it belongs in `src/hooks/`.
+
+### §6.4 Error Handling
+
+- **[error]** Empty `catch` blocks — at minimum `console.error` the caught value.
+- **[error]** Error states with no user-visible recovery path.
+- Reference pattern: `Contact.tsx` form — idle → submitting → success/error with a direct email fallback on error.
+
+### §6.5 Locked Files
+
+Do not modify these files without explicit review:
+
+| File | Reason |
+|------|--------|
+| `src/lib/birdPaths.ts` | Production-calibrated SVG path data for the canvas bird mascot. Wrong values break rendering silently. |
+| `src/styles/globals.css` `@theme` block | Single source of truth for all design tokens. Changing a value cascades everywhere. |
+| `src/components/effects/ParticleField.tsx` | 628-line canvas animation with per-frame physics and Path2D rendering. Highly fragile. |
+
+- **[error]** Modifications to `src/lib/birdPaths.ts` without explicit instruction.
+
+### §6.6 Netlify Form Integrity
+
+The hidden form in `index.html` is required for Netlify Forms to detect the form at build time. `Contact.tsx` POSTs with `form-name=contact` matching the `name` attribute.
+
+- **[error]** Removal or renaming of the hidden form in `index.html`.
+- **[error]** Field names in `Contact.tsx` that do not match the hidden form fields in `index.html`.
+
+### §6.7 Section IDs
+
+Navbar IntersectionObserver and all anchor links depend on exact `id` attribute strings:
+`hero`, `solutions`, `ourtech`, `trust`, `whynestcalc`, `contactus`
+
+- **[error]** Renaming a section `id` without updating the corresponding nav link and any anchor references.
+
+---
+
+## §7 — Beacon-Generated Rules
+_Rules appended by `/beacon-rules` after confirming recurring feedback patterns._
+_Rule IDs use the `B-` prefix._
 
 _No Beacon-generated rules yet. Run `/beacon-rules` after collecting feedback in `feedback-log.md`._

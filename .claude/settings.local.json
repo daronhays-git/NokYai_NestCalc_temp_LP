@@ -9,7 +9,13 @@
       "Bash(cat c:/Users/daron/dev3/nokyai-lp/postcss.config.*)",
       "Bash(npm ls:*)",
       "Bash(npm install:*)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Read(//c/Users/daron/dev3/nestcalcv4/.claude/commands/**)",
+      "Read(//c/Users/daron/dev3/nestcalcv4/.claude/agents/**)",
+      "Read(//c/Users/daron/dev3/nestcalcv4/.claude/skills/**)",
+      "Read(//c/Users/daron/dev3/nestcalcv4/.github/workflows/**)",
+      "Read(//c/Users/daron/dev3/nestcalcv4/nestcalc/**)",
+      "Read(//c/Users/daron/dev3/nestcalcv4/**)"
     ]
   }
 }

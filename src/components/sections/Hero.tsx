@@ -51,7 +51,7 @@ export function Hero() {
             className="font-display text-hero text-nok-gold mb-6 animate-[hero-glow_3s_ease-in-out_infinite]"
             {...fadeUp(0.5)}
           >
-            Use AI to Increase Profits
+            Custom AI Solutions<br />For Your Business
           </motion.h1>
 
           {/* Subheadline */}
@@ -59,8 +59,7 @@ export function Hero() {
             className="text-lg lg:text-xl text-nok-body max-w-3xl mx-auto mb-16 sm:mb-24 lg:mb-40"
             {...fadeUp(0.7)}
           >
-            Custom AI applications, intelligent automation, and next-gen digital products
-            — increase sales, increase customer engagement.
+            We Handle the Tech So You Can Focus on Your Business
           </motion.p>
 
           {/* CTA row */}

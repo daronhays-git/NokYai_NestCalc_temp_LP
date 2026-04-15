@@ -1,31 +1,62 @@
 name: Eagle Design Review
+
 on:
-  pull_request:
-    types: [opened, synchronize]
-    branches: [main]
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  issues: write
+  id-token: write
 
 jobs:
-  eagle-review:
+  eagle:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      issues: read
-      id-token: write
+
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
+
+      - name: Ensure "eagle" label exists
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "eagle" \
+            --color "0075CA" \
+            --description "Automated Eagle design review findings" \
+            2>/dev/null || true
+
       - uses: anthropics/claude-code-action@v1
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: "--dangerously-skip-permissions"
+          max_turns: "30"
           prompt: |
-            Read design-tokens.md and .claude/commands/eagle.md. Then review the PR diff for UI component files only (src/components/, src/pages/):
-            1. Design Token Compliance — raw hex values not in design-tokens.md, typography outside the type scale, undocumented border-radius or shadow values
-            2. Accessibility — missing alt text, missing aria-label on interactive elements, keyboard navigation gaps, color contrast issues
-            3. Responsive Patterns — fixed px font sizes, one-off layout values outside the documented spacing system
-            4. Architecture — styling approach violations as defined in REVIEW.md §1
-            If no UI component files were changed, post: "Eagle: no UI files in this PR — skipping design review."
-            Post findings as a PR comment with: Verdict (PASS / NEEDS ATTENTION / FAIL) and File | Line | Severity | Category | Finding | Recommendation
-          max_turns: "10"
+            Commit being reviewed: ${{ github.sha }}
+            Short hash for the issue title: first 7 characters of that SHA.
+
+            Read CLAUDE.md, REVIEW.md, design-tokens.md, and .claude/commands/eagle.md.
+            Run the complete 11-step Eagle design review:
+              1. Color token compliance — scan all .tsx files for raw hex values not in the documented exceptions table
+              2. Font compliance — scan for non-Space Grotesk / non-Outfit font families, font-sans misuse, font-mono outside code elements
+              3. Typography scale — arbitrary Tailwind font-size values, heading hierarchy (one h1, h2 for sections, h3 for cards)
+              4. Spacing compliance — section padding patterns, max-w-7xl mx-auto px-6 container rule
+              5. Inline style audit — static values in style={{}} that have Tailwind equivalents
+              6. ARIA and decorative elements — aria-hidden on ParticleField, NoiseOverlay, GradientMesh, CustomCursor, ScrollProgress; aria-label on interactive elements
+              7. Keyboard navigation — LegalModal Escape handler, scroll lock/restore on modal open/close, tabIndex > 0
+              8. Touch targets — MagneticButton px-8 py-4 intact, button/link hit area below 44×44px
+              9. Responsive behavior — horizontal overflow risk, missing mobile breakpoints, TechStack overflow-hidden
+              10. Animation properties — layout-triggering props in transitions, whileInView once:true, stagger pattern
+              11. Section background alternation — Hero nok-deep, Services nok-medium, TechStack nok-forest, WhyNokYai none, Testimonials nok-forest, Contact nok-medium, Footer nok-deep
+
+            Format the output using the Eagle Review report format defined in .claude/commands/eagle.md.
+
+            After completing all 11 steps:
+            - If there are any ❌ (Issue) or ⚠️ (Warning) findings:
+                1. Write the complete report to /tmp/eagle_report.md
+                2. Run: gh issue create --title "Eagle Review — SHORT_SHA" --label "eagle" --body-file /tmp/eagle_report.md
+                   (replace SHORT_SHA with the first 7 characters of the commit SHA above)
+            - If every finding is ✅ Passing:
+                Print "Eagle review clean — no issues found." and stop. Do not create an issue.

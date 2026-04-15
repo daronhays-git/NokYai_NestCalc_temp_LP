@@ -26,13 +26,6 @@ Tracks false positives, missed issues, and design decisions to improve Eagle, Sh
 - **Why it was wrong:** These are documented design exceptions in `design-tokens.md` — Nest uses a distinct green tint, .ai uses a distinct gold tint for the split-color wordmark. Intentional deviation from the nok-* token palette for brand identity.
 - **Rule:** Do not flag `#6DC99E` or `#fcd34d` in Footer.tsx — they are documented brand exceptions.
 
-### FP-003: tailwind.config.ts Syne font declaration
-- **Date:** 2026-04-14
-- **Agent:** Shield / Lighthouse
-- **What was flagged:** `tailwind.config.ts` declares `fontFamily.display: ['Syne']`
-- **Why it was wrong:** In Tailwind v4, `tailwind.config.ts` is not authoritative — `src/styles/globals.css` `@theme` block is. The config.ts declaration is inactive; `globals.css` correctly sets `--font-display: 'Space Grotesk'`. Not a real conflict.
-- **Rule:** Do not flag `tailwind.config.ts` font declarations as design drift — `globals.css @theme` is the authoritative source for Tailwind v4.
-
 ---
 
 ## Missed Issues
