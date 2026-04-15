@@ -1,7 +1,7 @@
 name: Eagle Design Review
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -32,7 +32,6 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: "--dangerously-skip-permissions"
-          max_turns: "30"
           prompt: |
             Commit being reviewed: ${{ github.sha }}
             Short hash for the issue title: first 7 characters of that SHA.
