@@ -1,10 +1,10 @@
 # NokYai.com Landing Page
 
-**Version:** V1.3.0  
-**Status:** Deployed — responsive, SEO complete, pending content replacement  
+**Version:** V1.3.1  
+**Status:** Deployed — agent stack ported, CI active, pending content replacement  
 **Branch:** main  
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP  
-**Commit:** 444e3db  
+**Commit:** 57790c2  
 **Dev Server:** http://localhost:5173  
 
 ---
@@ -18,8 +18,8 @@ npm run dev
 
 ## Tech Stack
 
-- Vite + React 19.2.4 + TypeScript
-- Tailwind CSS 4.2.2 (CSS-first custom design tokens in globals.css)
+- Vite + React 19 + TypeScript
+- Tailwind CSS 4 (CSS-first @theme tokens)
 - Framer Motion (component animations)
 - GSAP + ScrollTrigger (scroll-driven animations)
 - 2D Canvas particle system (custom, mouse-reactive)
@@ -34,12 +34,13 @@ nokyai-lp/
 ├── src/
 │   ├── components/
 │   │   ├── layout/        Navbar.tsx, Footer.tsx
-│   │   ├── sections/      Hero, Services, TechStack, WhyNokYai,
-│   │   │                  Testimonials, Contact
+│   │   ├── sections/      Hero, Services, Testimonials,
+│   │   │                  TechStack, WhyNokYai, Contact
 │   │   ├── ui/            MagneticButton, GlowCard, SectionHeading,
 │   │   │                  CustomCursor, ScrollProgress
 │   │   ├── effects/       ParticleField, GradientMesh, NoiseOverlay
-│   │   └── legal/         LegalModal, PrivacyPolicy, TermsOfService, Disclaimer
+│   │   └── legal/         LegalModal, PrivacyPolicy, TermsOfService,
+│   │                      Disclaimer
 │   ├── styles/globals.css
 │   ├── lib/               animations.ts, birdPaths.ts
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
@@ -50,6 +51,18 @@ nokyai-lp/
 │   ├── og-image.png       1200x630 OG image
 │   ├── robots.txt
 │   └── sitemap.xml
+├── .claude/
+│   ├── commands/          shield.md, eagle.md, lighthouse.md, scribe.md
+│   ├── agents/
+│   └── skills/
+├── .github/workflows/     shield.yml, eagle.yml, lighthouse.yml,
+│                          scribe.yml, review-all.yml
+├── docs/reports/          agent-baseline-2026-04-15.md
+├── CLAUDE.md
+├── REVIEW.md
+├── design-tokens.md
+├── CHANGELOG.md
+├── doc-inventory.md
 ├── tailwind.config.ts
 ├── vite.config.ts
 ├── netlify.toml
@@ -61,13 +74,25 @@ nokyai-lp/
 | Token | Hex | Usage |
 |-------|-----|-------|
 | nok-deep | #0f2920 | Hero, WhyNokYai, Footer bg |
-| nok-forest | #1a3a2a | LogoBar, Cases, Testimonials bg |
-| nok-medium | #2d5a42 | Services, Process, Contact bg |
+| nok-forest | #1a3a2a | TechStack, Testimonials bg |
+| nok-medium | #2d5a42 | Services, Contact bg |
 | nok-gold | #F59E0B | CTAs, numbers, highlights |
 | nok-teal | #0d9488 | Links, secondary accent |
 | nok-heading | #FFFFFF | Section headings |
 | nok-body | #FEF3C7 | Body text (warm wheat) |
 | nok-caption | #D4C9A8 | Captions, muted labels |
+
+## Agent Stack
+
+| Agent | Trigger | Purpose |
+|-------|---------|---------|
+| Shield | PR to main | Code quality + security review |
+| Eagle | PR to main | Design + accessibility review |
+| Lighthouse | Push to main | SEO, performance, EEAT |
+| Scribe | PR to main | Documentation staleness |
+| Review-All | PR to main | Orchestrates all PR agents |
+
+Manual: run `/shield`, `/eagle`, `/lighthouse`, `/scribe` in Claude Code.
 
 ## Git Remote
 
@@ -102,3 +127,5 @@ git push origin main # Auto-deploys to Netlify
 | mailto: link doesn't open | User has no default mail app — clipboard copy fallback handles this |
 | Pushing to wrong repo | Run `git remote -v` to verify origin before pushing |
 | Favicon not showing | Hard refresh (Ctrl+Shift+R) — browsers cache favicons aggressively |
+| Shield/Eagle CI fails | Check CLAUDE_CODE_OAUTH_TOKEN secret exists in repo Settings → Secrets |
+| CI "unsupported event" | Shield/Eagle must use pull_request trigger, not push |

@@ -1,7 +1,7 @@
 # NokYai.com LP — Roadmap
 
-**Last Updated:** April 11, 2026  
-**Current Status:** V1.3.0 complete — deployed, responsive + SEO done (commit 167bb5a)
+**Last Updated:** April 15, 2026  
+**Current Status:** V1.3.1 complete — agent stack ported, CI active (commit 57790c2)
 
 ---
 
@@ -13,17 +13,18 @@
 | Green/Gold Re-skin | V1.1 | NestCalc DNA palette applied, Guardian Bird feature added |
 | Contact Form & Polish | V1.2 | Netlify Forms working, email link with clipboard copy, trust badges, git remote fix |
 | Responsive & SEO | V1.3.0 | Full responsive pass, SEO meta tags, favicon, OG image, robots/sitemap, padding tightening |
+| Agent Stack Porting | V1.3.1 | Font config fix, dead code removal, Foundation configs, 4 agent commands, 5 GitHub Actions, baseline snapshot |
 
 ---
 
 ## Next Session (V1.4.0)
 
-**Priority:** Replace placeholder content + analytics
+**Priority:** Fix agent-flagged issues, replace placeholder content, add analytics
 
-1. Add Google Analytics 4 tracking
-2. Replace placeholder testimonials with real quotes
-3. Replace case study gradient placeholders with real screenshots
-4. Replace tech logo placeholders with actual SVGs
+1. Fix 5 quick-win agent findings (Contact catch, Footer import/color, LegalModal h1, Services nok-amber)
+2. Fix stale title tags in index.html
+3. Add Organization JSON-LD schema
+4. Add Google Analytics 4 tracking
 5. Lighthouse performance audit
 
 ---
@@ -31,18 +32,45 @@
 ## Backlog (Post V1.4.0)
 
 ### Content
+- [ ] Replace placeholder testimonials with real quotes
 - [ ] Write final copy for all sections
 - [ ] Add NokYai animated bird logo video (need clean file with matching bg)
+- [ ] Replace "Coming Soon" service cards with specific content
+- [ ] Add founder/author bio for EEAT
+
+### Legal
+- [ ] Rewrite legal documents for AI services (currently references old RE product)
 
 ### SEO & Marketing
 - [ ] Performance audit (Lighthouse 90+)
 - [ ] Social sharing preview image (verify OG renders correctly)
+- [ ] Add email link to Footer
+- [ ] Add operating entity statement to Footer
+- [ ] Create standalone routes for legal pages (/privacy, /terms, /disclaimer)
 
 ### Future Enhancements
 - [ ] Blog/content section
 - [ ] Case study detail pages
 - [ ] Client portal link
 - [ ] Pricing section (if applicable)
+- [ ] FAQ schema when content expands
+
+---
+
+## What Changed — V1.3.1
+
+**Session (April 15, 2026)**
+- PORT-C1: Fixed font discrepancy — tailwind.config.ts Syne → Space Grotesk to match globals.css/index.html
+- PORT-C2: Removed 9 dead files (CaseStudies, CTABand, LogoBar, Process sections; App.css, index.css; constants.ts; react.svg, vite.svg)
+- PORT-2: Generated CLAUDE.md, REVIEW.md, design-tokens.md from Foundation retroactive audit
+- PORT-3: Created Shield (9 steps), Eagle (11 steps), Lighthouse (16 steps), Scribe (11 steps) command files
+- PORT-4/5: Created GitHub Actions for Shield, Eagle, Lighthouse, Scribe, Review-All
+- PORT-6: Tested all 4 agents — found 11 unique issues across codebase
+- PORT-7: Baseline snapshot captured at docs/reports/agent-baseline-2026-04-15.md
+- PORT-8: README fixed (React 19, Tailwind 4, removed dead file refs), CHANGELOG.md + doc-inventory.md created
+- Fixed CI triggers: claude-code-action@v1 requires pull_request, not push
+- Added CLAUDE_CODE_OAUTH_TOKEN to GitHub repo secrets
+- All 5 CI workflows verified green
 
 ---
 
