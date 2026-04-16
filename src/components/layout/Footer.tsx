@@ -100,7 +100,7 @@ export function Footer() {
           </div>
 
           <p className="text-xs text-center pt-4 text-nok-caption">
-            v1.3
+            V{__APP_VERSION__}
           </p>
         </div>
       </footer>

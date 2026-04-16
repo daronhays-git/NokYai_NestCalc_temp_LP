@@ -74,6 +74,34 @@ export function WhyNestCalc() {
               </motion.div>
             ))}
           </div>
+
+          {/* Founder bio */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8 mt-16 text-center"
+          >
+            <p className="text-nok-gold uppercase tracking-widest text-sm">
+              About the Founder
+            </p>
+            <h3 className="text-white text-2xl font-display font-bold mt-2">
+              Daron R. Hays
+            </h3>
+            <p className="text-nok-caption text-sm mt-1">
+              Founder &amp; Developer — NestCalc.ai, LLC
+            </p>
+            <p className="text-nok-body text-base leading-relaxed mt-4 max-w-3xl mx-auto">
+              Engineer, builder, and real estate investor with 30+ years of hands-on
+              experience. A structural engineer by training and licensed General
+              Contractor, Daron has built 52 homes, completed over $15 million in
+              construction contracts, managed rental portfolios, structured private
+              investments, and owned a yoga studio and fitness center for nine years.
+              He builds the analytical tools that serious investors need — because
+              he's been the investor who needed them.
+            </p>
+          </motion.div>
         </div>
       </div>
     </section>

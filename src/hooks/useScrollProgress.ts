@@ -1,4 +1,3 @@
-// TODO: Implement useScrollProgress hook
 import { useState, useEffect } from 'react';
 
 export function useScrollProgress() {

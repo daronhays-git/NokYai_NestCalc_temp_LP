@@ -1,10 +1,10 @@
 # NokYai.com Landing Page
 
-**Version:** V1.4.0  
-**Status:** Deployed — agent fixes applied, Lighthouse 99/94/100/100, pending content replacement  
+**Version:** V1.4.1  
+**Status:** Deployed — EEAT bio + touch particles + CTA cleanup, professional quality audit 16/16 PASS  
 **Branch:** main  
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP  
-**Commit:** 198782e  
+**Commit:** 20eb707  
 **Dev Server:** http://localhost:5173  
 
 ---
@@ -22,7 +22,7 @@ npm run dev
 - Tailwind CSS 4 (CSS-first @theme tokens)
 - Framer Motion (component animations)
 - GSAP + ScrollTrigger (scroll-driven animations)
-- 2D Canvas particle system (custom, mouse-reactive)
+- 2D Canvas particle system (custom, mouse-reactive + touch-reactive)
 - Netlify Forms (contact form submissions)
 - Google Fonts: Space Grotesk (display) + Outfit (body)
 - Agent stack: Shield, Eagle, Lighthouse, Scribe (CI via GitHub Actions)
@@ -46,7 +46,7 @@ nokyai-lp/
 │   ├── lib/               animations.ts, birdPaths.ts
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
 ├── public/
-│   ├── favicon.svg        Eagle favicon
+│   ├── favicon.svg        Eagle favicon (360 bytes)
 │   ├── favicon.png        48x48 PNG version
 │   ├── apple-touch-icon.png  180x180 iOS icon
 │   ├── og-image.png       1200x630 OG image
@@ -82,6 +82,12 @@ nokyai-lp/
 | nok-heading | #FFFFFF | Section headings |
 | nok-body | #FEF3C7 | Body text (warm wheat) |
 | nok-caption | #D4C9A8 | Captions, muted labels |
+
+## JSON-LD Schemas
+
+Two structured data blocks in index.html:
+- **Organization** — NestCalc.ai business entity
+- **Person** — Daron R. Hays founder bio (EEAT/AEO signal)
 
 ## Agent Stack
 
@@ -131,3 +137,4 @@ git push origin main # Auto-deploys to Netlify
 | Shield/Eagle CI fails | Check CLAUDE_CODE_OAUTH_TOKEN secret exists in repo Settings → Secrets |
 | CI "unsupported event" | Shield/Eagle must use pull_request trigger, not push |
 | Favicon SVG looks wrong | Claude Code can't create logo art — design manually in Figma/Inkscape |
+| Touch particles not working | Requires window-level listeners (canvas has pointer-events:none) |

@@ -1,4 +1,3 @@
-// TODO: Implement useMousePosition hook
 import { useState, useEffect } from 'react';
 
 export function useMousePosition() {

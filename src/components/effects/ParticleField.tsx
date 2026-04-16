@@ -195,6 +195,33 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
       birdTargetRef.current = { x: birdPerchRef.current.x, y: birdPerchRef.current.y }
     }
 
+    // --- Touch tracking (registered on window like mouse, with bounds check) ---
+    function onTouchMove(e: TouchEvent) {
+      const touch = e.touches[0]
+      if (!touch) return
+      const rect = canvas!.getBoundingClientRect()
+      const x = touch.clientX - rect.left
+      const y = touch.clientY - rect.top
+
+      // Only interact when touch is within the canvas/hero area
+      if (x < 0 || x > rect.width || y < 0 || y > rect.height) return
+
+      e.preventDefault()
+      mouseRef.current.x = x
+      mouseRef.current.y = y
+      mouseRef.current.active = true
+
+      // Update trail
+      const trail = trailRef.current
+      trail.unshift({ x, y })
+      if (trail.length > 20) trail.length = 20
+    }
+
+    function onTouchEnd() {
+      mouseRef.current.active = false
+      trailRef.current = []
+    }
+
     // --- Intersection Observer ---
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -600,6 +627,9 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseleave', onMouseLeave)
     window.addEventListener('resize', resize)
+    window.addEventListener('touchstart', onTouchMove, { passive: false })
+    window.addEventListener('touchmove', onTouchMove, { passive: false })
+    window.addEventListener('touchend', onTouchEnd)
 
     return () => {
       clearTimeout(birdTimer)
@@ -608,6 +638,9 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseleave', onMouseLeave)
       window.removeEventListener('resize', resize)
+      window.removeEventListener('touchstart', onTouchMove)
+      window.removeEventListener('touchmove', onTouchMove)
+      window.removeEventListener('touchend', onTouchEnd)
     }
   }, [getCount])
 

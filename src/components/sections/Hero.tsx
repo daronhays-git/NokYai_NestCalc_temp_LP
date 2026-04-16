@@ -14,7 +14,6 @@ export function Hero() {
   const [btnHovered, setBtnHovered] = useState(false)
 
   const primaryBtnRef = useRef<HTMLDivElement>(null)
-  const secondaryBtnRef = useRef<HTMLAnchorElement>(null)
 
   return (
     <section
@@ -29,7 +28,7 @@ export function Hero() {
         className="absolute inset-0 transition-none"
         style={{ zIndex: btnHovered ? 20 : 0 }}
       >
-        <ParticleField buttonRefs={[primaryBtnRef, secondaryBtnRef]} />
+        <ParticleField buttonRefs={[primaryBtnRef]} />
       </div>
 
       {/* Content */}
@@ -62,35 +61,19 @@ export function Hero() {
             We Handle the Tech So You Can Focus on Your Business
           </motion.p>
 
-          {/* CTA row */}
+          {/* CTA */}
           <motion.div
-            className="flex flex-wrap items-center justify-center gap-4 mb-12"
+            className="flex justify-center mb-12"
             {...fadeUp(0.9)}
           >
             <div
               ref={primaryBtnRef}
               onMouseEnter={() => setBtnHovered(true)}
               onMouseLeave={() => setBtnHovered(false)}
-              onClick={(e) => {
-                e.preventDefault()
-                document.querySelector('#contactus')?.scrollIntoView({ behavior: 'smooth' })
-              }}
+              onClick={() => document.getElementById('contactus')?.scrollIntoView({ behavior: 'smooth' })}
             >
               <MagneticButton href="#contactus">Start Your Project</MagneticButton>
             </div>
-            <a
-              ref={secondaryBtnRef}
-              href="#solutions"
-              onClick={(e) => {
-                e.preventDefault()
-                document.querySelector('#solutions')?.scrollIntoView({ behavior: 'smooth' })
-              }}
-              onMouseEnter={() => setBtnHovered(true)}
-              onMouseLeave={() => setBtnHovered(false)}
-              className="cursor-hover inline-block px-8 py-4 rounded-xl border border-nok-border text-nok-body font-semibold hover:border-nok-gold hover:text-nok-gold transition-colors duration-200"
-            >
-              Explore Services &rarr;
-            </a>
           </motion.div>
 
         </div>

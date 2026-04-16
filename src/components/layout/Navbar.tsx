@@ -110,7 +110,7 @@ export function Navbar() {
               className="!px-5 !py-3 !text-sm !rounded-lg"
               onClick={() => scrollTo('#contactus')}
             >
-              Start a Project
+              Start Your Project
             </MagneticButton>
           </div>
 
@@ -178,7 +178,7 @@ export function Navbar() {
                 className="!text-base"
                 onClick={() => scrollTo('#contactus')}
               >
-                Start a Project
+                Start Your Project
               </MagneticButton>
             </motion.div>
           </motion.div>

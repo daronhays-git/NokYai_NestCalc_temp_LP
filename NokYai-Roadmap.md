@@ -1,7 +1,7 @@
 # NokYai.com LP — Roadmap
 
-**Last Updated:** April 15, 2026  
-**Current Status:** V1.4.0 complete — agent fixes applied, Lighthouse 99/94/100/100 (commit 198782e)
+**Last Updated:** April 16, 2026  
+**Current Status:** V1.4.1 complete — EEAT bio, touch particles, CTA cleanup, quality audit 16 PASS (commit 20eb707)
 
 ---
 
@@ -15,29 +15,30 @@
 | Responsive & SEO | V1.3.0 | Full responsive pass, SEO meta tags, favicon, OG image, robots/sitemap, padding tightening |
 | Agent Stack Porting | V1.3.1 | Font config fix, dead code removal, Foundation configs, 4 agent commands, 5 GitHub Actions, baseline snapshot |
 | Agent Fixes & Polish | V1.4.0 | Agent quick wins fixed, title tags, JSON-LD, Lighthouse audit, contrast fix, favicons, UX improvements |
+| EEAT & Mobile Touch | V1.4.1 | Person JSON-LD, founder bio, touch particles, CTA cleanup, TODO cleanup, quality audit |
 
 ---
 
-## Next Session (V1.4.1)
+## Next Session (V1.4.2)
 
-**Priority:** Fix favicon SVG, set up GA4 analytics, begin content replacement
+**Priority:** Content replacement, legal doc rewrite, GA4 analytics
 
-1. Fix favicon SVG manually (eagle logo — needs design tool, not Claude Code)
+1. Audit and rewrite legal documents (PrivacyPolicy, TermsOfService, Disclaimer) for AI services
 2. Add Google Analytics 4 (after domain/bank setup complete)
-3. Re-run Lighthouse audit (expect accessibility improvement from contrast fix)
-4. Audit and begin replacing placeholder content
-5. Validate JSON-LD schema with Google Rich Results Test
+3. Re-run Lighthouse audit (expect accessibility improvement)
+4. Validate JSON-LD schemas with Google Rich Results Test
+5. Begin replacing placeholder content
 
 ---
 
-## Backlog (Post V1.4.1)
+## Backlog (Post V1.4.2)
 
 ### Content
 - [ ] Replace placeholder testimonials with real quotes
 - [ ] Write final copy for all sections
 - [ ] Add NokYai animated bird logo video (need clean file with matching bg)
 - [ ] Replace "Coming Soon" service cards with specific content
-- [ ] Add founder/author bio for EEAT
+- [ ] Replace tech logo placeholders with actual SVG logos
 
 ### Legal
 - [ ] Rewrite legal documents for AI services (currently references old RE product)
@@ -55,6 +56,21 @@
 - [ ] Client portal link
 - [ ] Pricing section (if applicable)
 - [ ] FAQ schema when content expands
+
+---
+
+## What Changed — V1.4.1
+
+**Session (April 16, 2026)**
+- P1: Navbar CTA text → "Start Your Project", smooth-scrolls to Contact
+- P2: Hero — removed secondary CTA ("Explore Services →"), single centered "Start Your Project" CTA
+- P3-P4: ParticleField touch interaction — mobile users get particle push, glow, gold lines, trail on finger drag
+- P5: Favicon audit — SVG clean at 360 bytes, all icon sizes correct, no optimization needed
+- P6: Added Person JSON-LD schema to index.html (EEAT/AEO — founder bio structured data)
+- P7-P8: Added founder bio block to WhyNokYai section (glassmorphism card, animated, ~90-word bio)
+- P9: Placeholder content audit — found 3 stale TODO comments, 30+ lines of old RE product legal content
+- P10: Removed 3 stale TODO comments from hooks (useScrollProgress, useInView, useMousePosition)
+- P11: Professional quality audit — 16 PASS, 3 MINOR, 0 FIX
 
 ---
 
