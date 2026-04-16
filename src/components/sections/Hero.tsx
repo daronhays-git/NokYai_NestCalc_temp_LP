@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { MagneticButton } from '../ui/MagneticButton'
 import { ParticleField } from '../effects/ParticleField'
@@ -11,8 +11,6 @@ const fadeUp = (delay: number) => ({
 })
 
 export function Hero() {
-  const [btnHovered, setBtnHovered] = useState(false)
-
   const primaryBtnRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -24,10 +22,7 @@ export function Hero() {
       <div className="absolute inset-0 z-0">
         <GradientMesh colors={['#F59E0B', '#0d9488', '#0f2920']} className="opacity-40" />
       </div>
-      <div
-        className="absolute inset-0 transition-none"
-        style={{ zIndex: btnHovered ? 20 : 0 }}
-      >
+      <div className="absolute inset-0 z-0">
         <ParticleField buttonRefs={[primaryBtnRef]} />
       </div>
 
@@ -66,12 +61,7 @@ export function Hero() {
             className="flex justify-center mb-12"
             {...fadeUp(0.9)}
           >
-            <div
-              ref={primaryBtnRef}
-              onMouseEnter={() => setBtnHovered(true)}
-              onMouseLeave={() => setBtnHovered(false)}
-              onClick={() => document.getElementById('contactus')?.scrollIntoView({ behavior: 'smooth' })}
-            >
+            <div ref={primaryBtnRef}>
               <MagneticButton href="#contactus">Start Your Project</MagneticButton>
             </div>
           </motion.div>
