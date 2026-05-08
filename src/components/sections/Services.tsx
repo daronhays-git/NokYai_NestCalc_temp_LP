@@ -3,6 +3,8 @@ import { SectionHeading } from '../ui/SectionHeading'
 import { GlowCard } from '../ui/GlowCard'
 import casawiseWordmark from '../../assets/casawise-wordmark-final.png'
 import homefastcalcWordmark from '../../assets/homefastcalc-wordmark-final.png'
+import casawiseWordmarkWebp from '../../assets/casawise-wordmark-final.webp'
+import homefastcalcWordmarkWebp from '../../assets/homefastcalc-wordmark-final.webp'
 
 const SERVICES = [
   {
@@ -17,6 +19,7 @@ const SERVICES = [
     ),
     href: 'https://casawise.ai',
     wordmark: casawiseWordmark,
+    wordmarkWebp: casawiseWordmarkWebp,
     wordmarkWidth: 600,
     wordmarkHeight: 157,
   },
@@ -44,6 +47,7 @@ const SERVICES = [
     ),
     href: 'https://homefastcalc.com',
     wordmark: homefastcalcWordmark,
+    wordmarkWebp: homefastcalcWordmarkWebp,
     wordmarkWidth: 600,
     wordmarkHeight: 197,
     wordmarkHeightClass: 'h-12 sm:h-14',
@@ -102,16 +106,21 @@ export function Services() {
                         </p>
                         {service.wordmark ? (
                           <div className="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-xl border border-nok-gold/40 bg-nok-gold/0 transition-all duration-300 group-hover:border-nok-gold group-hover:bg-nok-gold/5">
-                            <img
-                              src={service.wordmark}
-                              alt={`${service.title} wordmark`}
-                              className={`${service.wordmarkHeightClass ?? 'h-10 sm:h-12'} w-auto select-none`}
-                              width={service.wordmarkWidth}
-                              height={service.wordmarkHeight}
-                              loading="lazy"
-                              decoding="async"
-                              draggable={false}
-                            />
+                            <picture>
+                              {service.wordmarkWebp && (
+                                <source srcSet={service.wordmarkWebp} type="image/webp" />
+                              )}
+                              <img
+                                src={service.wordmark}
+                                alt={`${service.title} wordmark`}
+                                className={`${service.wordmarkHeightClass ?? 'h-10 sm:h-12'} w-auto select-none`}
+                                width={service.wordmarkWidth}
+                                height={service.wordmarkHeight}
+                                loading="lazy"
+                                decoding="async"
+                                draggable={false}
+                              />
+                            </picture>
                           </div>
                         ) : (
                           <div className="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-xl border border-nok-gold/40 bg-nok-gold/0 transition-all duration-300 group-hover:border-nok-gold group-hover:bg-nok-gold/5">
