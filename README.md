@@ -1,11 +1,21 @@
-# NokYai.com Landing Page
+# NestCalc.ai Landing Page
 
-**Version:** V1.4.1  
-**Status:** Deployed — EEAT bio + touch particles + CTA cleanup, professional quality audit 16/16 PASS  
+**Version:** V1.4.2  
+**Status:** Deployed — Hero CTA fix, mobile touch fix, legal rewrites, NestCalc rebrand, favicon (tag v1.4.2)  
 **Branch:** main  
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP  
-**Commit:** 20eb707  
 **Dev Server:** http://localhost:5173  
+
+---
+
+## Company Structure
+
+| Entity | Role |
+|--------|------|
+| NestCalc.ai, LLC | Umbrella company |
+| HomeFastCalc.com | Simplified non-AI RE calculator app |
+| Casawise.ai | AI-powered RE analysis app (formerly NestCalc.ai) |
+| NestCalc.ai (this LP) | Company website and product showcase |
 
 ---
 
@@ -35,19 +45,19 @@ nokyai-lp/
 │   ├── components/
 │   │   ├── layout/        Navbar.tsx, Footer.tsx
 │   │   ├── sections/      Hero, Services, Testimonials,
-│   │   │                  TechStack, WhyNokYai, Contact
+│   │   │                  TechStack, WhyNestCalc, Contact
 │   │   ├── ui/            MagneticButton, GlowCard, SectionHeading,
 │   │   │                  CustomCursor, ScrollProgress
 │   │   ├── effects/       ParticleField, GradientMesh, NoiseOverlay
 │   │   └── legal/         LegalModal, PrivacyPolicy, TermsOfService,
 │   │                      Disclaimer
-│   ├── assets/            NokYai-logo-gold-green.png (primary logo)
+│   ├── assets/            nestcalc-logo-gold-green.png (primary logo)
 │   ├── styles/globals.css
 │   ├── lib/               animations.ts, birdPaths.ts
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
 ├── public/
-│   ├── favicon.svg        Eagle favicon (360 bytes)
-│   ├── favicon.png        48x48 PNG version
+│   ├── favicon.png        48x48 PNG favicon
+│   ├── favicon-512.png    512x512 high-DPI / PWA icon
 │   ├── apple-touch-icon.png  180x180 iOS icon
 │   ├── og-image.png       1200x630 OG image
 │   ├── robots.txt
@@ -74,7 +84,7 @@ nokyai-lp/
 
 | Token | Hex | Usage |
 |-------|-----|-------|
-| nok-deep | #0f2920 | Hero, WhyNokYai, Footer bg |
+| nok-deep | #0f2920 | Hero, WhyNestCalc, Footer bg |
 | nok-forest | #1a3a2a | TechStack, Testimonials bg |
 | nok-medium | #2d5a42 | Services, Contact bg |
 | nok-gold | #F59E0B | CTAs, numbers, highlights |
@@ -136,5 +146,6 @@ git push origin main # Auto-deploys to Netlify
 | Favicon not showing | Hard refresh (Ctrl+Shift+R) — browsers cache favicons aggressively |
 | Shield/Eagle CI fails | Check CLAUDE_CODE_OAUTH_TOKEN secret exists in repo Settings → Secrets |
 | CI "unsupported event" | Shield/Eagle must use pull_request trigger, not push |
-| Favicon SVG looks wrong | Claude Code can't create logo art — design manually in Figma/Inkscape |
 | Touch particles not working | Requires window-level listeners (canvas has pointer-events:none) |
+| Mobile clicks dead | Check ParticleField touchstart handler — never preventDefault on touchstart |
+| Hero CTA not scrolling | Ensure only one scroll mechanism (anchor href, not dual onClick+href) |
