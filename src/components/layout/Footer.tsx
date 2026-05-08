@@ -100,7 +100,7 @@ export function Footer() {
           </div>
 
           <div className="text-center pt-4">
-            <span className="text-nok-caption text-xs font-mono opacity-60">
+            <span className="text-nok-caption text-xs font-mono opacity-70">
               V{__APP_VERSION__}
             </span>
           </div>
