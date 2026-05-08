@@ -17,6 +17,8 @@ const SERVICES = [
     ),
     href: 'https://casawise.ai',
     wordmark: casawiseWordmark,
+    wordmarkWidth: 600,
+    wordmarkHeight: 157,
   },
   {
     title: 'Websites and Landing Pages',
@@ -42,7 +44,9 @@ const SERVICES = [
     ),
     href: 'https://homefastcalc.com',
     wordmark: homefastcalcWordmark,
-    wordmarkHeight: 'h-12 sm:h-14',
+    wordmarkWidth: 600,
+    wordmarkHeight: 197,
+    wordmarkHeightClass: 'h-12 sm:h-14',
   },
   {
     title: 'AI Strategy & Consulting',
@@ -101,7 +105,9 @@ export function Services() {
                             <img
                               src={service.wordmark}
                               alt={`${service.title} wordmark`}
-                              className={`${service.wordmarkHeight ?? 'h-10 sm:h-12'} w-auto select-none`}
+                              className={`${service.wordmarkHeightClass ?? 'h-10 sm:h-12'} w-auto select-none`}
+                              width={service.wordmarkWidth}
+                              height={service.wordmarkHeight}
                               loading="lazy"
                               decoding="async"
                               draggable={false}
