@@ -196,6 +196,18 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
     }
 
     // --- Touch tracking (registered on window like mouse, with bounds check) ---
+    function onTouchStart(e: TouchEvent) {
+      const touch = e.touches[0]
+      if (!touch) return
+      const rect = canvas!.getBoundingClientRect()
+      const x = touch.clientX - rect.left
+      const y = touch.clientY - rect.top
+      if (x < 0 || x > rect.width || y < 0 || y > rect.height) return
+      mouseRef.current.x = x
+      mouseRef.current.y = y
+      mouseRef.current.active = true
+    }
+
     function onTouchMove(e: TouchEvent) {
       const touch = e.touches[0]
       if (!touch) return
@@ -206,7 +218,6 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
       // Only interact when touch is within the canvas/hero area
       if (x < 0 || x > rect.width || y < 0 || y > rect.height) return
 
-      e.preventDefault()
       mouseRef.current.x = x
       mouseRef.current.y = y
       mouseRef.current.active = true
@@ -627,8 +638,8 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseleave', onMouseLeave)
     window.addEventListener('resize', resize)
-    window.addEventListener('touchstart', onTouchMove, { passive: false })
-    window.addEventListener('touchmove', onTouchMove, { passive: false })
+    window.addEventListener('touchstart', onTouchStart, { passive: true })
+    window.addEventListener('touchmove', onTouchMove, { passive: true })
     window.addEventListener('touchend', onTouchEnd)
 
     return () => {
@@ -638,7 +649,7 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseleave', onMouseLeave)
       window.removeEventListener('resize', resize)
-      window.removeEventListener('touchstart', onTouchMove)
+      window.removeEventListener('touchstart', onTouchStart)
       window.removeEventListener('touchmove', onTouchMove)
       window.removeEventListener('touchend', onTouchEnd)
     }
