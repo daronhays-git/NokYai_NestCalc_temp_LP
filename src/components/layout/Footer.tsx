@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { LegalModal } from '../legal/LegalModal'
 import { PrivacyPolicyContent } from '../legal/PrivacyPolicy'
 import { TermsOfServiceContent } from '../legal/TermsOfService'
@@ -46,6 +47,7 @@ function FooterLinks({ title, links }: { title: string; links: { label: string; 
 
 export function Footer() {
   const [activeLegal, setActiveLegal] = useState<LegalPage>(null)
+  const [copied, setCopied] = useState(false)
 
   return (
     <>
@@ -105,13 +107,30 @@ export function Footer() {
               NestCalc.ai is operated by{' '}
               <span className="font-medium">NestCalc.ai, LLC</span>.
               <span className="mx-2 opacity-50">·</span>
-              <a
-                href={`mailto:${EMAIL}`}
-                onClick={copyAndOpenMailto}
-                className="hover:text-nok-gold transition-colors"
-              >
-                {EMAIL_DISPLAY}
-              </a>
+              <span className="relative inline-block">
+                <a
+                  href={`mailto:${EMAIL}`}
+                  onClick={(e) => copyAndOpenMailto(e, () => {
+                    setCopied(true)
+                    setTimeout(() => setCopied(false), 3000)
+                  })}
+                  className="hover:text-nok-gold transition-colors"
+                >
+                  {EMAIL_DISPLAY}
+                </a>
+                <AnimatePresence>
+                  {copied && (
+                    <motion.span
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-nok-gold text-nok-deep text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap"
+                    >
+                      Email copied to clipboard!
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </span>
             </p>
           </div>
           <div className="text-center pt-4">
