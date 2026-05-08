@@ -45,7 +45,7 @@ export function GlowCard({
   return (
     <div
       ref={cardRef}
-      className={`relative rounded-2xl transition-transform duration-300 ease-out overflow-visible ${className}`}
+      className={`relative h-full rounded-2xl transition-transform duration-300 ease-out overflow-visible ${className}`}
       style={{ transform }}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
@@ -71,7 +71,7 @@ export function GlowCard({
       />
 
       {/* Card content layer */}
-      <div className="relative rounded-2xl bg-nok-surface border border-nok-border p-7 overflow-visible">
+      <div className="relative h-full flex flex-col rounded-2xl bg-nok-surface border border-nok-border p-7 overflow-visible">
         {children}
       </div>
     </div>

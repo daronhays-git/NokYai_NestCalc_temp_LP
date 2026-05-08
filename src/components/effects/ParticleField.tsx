@@ -161,11 +161,10 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
     }
     resize()
 
-    // --- Build Path2D objects from SVG path data (desktop only) ---
-    if (!isMobile()) {
-      birdPathsRef.current = BIRD_PATHS.map((d) => new Path2D(d))
-      birdScaleRef.current = 128 / (BIRD_BOUNDS.maxX - BIRD_BOUNDS.minX)
-    }
+    // --- Build Path2D objects from SVG path data ---
+    birdPathsRef.current = BIRD_PATHS.map((d) => new Path2D(d))
+    const birdRenderWidth = isMobile() ? 80 : 128
+    birdScaleRef.current = birdRenderWidth / (BIRD_BOUNDS.maxX - BIRD_BOUNDS.minX)
 
     // --- Mouse tracking ---
     function onMouseMove(e: MouseEvent) {
@@ -231,6 +230,10 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
     function onTouchEnd() {
       mouseRef.current.active = false
       trailRef.current = []
+
+      // Send bird back to perch (mirrors onMouseLeave behavior)
+      birdStateRef.current = 'returning'
+      birdTargetRef.current = { x: birdPerchRef.current.x, y: birdPerchRef.current.y }
     }
 
     // --- Intersection Observer ---
@@ -627,11 +630,9 @@ export function ParticleField({ buttonRefs }: ParticleFieldProps) {
 
     animate()
 
-    // --- Bird reveal after 1.2 seconds (desktop only) ---
+    // --- Bird reveal after 1.2 seconds ---
     const birdTimer = setTimeout(() => {
-      if (!isMobile()) {
-        birdReadyRef.current = true
-      }
+      birdReadyRef.current = true
     }, 1200)
 
     // --- Event listeners ---

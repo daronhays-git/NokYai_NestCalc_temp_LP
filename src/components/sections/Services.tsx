@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { GlowCard } from '../ui/GlowCard'
+import casawiseWordmark from '../../assets/casawise-wordmark-final.png'
+import homefastcalcWordmark from '../../assets/homefastcalc-wordmark-final.png'
 
 const SERVICES = [
   {
@@ -13,6 +15,8 @@ const SERVICES = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />
       </svg>
     ),
+    href: 'https://casawise.ai',
+    wordmark: casawiseWordmark,
   },
   {
     title: 'Websites and Landing Pages',
@@ -24,6 +28,7 @@ const SERVICES = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
       </svg>
     ),
+    href: 'https://builder-lp-5-251247478335.us-west1.run.app',
   },
   {
     title: 'Web & Mobile Apps',
@@ -35,6 +40,9 @@ const SERVICES = [
         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
       </svg>
     ),
+    href: 'https://homefastcalc.com',
+    wordmark: homefastcalcWordmark,
+    wordmarkHeight: 'h-12 sm:h-14',
   },
   {
     title: 'AI Strategy & Consulting',
@@ -62,29 +70,74 @@ export function Services() {
           {SERVICES.map((service, i) => (
             <motion.div
               key={service.title}
+              className="h-full"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.5, delay: i * 0.12 }}
             >
-              <GlowCard>
-                <div className="flex items-start gap-4">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} flex items-center justify-center shrink-0`}>
-                    {service.icon}
+              {service.href ? (
+                <a
+                  href={service.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Open ${service.title} in a new tab`}
+                  className="group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-nok-gold focus-visible:ring-offset-2 focus-visible:ring-offset-nok-medium rounded-2xl"
+                >
+                  <GlowCard>
+                    <div className="flex items-start gap-4">
+                      <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} flex items-center justify-center shrink-0`}>
+                        {service.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-display text-xl font-semibold text-white mb-2">
+                          {service.title}
+                        </h3>
+                        <p className="text-nok-body text-sm leading-relaxed mb-4">
+                          {service.description}
+                        </p>
+                        {service.wordmark ? (
+                          <div className="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-xl border border-nok-gold/40 bg-nok-gold/0 transition-all duration-300 group-hover:border-nok-gold group-hover:bg-nok-gold/5">
+                            <img
+                              src={service.wordmark}
+                              alt={`${service.title} wordmark`}
+                              className={`${service.wordmarkHeight ?? 'h-10 sm:h-12'} w-auto select-none`}
+                              loading="lazy"
+                              decoding="async"
+                              draggable={false}
+                            />
+                          </div>
+                        ) : (
+                          <div className="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-xl border border-nok-gold/40 bg-nok-gold/0 transition-all duration-300 group-hover:border-nok-gold group-hover:bg-nok-gold/5">
+                            <span className="text-xs font-medium uppercase tracking-widest text-nok-gold">
+                              View live →
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </GlowCard>
+                </a>
+              ) : (
+                <GlowCard>
+                  <div className="flex items-start gap-4">
+                    <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} flex items-center justify-center shrink-0`}>
+                      {service.icon}
+                    </div>
+                    <div>
+                      <h3 className="font-display text-xl font-semibold text-white mb-2">
+                        {service.title}
+                      </h3>
+                      <p className="text-nok-body text-sm leading-relaxed mb-4">
+                        {service.description}
+                      </p>
+                      <span className="inline-block mt-1 text-xs font-medium uppercase tracking-widest text-nok-caption">
+                        Coming Soon
+                      </span>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-display text-xl font-semibold text-white mb-2">
-                      {service.title}
-                    </h3>
-                    <p className="text-nok-body text-sm leading-relaxed mb-4">
-                      {service.description}
-                    </p>
-                    <span className="inline-block mt-1 text-xs font-medium uppercase tracking-widest text-nok-caption">
-                      Coming Soon
-                    </span>
-                  </div>
-                </div>
-              </GlowCard>
+                </GlowCard>
+              )}
             </motion.div>
           ))}
         </div>
