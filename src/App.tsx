@@ -8,7 +8,7 @@ import { NoiseOverlay } from './components/effects/NoiseOverlay'
 const Services = lazy(() => import('./components/sections/Services').then(m => ({ default: m.Services })))
 const Testimonials = lazy(() => import('./components/sections/Testimonials').then(m => ({ default: m.Testimonials })))
 const TechStack = lazy(() => import('./components/sections/TechStack').then(m => ({ default: m.TechStack })))
-const WhyNestCalc = lazy(() => import('./components/sections/WhyNokYai').then(m => ({ default: m.WhyNestCalc })))
+const WhyNestCalc = lazy(() => import('./components/sections/WhyNestCalc').then(m => ({ default: m.WhyNestCalc })))
 const Contact = lazy(() => import('./components/sections/Contact').then(m => ({ default: m.Contact })))
 const Footer = lazy(() => import('./components/layout/Footer').then(m => ({ default: m.Footer })))
 

@@ -3,7 +3,7 @@ import { LegalModal } from '../legal/LegalModal'
 import { PrivacyPolicyContent } from '../legal/PrivacyPolicy'
 import { TermsOfServiceContent } from '../legal/TermsOfService'
 import { DisclaimerContent } from '../legal/Disclaimer'
-import nokYaiLogo from '../../assets/NokYai-logo-gold-green.png'
+import nestcalcLogo from '../../assets/nestcalc-logo-gold-green.png'
 
 type LegalPage = 'privacy' | 'terms' | 'disclaimer' | null
 
@@ -55,7 +55,7 @@ export function Footer() {
             {/* Brand */}
             <div className="col-span-2 lg:col-span-1">
               <a href="#hero" className="inline-flex flex-col items-start mb-3">
-                <img src={nokYaiLogo} alt="NestCalc" width={200} height={200} className="h-12 w-auto mb-2" />
+                <img src={nestcalcLogo} alt="NestCalc" width={200} height={200} className="h-12 w-auto mb-2" />
                 <span className="font-display font-extrabold text-xl">
                   <span style={{ color: '#6DC99E', textShadow: '0 0 20px rgba(109,201,158,0.3)' }}>Nest</span>
                   <span style={{ color: '#fcd34d', textShadow: '0 0 20px rgba(252,211,77,0.4)' }}>Calc.ai</span>
