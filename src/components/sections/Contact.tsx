@@ -2,11 +2,9 @@ import { useState, useCallback, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { MagneticButton } from '../ui/MagneticButton'
+import { EMAIL, EMAIL_DISPLAY, copyAndOpenMailto } from '../../lib/contact'
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
-
-const EMAIL = 'daron@nestcalc.ai'
-const EMAIL_DISPLAY = 'daron@NestCalc.ai'
 
 const CopyIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className={className}>
@@ -23,11 +21,10 @@ export function Contact() {
   const [copied, setCopied] = useState(false)
 
   const handleEmailClick = useCallback((e: React.MouseEvent) => {
-    e.preventDefault()
-    navigator.clipboard.writeText(EMAIL)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 3000)
-    window.location.href = `mailto:${EMAIL}`
+    copyAndOpenMailto(e, () => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 3000)
+    })
   }, [])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

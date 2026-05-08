@@ -3,6 +3,7 @@ import { LegalModal } from '../legal/LegalModal'
 import { PrivacyPolicyContent } from '../legal/PrivacyPolicy'
 import { TermsOfServiceContent } from '../legal/TermsOfService'
 import { DisclaimerContent } from '../legal/Disclaimer'
+import { EMAIL, EMAIL_DISPLAY, copyAndOpenMailto } from '../../lib/contact'
 import nestcalcLogo from '../../assets/nestcalc-logo-gold-green.png'
 
 type LegalPage = 'privacy' | 'terms' | 'disclaimer' | null
@@ -99,6 +100,20 @@ export function Footer() {
             </p>
           </div>
 
+          <div className="text-center pt-6 text-xs text-nok-caption">
+            <p>
+              NestCalc.ai is operated by{' '}
+              <span className="font-medium">NestCalc.ai, LLC</span>.
+              <span className="mx-2 opacity-50">·</span>
+              <a
+                href={`mailto:${EMAIL}`}
+                onClick={copyAndOpenMailto}
+                className="hover:text-nok-gold transition-colors"
+              >
+                {EMAIL_DISPLAY}
+              </a>
+            </p>
+          </div>
           <div className="text-center pt-4">
             <span className="text-nok-caption text-xs font-mono opacity-70">
               V{__APP_VERSION__}
