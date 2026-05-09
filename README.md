@@ -1,7 +1,7 @@
 # NestCalc.ai Landing Page
 
-**Version:** V1.4.4
-**Status:** Deployed (tag v1.4.4) — footer contrast fixed, wordmark images optimized (WebP + dimensions), footer entity statement + email link with shared clipboard-fallback helper
+**Version:** V1.4.5
+**Status:** Deployed (tag v1.4.5) — JSON-LD validated, NokYai rename cleanup complete, image oversize fixed (320px wordmarks + 96px logo, -62% bytes), llms.txt at site root, Contact setTimeout cleanup
 **Branch:** main
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP
 **Dev Server:** http://localhost:5173
@@ -52,19 +52,24 @@ nokyai-lp/
 │   │   ├── effects/       ParticleField, GradientMesh, NoiseOverlay
 │   │   └── legal/         LegalModal, PrivacyPolicy, TermsOfService,
 │   │                      Disclaimer
-│   ├── assets/            nestcalc-logo-gold-green.png,
-│   │                      casawise-wordmark-final.{png,webp},
-│   │                      homefastcalc-wordmark-final.{png,webp}
+│   ├── assets/            nestcalc-logo-gold-green.png (200x200)
+│   │                      nestcalc-logo-gold-green-96.{png,webp}
+│   │                      casawise-wordmark-final.{png,webp} (600px)
+│   │                      casawise-wordmark-final-320.{png,webp}
+│   │                      homefastcalc-wordmark-final.{png,webp} (600px)
+│   │                      homefastcalc-wordmark-final-320.{png,webp}
 │   ├── styles/globals.css
 │   ├── lib/               animations.ts, birdPaths.ts, contact.ts
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
 ├── scripts/
-│   └── optimize-wordmarks.mjs  Sharp-based WebP generation
+│   └── optimize-wordmarks.mjs  Sharp-based WebP + downsized variant generation
 ├── public/
+│   ├── logo.png           200x200 brand logo (Organization JSON-LD)
 │   ├── favicon.png        48x48 PNG favicon
 │   ├── favicon-512.png    512x512 high-DPI / PWA icon
 │   ├── apple-touch-icon.png  180x180 iOS icon
 │   ├── og-image.png       1200x630 OG image
+│   ├── llms.txt           AEO/agentic-browsing entry point
 │   ├── robots.txt
 │   └── sitemap.xml
 ├── .claude/
@@ -74,7 +79,7 @@ nokyai-lp/
 ├── .github/workflows/     shield.yml, eagle.yml, lighthouse.yml,
 │                          scribe.yml, review-all.yml
 ├── docs/reports/          agent-baseline-2026-04-15.md,
-│                          lighthouse-v1.4.3-{desktop,mobile}.{html,json}
+│                          lighthouse-v1.4.5-{desktop,mobile}.{html,json}
 ├── CLAUDE.md
 ├── REVIEW.md
 ├── design-tokens.md
@@ -105,9 +110,9 @@ The Services section shows 4 cards. Three link to live products with wordmark/te
 
 | Card | Linked? | Badge |
 |------|---------|-------|
-| AI Applications | casawise.ai | Casawise.ai wordmark (WebP + PNG fallback) in gold-bordered button |
+| AI Applications | casawise.ai | Casawise.ai wordmark (320px WebP + PNG fallback) in gold-bordered button |
 | Websites and Landing Pages | Builder LP Cloud Run | "VIEW LIVE →" in gold-bordered button |
-| Web & Mobile Apps | homefastcalc.com | HomeFastCalc.com wordmark (WebP + PNG fallback) in gold-bordered button |
+| Web & Mobile Apps | homefastcalc.com | HomeFastCalc.com wordmark (320px WebP + PNG fallback) in gold-bordered button |
 | AI Strategy & Consulting | — | "COMING SOON" plain caption |
 
 ## Footer Layout (V1.4.4+)
@@ -126,13 +131,17 @@ The footer ends with three centered metadata regions stacked above each other:
 - `EMAIL_DISPLAY` — display casing
 - `copyAndOpenMailto(e, onCopied?)` — handles clipboard copy + mailto navigation; optional callback for toast feedback
 
-Both `Contact.tsx` and `Footer.tsx` import from this module.
+Both `Contact.tsx` and `Footer.tsx` import from this module. Contact.tsx uses a `useRef` + `useEffect` cleanup pattern for the toast timeout (Footer.tsx pending same fix in V1.4.6).
 
 ## JSON-LD Schemas
 
 Two structured data blocks in index.html:
-- **Organization** — NestCalc.ai business entity
-- **Person** — Daron R. Hays founder bio (EEAT/AEO signal)
+- **Organization** — NestCalc.ai business entity. Logo at `/logo.png` (200×200). `sameAs: ["https://www.linkedin.com/in/daron-hays"]`. Validated by Google Rich Results Test on both desktop + smartphone profiles (V1.4.5).
+- **Person** — Daron R. Hays founder bio (EEAT/AEO signal). Aligned with bio package V5 canonical.
+
+## llms.txt
+
+Spec-compliant per [llmstxt.org](https://llmstxt.org/). Sections: Company, Products, Services, Founder, Trust and Legal. Founder credentials drawn from bio package V4 short bio. Khanom location explicitly excluded per Wyoming-only address policy. Served at `https://nestcalc.ai/llms.txt`.
 
 ## Agent Stack
 
@@ -146,27 +155,37 @@ Two structured data blocks in index.html:
 
 Manual: run `/shield`, `/eagle`, `/lighthouse`, `/scribe` in Claude Code.
 
-## Lighthouse CLI Baseline (V1.4.4)
+## Lighthouse CLI Baseline (V1.4.5)
 
 Captured via `npx lighthouse` (simulated throttling):
 
 | Category | Desktop | Mobile |
 |----------|---------|--------|
-| Performance | 97–99 (run noise) | 85–86 |
+| Performance | 93–99 (run noise) | 84–86 |
 | Accessibility | 100 | 100 |
 | Best Practices | 100 | 100 |
 | SEO | 100 | 100 |
 
-Reports: `docs/reports/lighthouse-v1.4.3-{desktop,mobile}.{html,json}`.
+Reports: `docs/reports/lighthouse-v1.4.5-{desktop,mobile}.{html,json}`.
+
+V1.4.5 image-delivery audit improvements: mobile FAIL → 0.5 partial. Remaining 18 KB residual is a DPR-vs-quality tradeoff (accepted by design — going below 2× rendered size visibly softens retina assets).
+
+V1.4.6 perf priorities: render-blocking-insight (440 ms desktop / 1,200 ms mobile), unused-javascript (43 KB / 75 KB).
 
 ## Image Optimization
 
-Wordmark PNGs are converted to WebP via `scripts/optimize-wordmarks.mjs` (sharp-based, run once per asset update). Both formats are committed; the `<picture>` element in `Services.tsx` serves WebP to modern browsers with PNG fallback.
+Three image-optimization passes have shipped:
 
-To regenerate WebPs after updating source PNGs:
+1. **V1.4.4** — Wordmark PNGs converted to WebP (-53% / -56% per asset)
+2. **V1.4.4** — Intrinsic width/height attributes added (CLS to 0.0000)
+3. **V1.4.5** — 320px wordmark variants + 96×96 logo variants generated. Total delivered bytes 80 KB → 31 KB (-62%). Logo WebP base64-inlined by Vite (eliminates one HTTP request).
+
+To regenerate variants after updating source assets:
 ```bash
 node scripts/optimize-wordmarks.mjs
 ```
+
+Original 600px wordmark and 200×200 logo source files preserved in `src/assets/` for future high-DPR use.
 
 ## Git Remote
 
@@ -200,7 +219,7 @@ git push origin main # Auto-deploys to Netlify
 | Issue | Fix |
 |-------|-----|
 | Contact form goes to spam | Use realistic content + different email addresses for testing |
-| mailto: link doesn't open | The `copyAndOpenMailto` helper handles this — clipboard copy is the silent fallback |
+| mailto: link doesn't open | The `copyAndOpenMailto` helper handles this — clipboard copy is the silent fallback. If "click does nothing" reported, FIRST try incognito + hard refresh — service worker / browser cache is the cheapest first hypothesis |
 | Pushing to wrong repo | Run `git remote -v` to verify origin before pushing |
 | Favicon not showing | Hard refresh (Ctrl+Shift+R) — browsers cache favicons aggressively |
 | Shield/Eagle CI fails | Check CLAUDE_CODE_OAUTH_TOKEN secret exists in repo Settings → Secrets |
@@ -212,5 +231,7 @@ git push origin main # Auto-deploys to Netlify
 | Wordmark image looks washed on dark cards | Source asset designed for light backgrounds — needs cream/dark-mode variant |
 | Cards in same row are different heights | h-full must chain through motion.div → anchor wrapper → GlowCard outer → GlowCard inner content |
 | Footer version shows old number | Confirm package.json was bumped before push; __APP_VERSION__ reads from package.json at build time |
-| Image-delivery audit still failing after WebP | Check oversize — source dimensions must be close to rendered dimensions |
+| Image-delivery audit still failing after WebP | Check oversize — source dimensions must be close to rendered dimensions (1×–2× DPR margin) |
 | Lighthouse score noise | Windows headless Chrome has run-to-run variance; ±1–2 points is not signal |
+| Rich Results Test only shows one schema | Person schema isn't an eligible rich-result type. Organization is the only one validated. Both schemas are still useful (knowledge graph + AEO) |
+| Lighthouse Rich Results Test mode | Dropdown next to TEST URL switches between Googlebot desktop + smartphone — verify both after schema changes |
