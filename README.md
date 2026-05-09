@@ -1,7 +1,7 @@
 # NestCalc.ai Landing Page
 
-**Version:** V1.4.5
-**Status:** Deployed (tag v1.4.5) — JSON-LD validated, NokYai rename cleanup complete, image oversize fixed (320px wordmarks + 96px logo, -62% bytes), llms.txt at site root, Contact setTimeout cleanup
+**Version:** V1.4.6
+**Status:** Deployed (tag v1.4.6) — render-blocking fonts deferred, dead three.js removed, framer-motion migrated to m + LazyMotion (-46 KB raw / -13 KB gzip on animation-vendor), Footer setTimeout cleanup
 **Branch:** main
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP
 **Dev Server:** http://localhost:5173
@@ -30,11 +30,11 @@ npm run dev
 
 - Vite + React 19 + TypeScript
 - Tailwind CSS 4 (CSS-first @theme tokens)
-- Framer Motion (component animations)
-- GSAP + ScrollTrigger (scroll-driven animations)
+- Framer Motion via `m` + `<LazyMotion features={domAnimation} strict>` wrapper (V1.4.6)
+- GSAP + ScrollTrigger (scroll-driven animations — candidate for V1.4.7 removal)
 - 2D Canvas particle system + Guardian Bird (custom, mouse-reactive + touch-reactive, 128px desktop / 80px mobile)
 - Netlify Forms (contact form submissions)
-- Google Fonts: Space Grotesk (display) + Outfit (body)
+- Google Fonts: Space Grotesk (display) + Outfit (body) — non-blocking load via media="print" swap (V1.4.6)
 - Sharp (devDep, used by scripts/optimize-wordmarks.mjs for WebP generation)
 - Agent stack: Shield, Eagle, Lighthouse, Scribe (CI via GitHub Actions)
 
@@ -79,7 +79,8 @@ nokyai-lp/
 ├── .github/workflows/     shield.yml, eagle.yml, lighthouse.yml,
 │                          scribe.yml, review-all.yml
 ├── docs/reports/          agent-baseline-2026-04-15.md,
-│                          lighthouse-v1.4.5-{desktop,mobile}.{html,json}
+│                          lighthouse-v1.4.5-{desktop,mobile}.{html,json},
+│                          lighthouse-v1.4.6-{desktop,mobile}.{html,json}
 ├── CLAUDE.md
 ├── REVIEW.md
 ├── design-tokens.md
@@ -115,12 +116,12 @@ The Services section shows 4 cards. Three link to live products with wordmark/te
 | Web & Mobile Apps | homefastcalc.com | HomeFastCalc.com wordmark (320px WebP + PNG fallback) in gold-bordered button |
 | AI Strategy & Consulting | — | "COMING SOON" plain caption |
 
-## Footer Layout (V1.4.4+)
+## Footer Layout
 
 The footer ends with three centered metadata regions stacked above each other:
 
 1. **Bottom bar row** — copyright + "Built by NestCalc.ai" tagline
-2. **Entity + email line** — "NestCalc.ai is operated by NestCalc.ai, LLC. · daron@NestCalc.ai" (email link uses `copyAndOpenMailto` helper from `src/lib/contact.ts` for clipboard fallback)
+2. **Entity + email line** — "NestCalc.ai is operated by NestCalc.ai, LLC. · daron@NestCalc.ai" (email link uses `copyAndOpenMailto` helper from `src/lib/contact.ts`; toast timeout uses useRef + useEffect cleanup pattern as of V1.4.6-P5)
 3. **Version badge** — `V{__APP_VERSION__}` in monospace at 70% opacity (AA-compliant contrast)
 
 ## Email / Contact Helper
@@ -131,7 +132,30 @@ The footer ends with three centered metadata regions stacked above each other:
 - `EMAIL_DISPLAY` — display casing
 - `copyAndOpenMailto(e, onCopied?)` — handles clipboard copy + mailto navigation; optional callback for toast feedback
 
-Both `Contact.tsx` and `Footer.tsx` import from this module. Contact.tsx uses a `useRef` + `useEffect` cleanup pattern for the toast timeout (Footer.tsx pending same fix in V1.4.6).
+Both `Contact.tsx` and `Footer.tsx` import from this module. Both use a `useRef<ReturnType<typeof setTimeout> | null>` + `useEffect` cleanup pattern for the toast timeout (Contact.tsx fixed in V1.4.5-P8, Footer.tsx fixed in V1.4.6-P5).
+
+## Animation Library Pattern
+
+As of V1.4.6, all 8 framer-motion consumers use the `m` component + `<LazyMotion features={domAnimation} strict>` root wrapper. The `strict` flag throws a hard runtime error if any descendant uses `motion` instead of `m` — caught early and prevents partial migrations from shipping.
+
+Pattern in any animated component:
+```tsx
+import { m, AnimatePresence } from 'framer-motion'
+
+// Use m.X instead of motion.X
+<m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} />
+```
+
+Pattern at the root (App.tsx):
+```tsx
+import { LazyMotion, domAnimation } from 'framer-motion'
+
+<LazyMotion features={domAnimation} strict>
+  {/* app */}
+</LazyMotion>
+```
+
+`domAnimation` covers: animate, initial, exit, transition, variants, whileHover, whileTap, whileFocus, whileInView, AnimatePresence, useMotionValue, useSpring, useTransform, useScroll. Does NOT cover drag, layout, layoutId, or pan — would need `domMax` if any of those are added.
 
 ## JSON-LD Schemas
 
@@ -155,22 +179,27 @@ Spec-compliant per [llmstxt.org](https://llmstxt.org/). Sections: Company, Produ
 
 Manual: run `/shield`, `/eagle`, `/lighthouse`, `/scribe` in Claude Code.
 
-## Lighthouse CLI Baseline (V1.4.5)
+## Lighthouse CLI Baseline (V1.4.6)
 
 Captured via `npx lighthouse` (simulated throttling):
 
 | Category | Desktop | Mobile |
 |----------|---------|--------|
-| Performance | 93–99 (run noise) | 84–86 |
+| Performance | 95 | 88 |
 | Accessibility | 100 | 100 |
 | Best Practices | 100 | 100 |
 | SEO | 100 | 100 |
 
-Reports: `docs/reports/lighthouse-v1.4.5-{desktop,mobile}.{html,json}`.
+Reports: `docs/reports/lighthouse-v1.4.6-{desktop,mobile}.{html,json}`.
 
-V1.4.5 image-delivery audit improvements: mobile FAIL → 0.5 partial. Remaining 18 KB residual is a DPR-vs-quality tradeoff (accepted by design — going below 2× rendered size visibly softens retina assets).
+V1.4.6 wins:
+- render-blocking-insight: 440 ms desktop / 1,200 ms mobile → 0 ms (audit passes)
+- animation-vendor chunk: 247 → 201 kB raw, 88 → 75 kB gzip (-46 kB / -13 kB)
 
-V1.4.6 perf priorities: render-blocking-insight (440 ms desktop / 1,200 ms mobile), unused-javascript (43 KB / 75 KB).
+V1.4.7 perf candidates:
+- Drop GSAP + ScrollTrigger → useInView (~30 kB gzip lever)
+- Lazy-load animation-vendor chunk
+- Lazy-load ParticleField (628-line canvas effect)
 
 ## Image Optimization
 
@@ -235,3 +264,5 @@ git push origin main # Auto-deploys to Netlify
 | Lighthouse score noise | Windows headless Chrome has run-to-run variance; ±1–2 points is not signal |
 | Rich Results Test only shows one schema | Person schema isn't an eligible rich-result type. Organization is the only one validated. Both schemas are still useful (knowledge graph + AEO) |
 | Lighthouse Rich Results Test mode | Dropdown next to TEST URL switches between Googlebot desktop + smartphone — verify both after schema changes |
+| Browser console shows `motion is not defined` after framer-motion migration | First try Ctrl+Shift+R hard refresh — Vite caches transformed modules aggressively. If error persists after hard refresh, grep src/ for `motion\.` and verify the JSX migration is complete (V1.4.6 lesson) |
+| `<LazyMotion strict>` not throwing expected error | Strict mode produces a plain ReferenceError (`motion is not defined`), not a LazyMotion-specific message. Stack trace still pinpoints the file and line — that's the signal |

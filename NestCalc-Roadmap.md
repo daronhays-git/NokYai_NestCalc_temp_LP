@@ -1,7 +1,7 @@
 # NestCalc.ai Landing Page — Roadmap
 
 **Last Updated:** May 9, 2026
-**Current Status:** V1.4.5 deployed (tag v1.4.5) — JSON-LD validated by Google Rich Results Test, NokYai → NestCalc rename cleanup complete (config + docs + CI), image oversize fixed (320px wordmarks + 96×96 logo, total bytes 80 KB → 31 KB), llms.txt at site root, Contact.tsx setTimeout unmount cleanup
+**Current Status:** V1.4.6 deployed (tag v1.4.6) — render-blocking fonts deferred (440/1200 ms → 0 ms), dead three.js purged, framer-motion migrated to m + LazyMotion (-46 KB raw / -13 KB gzip on animation-vendor), Footer setTimeout cleanup. Lighthouse Performance: 93 → 95 desktop, 84 → 88 mobile.
 **Branch:** main
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP
 
@@ -11,6 +11,7 @@
 
 | Version | Tag | Highlights |
 |---------|-----|-----------|
+| V1.4.6 | tag v1.4.6 | Render-blocking fonts deferred via media="print" onload swap (P1, 440/1200 ms → 0 ms); dead three.js dependencies + dead vite chunk rule removed (P3, 56 packages purged, bit-identical bundle); framer-motion → m + LazyMotion + domAnimation across 8 files (P4, animation-vendor -46 KB raw / -13 KB gzip / -18.6%); Footer.tsx setTimeout unmount cleanup (P5, useRef + useEffect pattern); mobile smoke test passed cleanly; Lighthouse Performance 93 → 95 desktop / 84 → 88 mobile |
 | V1.4.5 | tag v1.4.5 | Organization JSON-LD logo + sameAs (validated by Google Rich Results Test on desktop + smartphone); NokYai → NestCalc rename cleanup across 16 files + 1 git mv (96% similarity); image oversize cleanup (320px wordmarks + 96×96 logo, -62% delivered bytes, mobile image-delivery FAIL → 0.5 partial); spec-compliant llms.txt at site root; Khanom/Thailand audit confirms repo Wyoming-policy clean; Contact.tsx setTimeout unmount cleanup with rapid-double-click pre-clear bonus; `__APP_VERSION__` footer wiring verified end-to-end |
 | V1.4.4 | tag v1.4.4 | CLI Lighthouse baseline; footer contrast fix (a11y 96→100); wordmark width/height attrs (CLS to 0.0000); WebP wordmarks via `<picture>` (-64 KB / 53%); footer entity statement + email link; hoisted email handler with clipboard fallback to `lib/contact.ts` |
 | V1.4.3 | tag v1.4.3 | Product cards (Casawise + HFC + Builder LP wordmarks/buttons); equal-height cards via h-full chain; mobile Guardian Bird (80px); footer version badge |
@@ -23,49 +24,53 @@
 
 ---
 
-## What Changed in V1.4.5
+## What Changed in V1.4.6
 
-### P1 — Organization JSON-LD logo + sameAs fix
-Audited Organization + Person schemas in index.html. Person schema clean (zero drift from bio package V5 canonical). Organization schema had two real issues: `logo` field pointed to the 1200×630 OG social image instead of a true logo (would fail Google's logo guidelines), and `sameAs` was missing. Fix: copied `src/assets/nestcalc-logo-gold-green.png` (200×200, 20.85 KB) to `public/logo.png` so it serves at `https://nestcalc.ai/logo.png`; updated schema `logo` field; added `sameAs: ["https://www.linkedin.com/in/daron-hays"]`. Validated via Google Rich Results Test on both Googlebot desktop and smartphone profiles — Organization detected as 1 valid item on both.
+### P1 — Render-blocking fonts deferred
+The Google Fonts `<link rel="stylesheet">` was Lighthouse's #1 render-blocking offender (357 ms desktop / 846 ms mobile). Diagnostic confirmed adjacent `<link rel="preload">` was already in place but the synchronous `<link rel="stylesheet">` still blocked render. Fix: convert the stylesheet line to `media="print" onload="this.media='all'"` swap pattern with `<noscript>` fallback. Browsers fetch `media="print"` stylesheets without blocking render, then the onload swaps to `all` once parsed. Preload retained — fetch still kicks off early. App CSS (7.3 KB) intentionally left synchronous (too small / too critical to defer). Lighthouse render-blocking-insight audit moved from score 0 / 440-1200 ms savings to score 0.5 / 0 ms savings (passing).
 
-### P2 — NokYai → NestCalc rename cleanup (config + docs + CI)
-Audited 173 NokYai references across the repo and categorized into 6 buckets: A (factually wrong about code — files/components that have been renamed), B (stale doc titles), C (intentional real identifiers — repo URL, folder paths, allowlisted commands), D (historical snapshots — handoff files, build artifacts), E (review stack branding — "NokYai Review Stack" → "NestCalc Review Stack"), F (bird mascot identity). Applied A + B + E + F in a single batch: 32 line edits across 16 files plus 1 file rename (`docs/nokyai-review-stack-ops-guide.md` → `docs/nestcalc-review-stack-ops-guide.md`, tracked as a true rename at 96% similarity preserving file history). Bird mascot renamed to generic "Guardian Bird" so it ages well across future projects. Favicon description updated to "(eagle/NestCalc logo)". Final residual: 127 NokYai matches, all in Category C or D. Build clean, zero source code changes.
+### P3 — Dead three.js dependencies removed
+V1.4.6-P2 unused-JS diagnostic surfaced that `three`, `@react-three/fiber`, `@react-three/drei`, and `@types/three` had zero imports across `src/`. Vite was already tree-shaking them out of the bundle (no `three-vendor` chunk emitted), so they didn't ship to clients — but they bloated `node_modules`, install time, and CI cache. Paranoia greps confirmed dead code, then `npm uninstall` removed all 4 packages (56 transitive packages purged). Dead `three-vendor` `manualChunks` rule in `vite.config.ts` removed in same atomic commit. Build output bit-identical to pre-removal — confirms the tree-shake was already working. Win is install time + node_modules size + CI cache.
 
-### P3 — Image oversize cleanup
-Lighthouse image-delivery-insight was still failing on the oversize dimension after V1.4.4's WebP conversion. Root cause: wordmarks were 600px source rendered at ~150px (4× over), brand logo was 200×200 rendered at ~48px. Extended `scripts/optimize-wordmarks.mjs` to generate appropriately-sized variants. Wordmarks → 320px WebP + PNG (Casawise -53%, HFC -52%). Brand logo → 96×96 WebP + PNG; the 2.6 KB logo WebP falls under Vite's 4 KB `assetsInlineLimit` and gets base64-inlined into the JS bundle, eliminating one HTTP request entirely. Total delivered bytes 80 KB → 31 KB (-62%). Original source files preserved for future high-DPR use. Visual rendering unchanged (Tailwind sizing identical). Lighthouse mobile image-delivery audit moved from FAIL (0) to partial (0.5) — remaining 18 KB residual is a DPR-vs-quality tradeoff (accepted by design).
+### P4 — Framer Motion → `m` + `<LazyMotion features={domAnimation} strict>`
+Single biggest perf-per-effort lever in the V1.4.6 plan. V1.4.6-P2 diagnostic flagged animation-vendor as 247 kB raw / 88 kB gzip with 54 KB of unused JS shipped to mobile clients. V1.4.6-P4-DIAG audited every framer-motion consumer: 8 files, all using only animation features that `domAnimation` covers (no drag, no layout, no pan — `domMax` would be over-pack). Migrated all 8 files from `motion` to `m` (one import change + JSX rename per file), wrapped App root in `<LazyMotion features={domAnimation} strict>`. The `strict` flag throws a hard runtime error if any descendant uses `motion` — this caught the migration verification step (initial smoke test surfaced cached browser bundles serving stale code; hard-refresh resolved). Result: animation-vendor 247 → 201 kB raw (-46 kB / -18.6%), 88 → 75 kB gzip (-13 kB / -14.9%). Beat the ~30 kB raw / ~12 kB gzip target by 50%. Mobile unused-JS audit: -15 KiB win.
 
-### P4 — llms.txt at site root
-Added `public/llms.txt`, spec-compliant per llmstxt.org (H1 + blockquote summary + prose intro + 5 H2 sections with `[Title](URL): description` link format). Sections: Company, Products, Services, Founder, Trust and Legal. Founder credentials drawn from bio package V4 short bio (30+ years, B.S. Structural Engineering Honors Oregon State, licensed GC at 18, 52 homes, $15M+ contracts). Reframed founder role as founder of the NestCalc.ai studio (umbrella entity), with Casawise.ai called out as the AI app. Khanom/Thailand location explicitly excluded per Wyoming-only address policy. Should clear the (intermittent) Lighthouse llms-txt audit and provides the canonical entry point for AI agent crawls (ChatGPT search, Claude, Perplexity).
+### P5 — Footer.tsx setTimeout unmount cleanup
+Same fix pattern from V1.4.5-P8 (Contact.tsx) applied to Footer.tsx. The footer email click handler had inline `setTimeout(() => setCopied(false), 3000)` that didn't clean up on unmount. Fixed by replacing with `useRef<ReturnType<typeof setTimeout> | null>` + `useEffect` cleanup that clears on unmount. Bonus: pre-clear before each new schedule re-anchors the 3 s window on rapid double-clicks (consistent with Contact.tsx behavior).
 
-### P5 — Khanom/Thailand/Bangkok policy audit (diagnostic only)
-Confirmed repo is fully aligned with the Wyoming-only address policy. Zero user-facing matches (index.html, public/, src/components/**, JSON-LD schemas all clean). Zero docs/dev-only matches. Two historical changelog entries in `NokYai-Roadmap.md` document the prior removal of Bangkok references — kept as-is per the historical-snapshot policy (those entries are the audit trail of the policy itself). Bio package OneDrive doc still has "Based in Khanom, Thailand" — out of repo scope, flagged for separate cleanup.
+### Mobile smoke test verification
+Daron ran complete mobile-device smoke test on https://nestcalc.ai before any V1.4.6 code shipped. All clickable buttons responsive, all sections rendered correctly. Minor flag: Guardian Bird flight slow-moving and slow to respond to touch. Acceptable for now — parked for V1.5+.
 
-### P8 — Contact.tsx setTimeout unmount cleanup
-Pre-existing harmless edge case: the 3-second `setCopied(false)` timeout didn't clear when the component unmounted. Fixed by replacing inline `setTimeout` with a `useRef<ReturnType<typeof setTimeout> | null>` plus a `useEffect` cleanup that clears the timeout on unmount. Bonus: pre-clear before each new schedule handles rapid double-clicks (re-anchors the toast to a fresh 3 s window from the second click). Footer.tsx has the same pattern but uses its own state — flagged for V1.4.6 follow-up.
-
-### P9 — `__APP_VERSION__` footer wiring verification (diagnostic only)
-Confirmed end-to-end wiring is mechanically correct: `vite.config.ts` reads from `package.json` at build time via `define` config and JSON-stringifies for substitution; `Footer.tsx` uses `V{__APP_VERSION__}` JSX expression with no hardcoded version string anywhere; rendered output matches package.json content exactly. No code change needed — package.json bump at session close cascades correctly to the deployed footer.
+### Workflow + skill improvements (non-code session work)
+- **sc-code skill rewritten to single-flow.** Removed Variant A / Variant B / Pre-launch Sprint sub-mode. Always 3 files (Handoff + README + Roadmap), always version bump (even zero-code sessions), always tag. Eliminates "which type is this?" friction and prevents version drift on mid-branch sessions.
+- **Code blocks rule formalized.** Code blocks reserved for Claude Code prompts only. User-facing instructions (browser checks, screenshots) go in plain prose. Permanent rule.
+- **Build commands rule formalized.** `npm run build`, `npm run preview`, `npm run dev`, grep — all go to Claude Code, not the user. Only browser-visual confirmations and third-party screenshots go to the user. Permanent rule.
 
 ---
 
-## Next Session (V1.4.6)
+## Next Session (V1.4.7)
 
-### Priorities
-1. **Render-blocking-insight reduction** — Lighthouse flags 440 ms desktop / 1,200 ms mobile. Biggest remaining performance win. Likely candidates: lazy-load fonts, defer non-critical CSS, audit `<link rel="stylesheet">` and inline `<script>` blocks in `index.html`.
-2. **Unused JavaScript reduction** — Lighthouse flags 43 KB desktop / 75 KB mobile. Likely candidates: tree-shake unused Framer Motion / GSAP exports, route-split lazy-loaded sections, audit utility imports.
-3. **Mobile smoke test verification** — Daron will run mobile-device verification post-deploy. Any regressions become V1.4.6-P-prefixed fix prompts.
-4. **Footer.tsx setTimeout unmount cleanup** — Apply V1.4.5-P8 fix pattern to Footer.tsx (same useRef + useEffect approach).
+### Decision needed up front
+V1.4.7 has a path-decision moment: continue perf optimization (next levers are higher-effort) or pivot to content replacement (testimonials, tech logos, copy). First prompt of the session is a decision-framing diagnostic.
 
-### Backlog
-- Replace placeholder testimonials with real quotes
-- Replace tech logo placeholders with actual SVG logos
-- Write final copy for all sections
+### V1.4.7 perf candidates (if continuing perf path)
+1. **Drop GSAP entirely** — V1.4.6-P2 estimated this would drop ~80 KB raw / ~30 KB gzip from animation-vendor. Higher effort (rewrite `lib/animations.ts` reveal logic with `useInView`) but very high impact. Biggest remaining lever.
+2. **Lazy-load animation-vendor chunk** — Defer the gsap chunk until first scroll. Medium effort, defers ~30 kB past first paint.
+3. **Lazy-load ParticleField** — 628-line canvas effect, eager today. Splits heavy canvas code out of the critical path. Must verify Guardian Bird still renders correctly.
+
+### V1.4.7 content candidates (if pivoting to content)
+1. **Replace placeholder testimonials with real quotes** — Need real testimonial copy from Daron
+2. **Replace tech logo placeholders with actual SVG logos** — Audit current TechStack.tsx, swap placeholders for real assets
+3. **Write final copy for all sections** — Identify which sections still have placeholder/draft language
+
+### Backlog (carries forward)
+- Mobile Guardian Bird flight slow movement and touch responsiveness — V1.5+
+- Wordmark visual balance (HFC vs Casawise text scale difference — needs source SVGs)
 - Animated bird logo video integration (need clean file)
 - Social sharing preview image (verify OG renders)
 - Replace "Coming Soon" service card (AI Strategy & Consulting) with content or link
 - Standalone routes for legal pages (/privacy, /terms, /disclaimer)
-- Wordmark visual balance (V5 placeholder — hold for source files)
-- Bio package OneDrive source still references "Based in Khanom, Thailand" — out of repo scope; flagged for separate cleanup pass
+- Bio package OneDrive source still references "Based in Khanom, Thailand" — out of repo scope
 - Google Analytics 4 setup (still blocked — domain/bank pending)
 - Future: proper SVG wordmarks (current PNGs are derivative cream variants)
 - Blog/content section (future)
@@ -74,7 +79,7 @@ Confirmed end-to-end wiring is mechanically correct: `vite.config.ts` reads from
 - NokYai.com brand (retired)
 - Controller agent (parked until all 8 agents running)
 - Autonomous wandering bird behavior on mobile
-- Wordmark visual balance fix (HFC vs Casawise text scale difference — needs source SVGs)
+- Wordmark visual balance fix (HFC vs Casawise — needs source SVGs)
 
 ---
 
@@ -82,4 +87,6 @@ Confirmed end-to-end wiring is mechanically correct: `vite.config.ts` reads from
 
 V1.4.x is the **post-launch polish phase**: small surgical improvements while the LP is live and serving as the NestCalc.ai company website. Each version ships 3–7 small, independently-revertible commits. Big content/branding work is deferred to V1.5.x once domain + GA4 + brand finalization unblock.
 
-V1.4.5 was a heavy session — 7 prompts shipped (P1, P2, P3, P4, P5, P8, P9), 4 production commits before close. The pattern of diagnostic-first prompting paid off again: P2's audit categorization prevented over-reach (would have renamed real GitHub identifiers) AND under-reach (would have missed the dead-code references). P9's wiring verification confirmed nothing needed changing — sometimes the diagnostic IS the deliverable.
+V1.4.6 was a clean four-prompt perf session (P1, P3, P4, P5) that hit every primary target: render-blocking eliminated, dead deps purged, framer-motion bundle cut significantly, footer cleanup applied. The diagnostic-first pattern paid off three times — P1 ruled out app CSS as a deferral target, P2 surfaced three.js as free dead code, P4 confirmed `domAnimation` was sufficient (no `domMax` overhead). Mobile smoke test pre-deploy caught the Guardian Bird responsiveness item before any rework was wasted on it.
+
+The sc-code skill rewrite at session close was the biggest meta-improvement: moving from a 3-variant flow (Release / Mid-branch / Pre-launch Sprint) to a single always-the-same flow eliminates an entire class of decision friction. Future sessions will all close the same way regardless of code volume.
