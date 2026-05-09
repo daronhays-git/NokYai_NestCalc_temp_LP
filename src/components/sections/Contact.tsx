@@ -1,4 +1,4 @@
-import { useState, useCallback, type FormEvent } from 'react'
+import { useState, useCallback, useRef, useEffect, type FormEvent } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { MagneticButton } from '../ui/MagneticButton'
@@ -19,11 +19,23 @@ const inputClass =
 export function Contact() {
   const [status, setStatus] = useState<Status>('idle')
   const [copied, setCopied] = useState(false)
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current)
+      }
+    }
+  }, [])
 
   const handleEmailClick = useCallback((e: React.MouseEvent) => {
     copyAndOpenMailto(e, () => {
       setCopied(true)
-      setTimeout(() => setCopied(false), 3000)
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current)
+      }
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 3000)
     })
   }, [])
 
