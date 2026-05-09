@@ -1,4 +1,4 @@
-# NokYai LP — Module Map
+# NestCalc LP — Module Map
 
 Architecture inventory for the NestCalc.ai landing page. Used by Shield, Eagle, and Scribe to understand file boundaries and dependencies.
 
@@ -23,7 +23,7 @@ nokyai-lp/
 │   │   │   ├── Hero.tsx
 │   │   │   ├── Services.tsx
 │   │   │   ├── TechStack.tsx
-│   │   │   ├── WhyNokYai.tsx
+│   │   │   ├── WhyNestCalc.tsx
 │   │   │   ├── Testimonials.tsx
 │   │   │   ├── Contact.tsx
 │   │   │   ├── CTABand.tsx
@@ -60,11 +60,11 @@ nokyai-lp/
 │   │
 │   ├── lib/
 │   │   ├── animations.ts              — GSAP ScrollTrigger animations; init in App.tsx only
-│   │   ├── birdPaths.ts               — ★ LOCKED: NokYai Guardian Bird SVG path data
+│   │   ├── birdPaths.ts               — ★ LOCKED: Guardian Bird SVG path data
 │   │   └── constants.ts              — Module-level constants (currently empty — TODO)
 │   │
 │   └── assets/
-│       └── NokYai-logo-gold-green.png
+│       └── nestcalc-logo-gold-green.png
 │
 └── public/
     ├── robots.txt
@@ -93,7 +93,7 @@ Do not modify these without explicit review:
 
 | File | Reason |
 |------|--------|
-| `src/lib/birdPaths.ts` | NokYai Guardian Bird SVG path data; exact values are production-calibrated |
+| `src/lib/birdPaths.ts` | Guardian Bird SVG path data; exact values are production-calibrated |
 | `src/styles/globals.css` | Authoritative design token source; any change affects the entire design system |
 
 ---

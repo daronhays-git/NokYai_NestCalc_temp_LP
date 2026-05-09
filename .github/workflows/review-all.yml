@@ -123,7 +123,7 @@ jobs:
             extractable content structures, and citation-ready headings.
 
             EEAT (Steps 11–15): Check for experience signals in index.html
-            and src/components/WhyNokYai.tsx (AEO informational only); expertise signals
+            and src/components/sections/WhyNestCalc.tsx (AEO informational only); expertise signals
             (author bio / About page); authority signals in src/components/Footer.tsx
             and index.html Organization schema; trust signals in main.tsx
             footer and src/components/Footer.tsx.

@@ -6,7 +6,7 @@
       "WebFetch(domain:nestcalc.ai)",
       "Bash(gh api:*)",
       "Bash(magick --version)",
-      "Bash(npx --yes sharp-cli -i src/assets/NokYai-logo-gold-green.png -o public/favicon.png resize 64 64)"
+      "Bash(npx --yes sharp-cli -i src/assets/nestcalc-logo-gold-green.png -o public/favicon.png resize 64 64)"
     ]
   }
 }

@@ -1,4 +1,4 @@
-# NokYai LP — Feedback Log
+# NestCalc LP — Feedback Log
 
 Beacon intake — all user feedback, bug reports, and feature requests land here.
 New entries are prepended by the beacon-intake GitHub Action. Manual entries can be added at the top of the Log section.

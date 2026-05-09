@@ -1,4 +1,4 @@
-# NokYai LP — Review Rules
+# NestCalc LP — Review Rules
 
 Reference for Shield, Eagle, Scribe, and Lighthouse agents.
 All rules derive from the actual codebase. Do not flag items listed as documented exceptions.
@@ -172,7 +172,7 @@ All section components below `Hero` must be loaded via `React.lazy` + `<Suspense
 ### §3.3 Image Optimization
 
 - **[error]** Any image in `src/assets/` or `public/` exceeding 200KB.
-- Reference: `NokYai-logo-gold-green.png` is ~21KB — this is the target size class for logos.
+- Reference: `nestcalc-logo-gold-green.png` is ~21KB — this is the target size class for logos.
 - Prefer `.webp` for photography; `.png` for logos requiring transparency; `.svg` for icons/illustrations.
 - **[warning]** New images committed without checking file size.
 

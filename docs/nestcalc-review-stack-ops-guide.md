@@ -1,11 +1,11 @@
-# NokYai Review Stack — Operations Guide
+# NestCalc Review Stack — Operations Guide
 v1.0 | April 2026
 
 ---
 
 ## 1. System Overview
 
-The NokYai Review Stack is a 9-agent code quality and operations system (8 active, 1 parked) designed for a solo builder on Windows 11 running VS Code + Claude Code + Claude.ai. Agents cover the full development lifecycle: project architecture interviews (Foundation), launch readiness scoring (Launch), code and security review (Shield), design token and accessibility review (Eagle), bundle health (Finance), user feedback triage (Beacon), documentation currency (Scribe), and SEO/EEAT/performance audit (Lighthouse). A Controller agent is defined but parked until multiple projects warrant cross-project orchestration. Review-All is the unified orchestrator that runs Eagle, Shield, and Lighthouse together as a merge gate on every PR.
+The NestCalc Review Stack is a 9-agent code quality and operations system (8 active, 1 parked) designed for a solo builder on Windows 11 running VS Code + Claude Code + Claude.ai. Agents cover the full development lifecycle: project architecture interviews (Foundation), launch readiness scoring (Launch), code and security review (Shield), design token and accessibility review (Eagle), bundle health (Finance), user feedback triage (Beacon), documentation currency (Scribe), and SEO/EEAT/performance audit (Lighthouse). A Controller agent is defined but parked until multiple projects warrant cross-project orchestration. Review-All is the unified orchestrator that runs Eagle, Shield, and Lighthouse together as a merge gate on every PR.
 
 | # | Agent | Role | Trigger | Output |
 |---|-------|------|---------|--------|
@@ -318,7 +318,7 @@ Document any false positives in `lessons.md` immediately.
 
 This establishes the initial `finance-report.md` bundle baseline. All future Finance runs compare against this. Also run:
 ```
-git add -A && git commit -m "chore: install NokYai review stack v1.0"
+git add -A && git commit -m "chore: install NestCalc review stack v1.0"
 ```
 
 ---
@@ -520,7 +520,7 @@ The Controller agent is defined but not active. You are currently the controller
 
 ### Branch name mismatch
 **Symptom:** Workflows don't trigger on PRs or push.  
-**Fix:** Check `branches:` in each workflow YAML. NestCalc uses `master`; NokYai LP uses `main`. Mismatch means the trigger never fires.
+**Fix:** Check `branches:` in each workflow YAML. NestCalc uses `master`; NestCalc LP uses `main`. Mismatch means the trigger never fires.
 
 ### `beacon-intake.yml` fails with "## Log heading not found"
 **Symptom:** The bot commit step errors.  
@@ -556,4 +556,4 @@ Any bracket token that isn't a regex character class or JavaScript accessor need
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 1.0 | 2026-04-14 | Initial release — 8 active agents (Foundation, Launch, Shield, Eagle, Finance, Beacon, Scribe, Lighthouse), Controller parked; template validated on NokYai LP; `eagle-auto.md` skill added to template and LP; 4 missing LP config files created; `claude.yml` deployed to LP |
+| 1.0 | 2026-04-14 | Initial release — 8 active agents (Foundation, Launch, Shield, Eagle, Finance, Beacon, Scribe, Lighthouse), Controller parked; template validated on NestCalc LP; `eagle-auto.md` skill added to template and LP; 4 missing LP config files created; `claude.yml` deployed to LP |

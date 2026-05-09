@@ -1,4 +1,4 @@
-# NokYai LP — Lessons Log
+# NestCalc LP — Lessons Log
 
 Tracks false positives, missed issues, and design decisions to improve Eagle, Shield, and Lighthouse accuracy for this project.
 

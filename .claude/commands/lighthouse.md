@@ -213,7 +213,7 @@ Verify each authority element:
 | Jurisdiction stated | `src/components/legal/` | Operating jurisdiction stated (e.g., state or country) — not yet in codebase |
 | Contact email | `src/components/legal/` + footer | `mailto:` email present — not yet in codebase |
 | Organization schema | `index.html` | `@type: Organization` with name, url, logo |
-| Professional framing | Hero / WhyNokYai section | Frames deliverables against AI development professional standards |
+| Professional framing | Hero / WhyNestCalc section | Frames deliverables against AI development professional standards |
 
 Flag ✅ for each element present.
 Flag ⚠️ if all elements pass but no named individual or professional biography exists — entity authority without personal authority.
@@ -267,7 +267,7 @@ Evaluate against the specificity ladder:
 
 For each section, classify the dominant language register:
 - **Hero** (`src/components/sections/Hero.tsx`): flag ⚠️ if generic language dominates without specific outcome claims
-- **WhyNokYai** (`src/components/sections/WhyNokYai.tsx`): check whether differentiators name specific AI capabilities or use generic agency framing
+- **WhyNestCalc** (`src/components/sections/WhyNestCalc.tsx`): check whether differentiators name specific AI capabilities or use generic agency framing
 - **Services** (`src/components/sections/Services.tsx`): check whether service bullets name specific outputs or use generic benefit language
 
 Flag ✅ for content sections where specificity is the dominant register.

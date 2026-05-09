@@ -1,4 +1,4 @@
-# NokYai LP — Design Tokens
+# NestCalc LP — Design Tokens
 
 Canonical design system reference. All values extracted from `src/styles/globals.css` `@theme` block and `tailwind.config.ts`.
 Eagle references this file during design compliance reviews.
@@ -21,7 +21,7 @@ Eagle references this file during design compliance reviews.
 Hero         → nok-deep
 Services     → nok-medium
 TechStack    → nok-forest
-WhyNokYai    → (inherits page bg — nok-deep)
+WhyNestCalc    → (inherits page bg — nok-deep)
 Testimonials → nok-forest
 Contact      → nok-medium
 Footer       → nok-deep
@@ -108,7 +108,7 @@ Two patterns in use — apply consistently when adding new sections:
 
 | Pattern | Classes | Sections using it |
 |---------|---------|------------------|
-| Standard | `py-12 sm:py-16 lg:py-32` | Services, Testimonials, Contact, WhyNokYai |
+| Standard | `py-12 sm:py-16 lg:py-32` | Services, Testimonials, Contact, WhyNestCalc |
 | Compact | `py-16 lg:py-20` | TechStack (marquee layout requires less vertical space) |
 | Footer | `py-8 lg:py-16` | Footer only |
 
@@ -126,7 +126,7 @@ Maximum content width: `1280px` (Tailwind `max-w-7xl`). Horizontal padding: `24p
 
 | Pattern | Classes | Where used |
 |---------|---------|-----------|
-| Card grid | `gap-6` | Services 2-col, WhyNokYai 3-col |
+| Card grid | `gap-6` | Services 2-col, WhyNestCalc 3-col |
 | Large 2-col | `gap-10 lg:gap-16` | Contact form + sidebar |
 | CTA buttons | `gap-4` | Hero CTA row |
 | Marquee cards | `gap-4` | TechStack carousel |
@@ -226,7 +226,7 @@ to   { opacity: 1; transform: translateX(0); }
 
 ### GlowCard
 
-Three-layer structure. Used in Services, TechStack, WhyNokYai.
+Three-layer structure. Used in Services, TechStack, WhyNestCalc.
 
 ```
 [outer wrapper]  relative rounded-2xl transition-transform duration-300 ease-out overflow-visible

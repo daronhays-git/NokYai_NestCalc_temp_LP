@@ -1,4 +1,4 @@
-# NokYai LP — Document Inventory
+# NestCalc LP — Document Inventory
 
 Tracks which source files are covered by which documentation. Used by Scribe to detect stale docs after code changes.
 
@@ -31,7 +31,7 @@ Tracks which source files are covered by which documentation. Used by Scribe to 
 | `Hero.tsx` | Primary hero section, animated headline | `module-map.md`, `design-tokens.md` | 2026-04-14 |
 | `Services.tsx` | Services/offerings section | `module-map.md` | 2026-04-14 |
 | `TechStack.tsx` | Technology stack display | `module-map.md` | 2026-04-14 |
-| `WhyNokYai.tsx` | Value proposition / differentiators | `module-map.md`, `lighthouse.md` (Step 12) | 2026-04-14 |
+| `WhyNestCalc.tsx` | Value proposition / differentiators | `module-map.md`, `lighthouse.md` (Step 12) | 2026-04-14 |
 | `Testimonials.tsx` | Client testimonials | `module-map.md` | 2026-04-14 |
 | `Contact.tsx` | Contact form (Netlify Forms) | `module-map.md`, `REVIEW.md` (handleSubmit guard) | 2026-04-14 |
 | `CTABand.tsx` | Call-to-action banner | `module-map.md` | 2026-04-14 |
@@ -98,7 +98,7 @@ Tracks which source files are covered by which documentation. Used by Scribe to 
 | File | Type | Covered By | Last Verified |
 |------|------|------------|---------------|
 | `animations.ts` | GSAP ScrollTrigger animation definitions | `CLAUDE.md` (Animation init rule), `module-map.md` | 2026-04-14 |
-| `birdPaths.ts` | NokYai Guardian Bird SVG path data (locked) | `CLAUDE.md` (Locked files), `module-map.md` | 2026-04-14 |
+| `birdPaths.ts` | Guardian Bird SVG path data (locked) | `CLAUDE.md` (Locked files), `module-map.md` | 2026-04-14 |
 | `constants.ts` | Module-level constants (currently empty) | `CLAUDE.md` (Known Issues) | 2026-04-14 |
 
 ---

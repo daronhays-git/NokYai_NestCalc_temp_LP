@@ -48,7 +48,7 @@ jobs:
               8. Touch targets — MagneticButton px-8 py-4 intact, button/link hit area below 44×44px
               9. Responsive behavior — horizontal overflow risk, missing mobile breakpoints, TechStack overflow-hidden
               10. Animation properties — layout-triggering props in transitions, whileInView once:true, stagger pattern
-              11. Section background alternation — Hero nok-deep, Services nok-medium, TechStack nok-forest, WhyNokYai none, Testimonials nok-forest, Contact nok-medium, Footer nok-deep
+              11. Section background alternation — Hero nok-deep, Services nok-medium, TechStack nok-forest, WhyNestCalc none, Testimonials nok-forest, Contact nok-medium, Footer nok-deep
 
             Format the output using the Eagle Review report format defined in .claude/commands/eagle.md.
 

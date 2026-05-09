@@ -1,10 +1,10 @@
-# NokYai LP — Claude Code Guide
+# NestCalc LP — Claude Code Guide
 
 ---
 
 ## Project Identity
 
-- **Project name:** NokYai LP
+- **Project name:** NestCalc LP
 - **Brand / tagline:** NestCalc.ai — Custom AI Solutions For Your Business
 - **Live URL:** https://nestcalc.ai/
 - **Repository:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP
@@ -65,12 +65,12 @@ src/
       Hero.tsx                   — Above-fold; eager loaded; ParticleField + GradientMesh
       Services.tsx               — 4 service cards (lazy)
       TechStack.tsx              — Infinite marquee carousel (lazy)
-      WhyNokYai.tsx              — 3 differentiator cards; exports WhyNestCalc (lazy)
+      WhyNestCalc.tsx              — 3 differentiator cards; exports WhyNestCalc (lazy)
       Testimonials.tsx           — Placeholder section; coming soon (lazy)
       Contact.tsx                — Netlify form; email copy; status states (lazy)
 
     effects/
-      ParticleField.tsx          — Canvas 2D particle system + NokYai bird mascot (628 lines)
+      ParticleField.tsx          — Canvas 2D particle system + Guardian Bird mascot (628 lines)
       GradientMesh.tsx           — Three.js/R3F animated gradient blobs
       NoiseOverlay.tsx           — Full-screen SVG noise texture overlay
 
@@ -97,7 +97,7 @@ src/
     birdPaths.ts                 — BIRD_PATHS string[] + BIRD_BOUNDS (SVG path data — DO NOT EDIT)
 
   assets/
-    NokYai-logo-gold-green.png   — Primary logo (optimized, ~21KB)
+    nestcalc-logo-gold-green.png   — Primary logo (optimized, ~21KB)
 
   styles/
     globals.css                  — @theme block (authoritative), base styles, keyframes
@@ -116,12 +116,12 @@ public/
 
 **Section structure:** Each section is a named export from a single `.tsx` file. Section-specific subcomponents (e.g. `TechCard` in TechStack, `FooterLinks` in Footer) are defined in the same file. No cross-file subcomponent sharing.
 
-**Naming convention:** Files use PascalCase. Function names match exports. Exception: `WhyNokYai.tsx` exports `WhyNestCalc` — both names are in active use.
+**Naming convention:** Files use PascalCase. Function names match exports.
 
 **Section IDs** (used by Navbar IntersectionObserver and anchor links):
 - `#hero`, `#solutions`, `#ourtech`, `#trust`, `#whynestcalc`, `#contactus`
 
-**GlowCard:** Reusable wrapper providing 3D tilt + gradient glow on hover. Used in Services, TechStack, WhyNokYai. Accepts optional `glowColor` prop (default: `#F59E0B`).
+**GlowCard:** Reusable wrapper providing 3D tilt + gradient glow on hover. Used in Services, TechStack, WhyNestCalc. Accepts optional `glowColor` prop (default: `#F59E0B`).
 
 **MagneticButton:** Renders `<a>` when `href` prop is present, `<button>` otherwise. Magnetic pull radius is 100px. Used in Navbar CTA and Hero CTAs. Add `cursor-hover` class to any element that should trigger the custom cursor ring expansion.
 
@@ -131,7 +131,7 @@ public/
 
 | Library | Where used | How triggered |
 |---------|-----------|---------------|
-| Framer Motion | Navbar mobile menu, Hero elements, Services cards, WhyNokYai cards, Contact form, LegalModal | `whileInView`, `AnimatePresence`, `motion.*` props |
+| Framer Motion | Navbar mobile menu, Hero elements, Services cards, WhyNestCalc cards, Contact form, LegalModal | `whileInView`, `AnimatePresence`, `motion.*` props |
 | GSAP ScrollTrigger | Batch scroll reveals across all sections | `initScrollAnimations()` called once in `App.tsx` useEffect |
 | CSS keyframes | TechStack marquee, hero glow, gradient mesh drift | `globals.css` keyframes + Tailwind `animate-[]` utilities |
 | Canvas 2D (custom) | ParticleField — particles + bird mascot | `requestAnimationFrame` loop; desktop only (120 particles) |
@@ -197,4 +197,3 @@ Agent config files:
 
 - **2026-04-14** · `index.html` `<title>` reads "AI-Powered Real Estate Investment Tools" — stale from prior product identity; needs updating to reflect AI dev studio positioning
 - **2026-04-14** · Legal content (PrivacyPolicy, Terms, Disclaimer) references the old NestCalc real estate product (Supabase, Stripe, property analysis tiers) — needs full rewrite for AI services agency
-- **2026-04-14** · `WhyNokYai.tsx` exports a component named `WhyNestCalc` — filename and export name are mismatched; low priority cosmetic issue

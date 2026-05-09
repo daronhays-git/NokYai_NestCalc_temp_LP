@@ -125,7 +125,7 @@ Verify the section background sequence matches the documented flow:
 Hero         → bg-nok-deep
 Services     → bg-nok-medium
 TechStack    → bg-nok-forest
-WhyNokYai    → (no bg class — inherits page bg)
+WhyNestCalc    → (no bg class — inherits page bg)
 Testimonials → bg-nok-forest
 Contact      → bg-nok-medium
 Footer       → bg-nok-deep

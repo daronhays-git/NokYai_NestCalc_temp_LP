@@ -1,4 +1,4 @@
-# NokYai LP — File Inventory
+# NestCalc LP — File Inventory
 
 Every file in the repository with a one-line purpose note. Grouped by directory. Excludes `node_modules/`, `.git/`, and `dist/`.
 
@@ -107,7 +107,7 @@ These files were accurate at the time of writing. They are not maintained; treat
 
 | File | Purpose |
 |------|---------|
-| `public/favicon.svg` | SVG favicon (eagle/NokYai logo) |
+| `public/favicon.svg` | SVG favicon (eagle/NestCalc logo) |
 | `public/favicon.png` | 48×48 PNG favicon |
 | `public/apple-touch-icon.png` | 180×180 iOS home screen icon |
 | `public/og-image.png` | 1200×630 Open Graph social share image |
@@ -130,7 +130,7 @@ These files were accurate at the time of writing. They are not maintained; treat
 
 | File | Purpose |
 |------|---------|
-| `src/assets/NokYai-logo-gold-green.png` | Primary brand logo — gold + green variant (~21KB, optimized) |
+| `src/assets/nestcalc-logo-gold-green.png` | Primary brand logo — gold + green variant (~21KB, optimized) |
 
 ### `src/components/layout/`
 
@@ -148,7 +148,7 @@ All sections below Hero are lazy-loaded via `React.lazy` in `App.tsx`.
 | `src/components/sections/Hero.tsx` | Above-fold hero; eager-loaded; hosts ParticleField + GradientMesh |
 | `src/components/sections/Services.tsx` | 4 service offering cards with GlowCard wrappers |
 | `src/components/sections/TechStack.tsx` | Infinite marquee carousel of technology logos |
-| `src/components/sections/WhyNokYai.tsx` | 3 differentiator cards; exports as `WhyNestCalc` (known naming mismatch) |
+| `src/components/sections/WhyNestCalc.tsx` | 3 differentiator cards; exports as `WhyNestCalc` |
 | `src/components/sections/Testimonials.tsx` | Client testimonials placeholder ("coming soon") |
 | `src/components/sections/Contact.tsx` | Netlify form with email copy fallback and status states |
 
@@ -158,7 +158,7 @@ Visual-only components; no business logic.
 
 | File | Purpose |
 |------|---------|
-| `src/components/effects/ParticleField.tsx` | **FRAGILE** — Canvas 2D particle system + NokYai bird mascot animation (628 lines) |
+| `src/components/effects/ParticleField.tsx` | **FRAGILE** — Canvas 2D particle system + Guardian Bird mascot animation (628 lines) |
 | `src/components/effects/GradientMesh.tsx` | Three.js / R3F animated gradient blobs; uses raw hex color props (documented exception) |
 | `src/components/effects/NoiseOverlay.tsx` | Full-screen SVG noise texture overlay |
 
@@ -207,5 +207,5 @@ Modal-rendered legal pages (not standalone HTML; not crawlable).
 | File | Purpose |
 |------|---------|
 | `docs/doc-inventory.md` | Source file coverage matrix; maps each file to the documentation that covers it; used by Scribe |
-| `docs/nokyai-review-stack-ops-guide.md` | Operations guide for the NokYai CI review stack (Shield, Eagle, Lighthouse, Scribe) |
+| `docs/nestcalc-review-stack-ops-guide.md` | Operations guide for the NestCalc CI review stack (Shield, Eagle, Lighthouse, Scribe) |
 | `docs/reports/agent-baseline-2026-04-15.md` | Consolidated agent review baseline (Shield/Eagle/Lighthouse/Scribe) as of 2026-04-15 |

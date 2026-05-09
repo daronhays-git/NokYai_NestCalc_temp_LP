@@ -1,4 +1,4 @@
-# NokYai Review Stack — Project Setup
+# NestCalc Review Stack — Project Setup
 
 This template provides the complete 8-agent review and 
 operations system. Follow these steps to customize it for 

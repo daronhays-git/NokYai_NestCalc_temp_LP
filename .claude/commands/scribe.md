@@ -95,7 +95,6 @@ Read `CLAUDE.md` §File Structure and compare the component list against actual 
 
 For each component mentioned in CLAUDE.md:
 - Does the file actually exist at the stated path?
-- Does the component export match (e.g., `WhyNokYai.tsx` exports `WhyNestCalc`)?
 
 **Known deletions from PORT-C2 cleanup** — flag 🔴 Wrong if any of these still appear in CLAUDE.md:
 - `src/components/sections/CaseStudies.tsx`
@@ -119,7 +118,6 @@ Read `CLAUDE.md` §Known Issues. For each listed issue:
 
 Check these specific known issues:
 - "index.html `<title>` reads 'AI-Powered Real Estate Investment Tools'" — read `index.html` and check if the title has been updated
-- "WhyNokYai.tsx exports a component named WhyNestCalc — filename and export name are mismatched" — read the file and check if the mismatch still exists
 - "Legal content references the old NestCalc real estate product" — scan `src/components/legal/` for Supabase, Stripe, property analysis references to confirm the issue still exists
 
 Flag 🟡 **Stale** for resolved issues that are still listed.
