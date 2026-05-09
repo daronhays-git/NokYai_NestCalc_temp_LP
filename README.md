@@ -1,7 +1,7 @@
 # NestCalc.ai Landing Page
 
-**Version:** V1.4.6
-**Status:** Deployed (tag v1.4.6) — render-blocking fonts deferred, dead three.js removed, framer-motion migrated to m + LazyMotion (-46 KB raw / -13 KB gzip on animation-vendor), Footer setTimeout cleanup
+**Version:** V1.4.7
+**Status:** Deployed (tag v1.4.7) — GSAP removed and replaced with framer-motion whileInView (animation-vendor −112.9 KB raw / −43.5 KB gzip), ParticleField lazy-loaded via React.lazy + Suspense (entry chunk −26.4 KB raw / −11.5 KB gzip), mobile unused-javascript audit cleared (60 KiB FAIL → 0 PASS)
 **Branch:** main
 **Repo:** https://github.com/daronhays-git/NokYai_NestCalc_temp_LP
 **Dev Server:** http://localhost:5173
@@ -30,9 +30,8 @@ npm run dev
 
 - Vite + React 19 + TypeScript
 - Tailwind CSS 4 (CSS-first @theme tokens)
-- Framer Motion via `m` + `<LazyMotion features={domAnimation} strict>` wrapper (V1.4.6)
-- GSAP + ScrollTrigger (scroll-driven animations — candidate for V1.4.7 removal)
-- 2D Canvas particle system + Guardian Bird (custom, mouse-reactive + touch-reactive, 128px desktop / 80px mobile)
+- Framer Motion via `m` + `<LazyMotion features={domAnimation} strict>` wrapper (V1.4.6) — only animation library after V1.4.7 GSAP removal
+- 2D Canvas particle system + Guardian Bird (custom, mouse-reactive + touch-reactive, 128px desktop / 80px mobile) — lazy-loaded via React.lazy + Suspense as of V1.4.7
 - Netlify Forms (contact form submissions)
 - Google Fonts: Space Grotesk (display) + Outfit (body) — non-blocking load via media="print" swap (V1.4.6)
 - Sharp (devDep, used by scripts/optimize-wordmarks.mjs for WebP generation)
@@ -49,7 +48,8 @@ nokyai-lp/
 │   │   │                  TechStack, WhyNestCalc, Contact
 │   │   ├── ui/            MagneticButton, GlowCard, SectionHeading,
 │   │   │                  CustomCursor, ScrollProgress
-│   │   ├── effects/       ParticleField, GradientMesh, NoiseOverlay
+│   │   ├── effects/       ParticleField (lazy-loaded V1.4.7),
+│   │   │                  GradientMesh, NoiseOverlay
 │   │   └── legal/         LegalModal, PrivacyPolicy, TermsOfService,
 │   │                      Disclaimer
 │   ├── assets/            nestcalc-logo-gold-green.png (200x200)
@@ -59,7 +59,8 @@ nokyai-lp/
 │   │                      homefastcalc-wordmark-final.{png,webp} (600px)
 │   │                      homefastcalc-wordmark-final-320.{png,webp}
 │   ├── styles/globals.css
-│   ├── lib/               animations.ts, birdPaths.ts, contact.ts
+│   ├── lib/               birdPaths.ts, contact.ts
+│   │                      (animations.ts removed V1.4.7 — GSAP gone)
 │   └── hooks/             useMousePosition, useScrollProgress, useInView
 ├── scripts/
 │   └── optimize-wordmarks.mjs  Sharp-based WebP + downsized variant generation
@@ -80,7 +81,8 @@ nokyai-lp/
 │                          scribe.yml, review-all.yml
 ├── docs/reports/          agent-baseline-2026-04-15.md,
 │                          lighthouse-v1.4.5-{desktop,mobile}.{html,json},
-│                          lighthouse-v1.4.6-{desktop,mobile}.{html,json}
+│                          lighthouse-v1.4.6-{desktop,mobile}.{html,json},
+│                          lighthouse-v1.4.7-{desktop,mobile}.{html,json}
 ├── CLAUDE.md
 ├── REVIEW.md
 ├── design-tokens.md
@@ -136,7 +138,7 @@ Both `Contact.tsx` and `Footer.tsx` import from this module. Both use a `useRef<
 
 ## Animation Library Pattern
 
-As of V1.4.6, all 8 framer-motion consumers use the `m` component + `<LazyMotion features={domAnimation} strict>` root wrapper. The `strict` flag throws a hard runtime error if any descendant uses `motion` instead of `m` — caught early and prevents partial migrations from shipping.
+As of V1.4.6, all framer-motion consumers use the `m` component + `<LazyMotion features={domAnimation} strict>` root wrapper. The `strict` flag throws a hard runtime error if any descendant uses `motion` instead of `m` — caught early and prevents partial migrations from shipping.
 
 Pattern in any animated component:
 ```tsx
@@ -156,6 +158,41 @@ import { LazyMotion, domAnimation } from 'framer-motion'
 ```
 
 `domAnimation` covers: animate, initial, exit, transition, variants, whileHover, whileTap, whileFocus, whileInView, AnimatePresence, useMotionValue, useSpring, useTransform, useScroll. Does NOT cover drag, layout, layoutId, or pan — would need `domMax` if any of those are added.
+
+### Section Reveal Pattern (post-V1.4.7)
+
+As of V1.4.7, section-level fade-up animations use framer-motion's `whileInView` directly on the section element instead of the GSAP-driven `.reveal-section` class (now removed). Pattern:
+
+```tsx
+<m.section
+  id="..."
+  initial={{ opacity: 0, y: 40 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
+  viewport={{ once: true, amount: 0.2 }}
+>
+```
+
+The `ease: [0.215, 0.61, 0.355, 1]` cubic-bezier is an exact match for GSAP's `power3.out`. The `viewport={{ once: true, amount: 0.2 }}` matches GSAP's `start: 'top 80%'` semantics closely (fires when 20% of section is visible).
+
+### Code Splitting Pattern (V1.4.7-P2)
+
+ParticleField is lazy-loaded via React.lazy + Suspense in Hero.tsx:
+
+```tsx
+import { lazy, Suspense, useRef } from 'react'
+
+const ParticleField = lazy(() =>
+  import('../effects/ParticleField').then(mod => ({ default: mod.ParticleField }))
+)
+
+// In JSX:
+<Suspense fallback={null}>
+  <ParticleField {...props} />
+</Suspense>
+```
+
+The `.then(mod => ({ default: mod.ParticleField }))` shape handles the named export (avoids `m` import shadowing collision). `<Suspense fallback={null}>` is correct because ParticleField is purely decorative (pointer-events-none + aria-hidden="true" + behind-content z-0).
 
 ## JSON-LD Schemas
 
@@ -179,27 +216,31 @@ Spec-compliant per [llmstxt.org](https://llmstxt.org/). Sections: Company, Produ
 
 Manual: run `/shield`, `/eagle`, `/lighthouse`, `/scribe` in Claude Code.
 
-## Lighthouse CLI Baseline (V1.4.6)
+## Lighthouse CLI Baseline (V1.4.7)
 
 Captured via `npx lighthouse` (simulated throttling):
 
 | Category | Desktop | Mobile |
 |----------|---------|--------|
-| Performance | 95 | 88 |
+| Performance | 98 | 90 |
 | Accessibility | 100 | 100 |
 | Best Practices | 100 | 100 |
 | SEO | 100 | 100 |
 
-Reports: `docs/reports/lighthouse-v1.4.6-{desktop,mobile}.{html,json}`.
+Reports: `docs/reports/lighthouse-v1.4.7-{desktop,mobile}.{html,json}`.
 
-V1.4.6 wins:
-- render-blocking-insight: 440 ms desktop / 1,200 ms mobile → 0 ms (audit passes)
-- animation-vendor chunk: 247 → 201 kB raw, 88 → 75 kB gzip (-46 kB / -13 kB)
+V1.4.7 wins:
+- Mobile unused-javascript audit: 60 KiB FAIL → 0 PASS (cleared completely)
+- Desktop unused-javascript: 64 KiB → 23 KiB (−64%)
+- Desktop Performance: 0.95 → 0.98 (+0.03)
+- Desktop FCP / LCP: 1122 → 909 ms (−213 ms, −19%)
+- Desktop Speed Index: 1422 → 1059 ms (−363 ms, −25.5%)
+- Mobile FCP / LCP: 2993 → 2815 ms (−178 ms, −6%)
+- Mobile TBT: 22 → 0 ms
 
-V1.4.7 perf candidates:
-- Drop GSAP + ScrollTrigger → useInView (~30 kB gzip lever)
-- Lazy-load animation-vendor chunk
-- Lazy-load ParticleField (628-line canvas effect)
+V1.4.8 perf candidates:
+- Lazy-load animation-vendor chunk (defer framer-motion until first scroll) — ~75 KB gzip lever, primary remaining target for mobile FCP (still 2.8s)
+- Replace placeholder content (testimonials, 12 tech logos, AI Strategy "Coming Soon" card) — content path alternative
 
 ## Image Optimization
 
@@ -266,3 +307,6 @@ git push origin main # Auto-deploys to Netlify
 | Lighthouse Rich Results Test mode | Dropdown next to TEST URL switches between Googlebot desktop + smartphone — verify both after schema changes |
 | Browser console shows `motion is not defined` after framer-motion migration | First try Ctrl+Shift+R hard refresh — Vite caches transformed modules aggressively. If error persists after hard refresh, grep src/ for `motion\.` and verify the JSX migration is complete (V1.4.6 lesson) |
 | `<LazyMotion strict>` not throwing expected error | Strict mode produces a plain ReferenceError (`motion is not defined`), not a LazyMotion-specific message. Stack trace still pinpoints the file and line — that's the signal |
+| Section fade-up not triggering | V1.4.7+ uses whileInView, not GSAP. Check viewport={{ once: true, amount: 0.2 }} prop exists on outer m.section. amount controls when trigger fires (0.2 = 20% visible) |
+| ParticleField not loading | V1.4.7+ uses React.lazy. Check Hero.tsx for `<Suspense fallback={null}>` wrapper. Network tab should show ParticleField-*.js chunk fetched after entry chunk |
+| New chunk import shape error after lazy-load | Named exports need `.then(mod => ({ default: mod.ComponentName }))` wrapper in lazy() call. Default exports just need `lazy(() => import('...'))` |
