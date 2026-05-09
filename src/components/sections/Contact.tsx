@@ -78,7 +78,14 @@ export function Contact() {
   }
 
   return (
-    <section id="contactus" className="reveal-section py-12 sm:py-16 lg:py-32 bg-nok-medium">
+    <m.section
+      id="contactus"
+      className="py-12 sm:py-16 lg:py-32 bg-nok-medium"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
+    >
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading
           title="Contact Us"
@@ -262,6 +269,6 @@ export function Contact() {
           </m.div>
         </div>
       </div>
-    </section>
+    </m.section>
   )
 }

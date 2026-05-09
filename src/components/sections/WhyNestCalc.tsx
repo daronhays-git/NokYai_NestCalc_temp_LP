@@ -40,7 +40,14 @@ const CARDS: { icon: ReactNode; title: string; description: string }[] = [
 /* ── Component ──────────────────────────────────────────────────── */
 export function WhyNestCalc() {
   return (
-    <section id="whynestcalc" className="reveal-section bg-nok-deep">
+    <m.section
+      id="whynestcalc"
+      className="bg-nok-deep"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
+    >
       {/* Differentiator cards */}
       <div className="py-12 sm:py-16 lg:py-32">
         <div className="max-w-7xl mx-auto px-6">
@@ -104,6 +111,6 @@ export function WhyNestCalc() {
           </m.div>
         </div>
       </div>
-    </section>
+    </m.section>
   )
 }

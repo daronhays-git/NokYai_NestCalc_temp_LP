@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense } from 'react'
 import { LazyMotion, domAnimation } from 'framer-motion'
 import { Navbar } from './components/layout/Navbar'
 import { Hero } from './components/sections/Hero'
@@ -14,17 +14,6 @@ const Contact = lazy(() => import('./components/sections/Contact').then(m => ({ 
 const Footer = lazy(() => import('./components/layout/Footer').then(m => ({ default: m.Footer })))
 
 function App() {
-  useEffect(() => {
-    let cleanup: (() => void) | undefined
-
-    import('./lib/animations').then(({ initScrollAnimations, cleanupScrollAnimations }) => {
-      initScrollAnimations()
-      cleanup = cleanupScrollAnimations
-    })
-
-    return () => cleanup?.()
-  }, [])
-
   return (
     <LazyMotion features={domAnimation} strict>
       <CustomCursor />

@@ -1,3 +1,4 @@
+import { m } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { GlowCard } from '../ui/GlowCard'
 
@@ -36,7 +37,14 @@ export function TechStack() {
   const doubled = [...TECH, ...TECH]
 
   return (
-    <section id="ourtech" className="reveal-section py-16 lg:py-20 bg-nok-forest">
+    <m.section
+      id="ourtech"
+      className="py-16 lg:py-20 bg-nok-forest"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
+    >
       <div className="max-w-7xl mx-auto px-6 mb-8">
         <SectionHeading
           title="Our Trusted Technologies"
@@ -54,6 +62,6 @@ export function TechStack() {
           ))}
         </div>
       </div>
-    </section>
+    </m.section>
   )
 }

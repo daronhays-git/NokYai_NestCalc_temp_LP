@@ -1,8 +1,16 @@
+import { m } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 
 export function Testimonials() {
   return (
-    <section id="trust" className="reveal-section py-12 sm:py-16 lg:py-32 bg-nok-forest">
+    <m.section
+      id="trust"
+      className="py-12 sm:py-16 lg:py-32 bg-nok-forest"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }}
+    >
       <div className="max-w-7xl mx-auto px-6">
         <SectionHeading title="What Our Clients Say" />
 
@@ -21,6 +29,6 @@ export function Testimonials() {
           </div>
         </div>
       </div>
-    </section>
+    </m.section>
   )
 }
