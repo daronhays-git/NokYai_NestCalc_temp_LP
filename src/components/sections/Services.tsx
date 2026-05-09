@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { GlowCard } from '../ui/GlowCard'
-import casawiseWordmark from '../../assets/casawise-wordmark-final.png'
-import homefastcalcWordmark from '../../assets/homefastcalc-wordmark-final.png'
-import casawiseWordmarkWebp from '../../assets/casawise-wordmark-final.webp'
-import homefastcalcWordmarkWebp from '../../assets/homefastcalc-wordmark-final.webp'
+import casawiseWordmark from '../../assets/casawise-wordmark-final-320.png'
+import homefastcalcWordmark from '../../assets/homefastcalc-wordmark-final-320.png'
+import casawiseWordmarkWebp from '../../assets/casawise-wordmark-final-320.webp'
+import homefastcalcWordmarkWebp from '../../assets/homefastcalc-wordmark-final-320.webp'
 
 const SERVICES = [
   {
@@ -20,8 +20,8 @@ const SERVICES = [
     href: 'https://casawise.ai',
     wordmark: casawiseWordmark,
     wordmarkWebp: casawiseWordmarkWebp,
-    wordmarkWidth: 600,
-    wordmarkHeight: 157,
+    wordmarkWidth: 320,
+    wordmarkHeight: 84,
   },
   {
     title: 'Websites and Landing Pages',
@@ -48,8 +48,8 @@ const SERVICES = [
     href: 'https://homefastcalc.com',
     wordmark: homefastcalcWordmark,
     wordmarkWebp: homefastcalcWordmarkWebp,
-    wordmarkWidth: 600,
-    wordmarkHeight: 197,
+    wordmarkWidth: 320,
+    wordmarkHeight: 105,
     wordmarkHeightClass: 'h-12 sm:h-14',
   },
   {
