@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { m, AnimatePresence } from 'framer-motion'
 import { LegalModal } from '../legal/LegalModal'
 import { PrivacyPolicyContent } from '../legal/PrivacyPolicy'
@@ -49,6 +49,25 @@ function FooterLinks({ title, links }: { title: string; links: { label: string; 
 export function Footer() {
   const [activeLegal, setActiveLegal] = useState<LegalPage>(null)
   const [copied, setCopied] = useState(false)
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  const handleEmailClick = useCallback((e: React.MouseEvent) => {
+    copyAndOpenMailto(e, () => {
+      setCopied(true)
+      if (copyTimeoutRef.current) {
+        clearTimeout(copyTimeoutRef.current)
+      }
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 3000)
+    })
+  }, [])
 
   return (
     <>
@@ -114,10 +133,7 @@ export function Footer() {
               <span className="relative inline-block">
                 <a
                   href={`mailto:${EMAIL}`}
-                  onClick={(e) => copyAndOpenMailto(e, () => {
-                    setCopied(true)
-                    setTimeout(() => setCopied(false), 3000)
-                  })}
+                  onClick={handleEmailClick}
                   className="hover:text-nok-gold transition-colors"
                 >
                   {EMAIL_DISPLAY}
