@@ -1,8 +1,11 @@
-import { useRef } from 'react'
+import { lazy, Suspense, useRef } from 'react'
 import { m } from 'framer-motion'
 import { MagneticButton } from '../ui/MagneticButton'
-import { ParticleField } from '../effects/ParticleField'
 import { GradientMesh } from '../effects/GradientMesh'
+
+const ParticleField = lazy(() =>
+  import('../effects/ParticleField').then(mod => ({ default: mod.ParticleField }))
+)
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 20 },
@@ -23,7 +26,9 @@ export function Hero() {
         <GradientMesh colors={['#F59E0B', '#0d9488', '#0f2920']} className="opacity-40" />
       </div>
       <div className="absolute inset-0 z-0">
-        <ParticleField buttonRefs={[primaryBtnRef]} />
+        <Suspense fallback={null}>
+          <ParticleField buttonRefs={[primaryBtnRef]} />
+        </Suspense>
       </div>
 
       {/* Content */}
