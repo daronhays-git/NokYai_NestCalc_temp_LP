@@ -1,0 +1,32 @@
+# NestCalc.ai
+
+> Custom AI development studio building intelligent automation, custom AI applications, and next-generation digital products for small businesses. Operating company for Casawise.ai and HomeFastCalc.com.
+
+NestCalc.ai is the umbrella entity (NestCalc.ai, LLC) for two production apps and a custom AI services practice. All software is built by founder Daron R. Hays — a structural engineer, licensed General Contractor, and 30+ year real estate investor who writes the production code himself.
+
+## Company
+
+- [Company homepage](https://nestcalc.ai/): NestCalc.ai studio — services, founder background, and contact
+- Legal entity: NestCalc.ai, LLC
+- Contact: daron@nestcalc.ai
+
+## Products
+
+- [Casawise.ai](https://casawise.ai): AI-powered real estate investment analysis platform — multi-scenario underwriting, live Federal Reserve data, professional PDF reports
+- [HomeFastCalc.com](https://homefastcalc.com): Fast non-AI home and property calculators for quick deal screening
+
+## Services
+
+NestCalc.ai delivers custom AI development, modern websites and landing pages with AI-enhanced SEO/GEO/E-E-A-T optimization, web and mobile applications, and AI strategy consulting — primarily for small business owners who need production AI without hiring an engineering team.
+
+## Founder
+
+Daron R. Hays is the founder and developer of NestCalc.ai. He holds a B.S. in Structural Engineering (Honors, 1990) from Oregon State University and is a licensed General Contractor — the youngest in Oregon at age 18. Over three decades he has built 52 homes, completed $15M+ in construction contracts (including a 118-unit apartment renovation and a $1.8M commercial retail development), operated long-term and short-term rental portfolios, structured private investments through idé investments LLC, and owned a yoga studio and fitness center for nine years. He builds AI-powered analysis tools from firsthand operator experience.
+
+- [LinkedIn](https://www.linkedin.com/in/daron-hays): Daron R. Hays profile
+
+## Trust and Legal
+
+- Privacy Policy, Terms of Service, and Disclaimer: rendered as in-app modals from the homepage footer at https://nestcalc.ai/
+- [Sitemap](https://nestcalc.ai/sitemap.xml): XML sitemap
+- [Robots](https://nestcalc.ai/robots.txt): crawler directives
