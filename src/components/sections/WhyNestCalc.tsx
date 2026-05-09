@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { GlowCard } from '../ui/GlowCard'
 
@@ -51,7 +51,7 @@ export function WhyNestCalc() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {CARDS.map((card, i) => (
-              <motion.div
+              <m.div
                 key={card.title}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -71,12 +71,12 @@ export function WhyNestCalc() {
                     </p>
                   </div>
                 </GlowCard>
-              </motion.div>
+              </m.div>
             ))}
           </div>
 
           {/* Founder bio */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -101,7 +101,7 @@ export function WhyNestCalc() {
               He builds the analytical tools that serious investors need — because
               he's been the investor who needed them.
             </p>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

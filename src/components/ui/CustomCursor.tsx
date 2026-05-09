@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { m, useMotionValue, useSpring } from 'framer-motion'
 
 export function CustomCursor() {
   const [isTouch, setIsTouch] = useState(false)
@@ -63,7 +63,7 @@ export function CustomCursor() {
   return (
     <>
       {/* Inner dot */}
-      <motion.div
+      <m.div
         className="fixed top-0 left-0 z-[9999] pointer-events-none w-2 h-2 rounded-full bg-white"
         aria-hidden="true"
         style={{
@@ -75,7 +75,7 @@ export function CustomCursor() {
       />
 
       {/* Outer ring */}
-      <motion.div
+      <m.div
         className="fixed top-0 left-0 z-[9999] pointer-events-none rounded-full mix-blend-difference"
         aria-hidden="true"
         style={{

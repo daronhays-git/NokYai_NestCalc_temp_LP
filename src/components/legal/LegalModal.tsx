@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 
 interface LegalModalProps {
   open: boolean
@@ -24,7 +24,7 @@ export function LegalModal({ open, onClose, title, lastUpdated, children }: Lega
   return (
     <AnimatePresence>
       {open && (
-        <motion.div
+        <m.div
           className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-nok-deep/95 backdrop-blur-xl"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -61,7 +61,7 @@ export function LegalModal({ open, onClose, title, lastUpdated, children }: Lega
               </button>
             </div>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   )

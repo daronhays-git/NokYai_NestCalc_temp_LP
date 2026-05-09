@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { MagneticButton } from '../ui/MagneticButton'
 import nestcalcLogo from '../../assets/nestcalc-logo-gold-green-96.png'
 import nestcalcLogoWebp from '../../assets/nestcalc-logo-gold-green-96.webp'
@@ -124,17 +124,17 @@ export function Navbar() {
             onClick={() => setMenuOpen((v) => !v)}
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           >
-            <motion.span
+            <m.span
               className="block w-5 h-px bg-white origin-center"
               animate={menuOpen ? { rotate: 45, y: 3.5 } : { rotate: 0, y: 0 }}
               transition={{ duration: 0.2 }}
             />
-            <motion.span
+            <m.span
               className="block w-5 h-px bg-white origin-center"
               animate={menuOpen ? { opacity: 0 } : { opacity: 1 }}
               transition={{ duration: 0.15 }}
             />
-            <motion.span
+            <m.span
               className="block w-5 h-px bg-white origin-center"
               animate={menuOpen ? { rotate: -45, y: -3.5 } : { rotate: 0, y: 0 }}
               transition={{ duration: 0.2 }}
@@ -146,7 +146,7 @@ export function Navbar() {
       {/* Mobile overlay menu */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             className="fixed inset-0 z-[49] bg-nok-deep/95 backdrop-blur-2xl flex flex-col items-center justify-center gap-8 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -154,7 +154,7 @@ export function Navbar() {
             transition={{ duration: 0.25 }}
           >
             {NAV_LINKS.map((link, i) => (
-              <motion.a
+              <m.a
                 key={link.href}
                 href={link.href}
                 onClick={(e) => { e.preventDefault(); scrollTo(link.href) }}
@@ -168,10 +168,10 @@ export function Navbar() {
                 transition={{ delay: 0.05 + i * 0.07, duration: 0.3 }}
               >
                 {link.label}
-              </motion.a>
+              </m.a>
             ))}
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
@@ -184,8 +184,8 @@ export function Navbar() {
               >
                 Start Your Project
               </MagneticButton>
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

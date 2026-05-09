@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { GlowCard } from '../ui/GlowCard'
 import casawiseWordmark from '../../assets/casawise-wordmark-final-320.png'
@@ -76,7 +76,7 @@ export function Services() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {SERVICES.map((service, i) => (
-            <motion.div
+            <m.div
               key={service.title}
               className="h-full"
               initial={{ opacity: 0, y: 30 }}
@@ -153,7 +153,7 @@ export function Services() {
                   </div>
                 </GlowCard>
               )}
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

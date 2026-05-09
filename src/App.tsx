@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
+import { LazyMotion, domAnimation } from 'framer-motion'
 import { Navbar } from './components/layout/Navbar'
 import { Hero } from './components/sections/Hero'
 import { CustomCursor } from './components/ui/CustomCursor'
@@ -25,7 +26,7 @@ function App() {
   }, [])
 
   return (
-    <>
+    <LazyMotion features={domAnimation} strict>
       <CustomCursor />
       <ScrollProgress />
       <NoiseOverlay />
@@ -43,7 +44,7 @@ function App() {
       <Suspense fallback={null}>
         <Footer />
       </Suspense>
-    </>
+    </LazyMotion>
   )
 }
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { LegalModal } from '../legal/LegalModal'
 import { PrivacyPolicyContent } from '../legal/PrivacyPolicy'
 import { TermsOfServiceContent } from '../legal/TermsOfService'
@@ -124,14 +124,14 @@ export function Footer() {
                 </a>
                 <AnimatePresence>
                   {copied && (
-                    <motion.span
+                    <m.span
                       initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -4 }}
                       className="absolute left-1/2 -translate-x-1/2 top-full mt-2 bg-nok-gold text-nok-deep text-xs font-medium px-3 py-1.5 rounded-lg shadow-lg whitespace-nowrap"
                     >
                       Email copied to clipboard!
-                    </motion.span>
+                    </m.span>
                   )}
                 </AnimatePresence>
               </span>

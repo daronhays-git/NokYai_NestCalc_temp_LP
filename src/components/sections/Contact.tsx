@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect, type FormEvent } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { SectionHeading } from '../ui/SectionHeading'
 import { MagneticButton } from '../ui/MagneticButton'
 import { EMAIL, EMAIL_DISPLAY, copyAndOpenMailto } from '../../lib/contact'
@@ -87,7 +87,7 @@ export function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
           {/* LEFT — Form */}
-          <motion.form
+          <m.form
             name="contact"
             method="POST"
             action="/"
@@ -164,14 +164,14 @@ export function Contact() {
                   </a>.
                   <AnimatePresence>
                     {copied && (
-                      <motion.span
+                      <m.span
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -4 }}
                         className="absolute -bottom-8 left-0 bg-nok-gold text-nok-deep text-sm font-medium px-3 py-1.5 rounded-lg shadow-lg"
                       >
                         Email copied to clipboard!
-                      </motion.span>
+                      </m.span>
                     )}
                   </AnimatePresence>
                 </div>
@@ -197,10 +197,10 @@ export function Contact() {
             <p className="text-xs text-nok-caption">
               We respect your privacy. Your information is never shared.
             </p>
-          </motion.form>
+          </m.form>
 
           {/* RIGHT — Info */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
@@ -230,14 +230,14 @@ export function Contact() {
               </a>
               <AnimatePresence>
                 {copied && (
-                  <motion.span
+                  <m.span
                     initial={{ opacity: 0, y: 4 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -4 }}
                     className="absolute top-full left-13 mt-2 bg-nok-gold text-nok-deep text-sm font-medium px-3 py-1.5 rounded-lg shadow-lg"
                   >
                     Email copied to clipboard!
-                  </motion.span>
+                  </m.span>
                 )}
               </AnimatePresence>
             </div>
@@ -259,7 +259,7 @@ export function Contact() {
               <span className="text-nok-border hidden sm:inline">|</span>
               <span>Response within 24 hours</span>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     </section>

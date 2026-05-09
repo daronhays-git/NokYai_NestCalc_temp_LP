@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { motion } from 'framer-motion'
+import { m } from 'framer-motion'
 import { MagneticButton } from '../ui/MagneticButton'
 import { ParticleField } from '../effects/ParticleField'
 import { GradientMesh } from '../effects/GradientMesh'
@@ -30,7 +30,7 @@ export function Hero() {
       <div className="relative z-10 w-full px-6">
         <div className="max-w-4xl mx-auto text-center">
           {/* Status badge */}
-          <motion.div
+          <m.div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-nok-gold/30 bg-nok-gold/5 text-nok-gold text-sm font-medium mb-8"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -38,33 +38,33 @@ export function Hero() {
           >
             <span className="w-1.5 h-1.5 rounded-full bg-nok-gold animate-pulse" />
             Building Leading Edge AI Applications - Small Business Focused
-          </motion.div>
+          </m.div>
 
           {/* Headline */}
-          <motion.h1
+          <m.h1
             className="font-display text-hero text-nok-gold mb-6 animate-[hero-glow_3s_ease-in-out_infinite]"
             {...fadeUp(0.5)}
           >
             Custom AI Solutions<br />For Your Business
-          </motion.h1>
+          </m.h1>
 
           {/* Subheadline */}
-          <motion.p
+          <m.p
             className="text-lg lg:text-xl text-nok-body max-w-3xl mx-auto mb-16 sm:mb-24 lg:mb-40"
             {...fadeUp(0.7)}
           >
             We Handle the Tech So You Can Focus on Your Business
-          </motion.p>
+          </m.p>
 
           {/* CTA */}
-          <motion.div
+          <m.div
             className="flex justify-center mb-12"
             {...fadeUp(0.9)}
           >
             <div ref={primaryBtnRef}>
               <MagneticButton href="#contactus">Start Your Project</MagneticButton>
             </div>
-          </motion.div>
+          </m.div>
 
         </div>
       </div>
