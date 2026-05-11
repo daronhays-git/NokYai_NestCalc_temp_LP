@@ -1,7 +1,7 @@
 # NestCalc.ai Finance Report
-**Date:** 2026-05-04
-**Total JS (raw):** 529.84 KB (+0.0% vs last report)
-**Total JS (gzip):** 182.54 KB
+**Date:** 2026-05-11
+**Total JS (raw):** 355.71 KB (-32.9% vs last report)
+**Total JS (gzip):** 123.01 KB
 **Netlify deploys (last 7 days):** N/A
 
 ---
@@ -10,22 +10,27 @@
 
 | Chunk | Raw | Gzip |
 |-------|-----|------|
-| `assets/animation-vendor-BfJsWXyu.js` | 247.43 KB | 88.17 KB |
-| `assets/index-y0s_pxqr.js` | 221.84 KB | 73.89 KB |
-| `assets/Footer-BBh2ohAD.js` | 39.53 KB | 11.66 KB |
-| `assets/index-Dm9vhNG_.css` | 35.81 KB | 7.00 KB |
-| `assets/NokYai-logo-gold-green-CJ_uaLwJ.png` | 21.34 KB | 0.00 KB |
-| `assets/Contact-C864Bu-v.js` | 7.24 KB | 2.44 KB |
-| `index.html` | 5.34 KB | 1.73 KB |
-| `assets/WhyNokYai-DCQOAPtC.js` | 3.95 KB | 1.67 KB |
-| `assets/Services-BJ9frC9n.js` | 3.70 KB | 1.50 KB |
-| `assets/TechStack-DxrCxzi0.js` | 1.79 KB | 0.82 KB |
-| `assets/GlowCard-CZFCpnQ_.js` | 1.32 KB | 0.67 KB |
-| `assets/Testimonials-LGslA7Sn.js` | 1.12 KB | 0.59 KB |
+| `assets/index-DGqtwTNM.js` | 199.01 KB | 65.34 KB |
+| `assets/animation-vendor-PjATOAhE.js` | 88.53 KB | 30.98 KB |
+| `assets/index-DWK7EnKJ.css` | 39.65 KB | 7.70 KB |
+| `assets/ParticleField-0EAL8gCL.js` | 26.73 KB | 11.79 KB |
+| `assets/homefastcalc-wordmark-final-320-CrQR4GmA.png` | 25.92 KB | 0.00 KB |
+| `assets/casawise-wordmark-final-320-BafB0gh7.png` | 22.71 KB | 0.00 KB |
+| `assets/Footer-DxqMRC8G.js` | 17.91 KB | 5.35 KB |
+| `assets/nestcalc-logo-gold-green-96-DnNahE7-.png` | 14.60 KB | 0.00 KB |
+| `assets/homefastcalc-wordmark-final-320-B_9apXwF.webp` | 14.05 KB | 0.00 KB |
+| `assets/casawise-wordmark-final-320-BJuzIACM.webp` | 13.97 KB | 0.00 KB |
+| `assets/Contact-DCq901Or.js` | 7.43 KB | 2.50 KB |
+| `assets/Services-BxyMuiCU.js` | 6.02 KB | 2.13 KB |
+| `index.html` | 5.64 KB | 1.79 KB |
+| `assets/WhyNestCalc-gPDQmgQ-.js` | 4.07 KB | 1.70 KB |
+| `assets/TechStack-BS92DUYu.js` | 1.92 KB | 0.91 KB |
+| `assets/GlowCard-BSNV9Cj-.js` | 1.35 KB | 0.69 KB |
+| `assets/Testimonials-bO3JM7sS.js` | 1.25 KB | 0.68 KB |
 | `assets/rolldown-runtime-COnpUsM8.js` | 0.81 KB | 0.46 KB |
-| `assets/animations-SN1WjKOV.js` | 0.64 KB | 0.36 KB |
-| `assets/SectionHeading-ZcyBYZ4Z.js` | 0.47 KB | 0.31 KB |
-| **Total JS** | **529.84 KB** | **182.54 KB** |
+| `assets/SectionHeading-D79N-7f4.js` | 0.47 KB | 0.31 KB |
+| `assets/contact-DVoZPW53.js` | 0.21 KB | 0.17 KB |
+| **Total JS** | **355.71 KB** | **123.01 KB** |
 
 ---
 
